@@ -1,10 +1,23 @@
 import "./App.css";
 
-function App() {
+import { GoogleLogin } from "@react-oauth/google";
+
+import { decodeJWT } from "./utils/decodeJWT";
+
+function App(): JSX.Element {
   return (
     <div className="App">
       <div className="card">
-        <button onClick={() => console.log("Login")}>Sign in</button>
+        <GoogleLogin
+          onSuccess={(credentialResponse) => {
+            const decoded = decodeJWT(credentialResponse.credential);
+            console.log(credentialResponse);
+            console.log({ decoded });
+          }}
+          onError={() => {
+            console.log("Login Failed");
+          }}
+        />
       </div>
     </div>
   );
