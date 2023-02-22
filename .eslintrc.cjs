@@ -8,7 +8,12 @@ module.exports = {
   parserOptions: {
     ecmaVersion: "latest",
     sourceType: "module",
+    project: "./tsconfig.json",
   },
-  plugins: ["react"],
-  rules: {},
+  plugins: ["react", "simple-import-sort"],
+  rules: {
+    "react/react-in-jsx-scope": "off",
+    "simple-import-sort/imports": "warn",
+    "simple-import-sort/exports": "warn",
+  },
 };
