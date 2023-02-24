@@ -1,8 +1,9 @@
 import "../App.css";
 
 import { GoogleLogin } from "@react-oauth/google";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
+import useAuth from "../hooks/useAuth";
 import { useSessionStore, useUserStore } from "../store";
 import { decodeJWT } from "../utils/decodeJWT";
 
@@ -10,8 +11,11 @@ function Login(): JSX.Element {
   const { setSession } = useSessionStore();
   const { setUser } = useUserStore();
   const navigate = useNavigate();
+  const isUserAuthenticated = useAuth();
 
-  return (
+  return isUserAuthenticated ? (
+    <Navigate to="/" replace />
+  ) : (
     <div className="App">
       <div className="card">
         <GoogleLogin
