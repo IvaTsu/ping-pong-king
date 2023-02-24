@@ -40,10 +40,7 @@ export const useSessionStore = create<ISessionState & ISessionStateActions>()(
       session: undefined,
       clear: () => {
         set({
-          session: {
-            jwt: undefined,
-            exp: undefined,
-          },
+          session: undefined,
         });
       },
       setSession: (session) => {
