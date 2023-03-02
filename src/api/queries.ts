@@ -1,4 +1,4 @@
-import { playersList } from "./urls";
+import { type IPlayerListParams, playersList } from "./urls";
 
 async function request<T>(url: string): Promise<T> {
   const response = await fetch(url, {
@@ -33,6 +33,9 @@ interface IPlayersList {
   };
 }
 
-export async function fetchPlayersList(): Promise<IPlayersList> {
-  return await request(playersList);
+export async function fetchPlayersList({
+  page,
+  size,
+}: IPlayerListParams): Promise<IPlayersList> {
+  return await request(playersList({ page, size }));
 }
