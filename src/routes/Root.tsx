@@ -4,10 +4,11 @@ import {
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
+  type PaginationState,
   type SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { fetchPlayersList, type IPlayerData } from "../api/queries";
 import NavigationBar from "../components/NavigationBar";
@@ -39,17 +40,38 @@ export const userColumnDefs = [
 
 function Root(): JSX.Element {
   const [sorting, setSorting] = useState<SortingState>([]);
-  const { data: playersList } = useQuery(["playersList"], fetchPlayersList);
+  const [{ pageIndex, pageSize }, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+
+  const pagination = useMemo(
+    () => ({
+      pageIndex,
+      pageSize,
+    }),
+    [pageIndex, pageSize]
+  );
+
+  const { data: playersList } = useQuery(
+    ["playersList", fetchPlayersList, pagination],
+    async () => await fetchPlayersList({ page: pageIndex, size: pageSize }),
+    { keepPreviousData: true }
+  );
 
   const table = useReactTable({
     columns: userColumnDefs,
     data: playersList?.content ?? [],
+    pageCount: playersList?.pageable.totalPages,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     state: {
       sorting,
+      pagination,
     },
     onSortingChange: setSorting,
+    onPaginationChange: setPagination,
+    manualPagination: true,
   });
   const headers = table.getFlatHeaders();
   const rows = table.getRowModel().rows;
@@ -60,7 +82,6 @@ function Root(): JSX.Element {
         <NavigationBar />
         <div className="overflow-x-auto">
           <table className="table w-full">
-            {/* head */}
             <thead>
               <tr>
                 {headers.map((header) => {
@@ -77,14 +98,12 @@ function Root(): JSX.Element {
                       {header.isPlaceholder ? null : (
                         <div
                           onClick={header.column.getToggleSortingHandler()}
-                          // 8. add a class to render the sorting indicator properly
                           className="cursor-pointer flex gap-4"
                         >
                           {flexRender(
                             header.column.columnDef.header,
                             header.getContext()
                           )}
-                          {/* 9. render the sorting indicator */}
                           {direction !== false && <span>{sortIndicator}</span>}
                         </div>
                       )}
@@ -108,6 +127,81 @@ function Root(): JSX.Element {
               ))}
             </tbody>
           </table>
+          <div className="my-2">
+            <div className="flex items-center gap-2">
+              <div className="btn-group btn-sm">
+                <button
+                  className="btn btn-sm"
+                  onClick={() => {
+                    table.setPageIndex(0);
+                  }}
+                  disabled={!table.getCanPreviousPage()}
+                >
+                  {"<<"}
+                </button>
+                <button
+                  className="btn btn-sm"
+                  onClick={() => {
+                    table.previousPage();
+                  }}
+                  disabled={!table.getCanPreviousPage()}
+                >
+                  {"<"}
+                </button>
+                <button
+                  className="btn btn-sm"
+                  onClick={() => {
+                    table.nextPage();
+                  }}
+                  disabled={!table.getCanNextPage()}
+                >
+                  {">"}
+                </button>
+                <button
+                  className="btn btn-sm"
+                  onClick={() => {
+                    table.setPageIndex(table.getPageCount() - 1);
+                  }}
+                  disabled={!table.getCanNextPage()}
+                >
+                  {">>"}
+                </button>
+              </div>
+              <span className="flex items-center gap-1">
+                <div>Page</div>
+                <strong>
+                  {table.getState().pagination.pageIndex + 1} of{" "}
+                  {table.getPageCount()}
+                </strong>
+              </span>
+              <span className="flex items-center gap-1">
+                | Go to page:
+                <input
+                  defaultValue={table.getState().pagination.pageIndex + 1}
+                  type="number"
+                  onChange={(e) => {
+                    const page =
+                      e.target.value != null ? Number(e.target.value) - 1 : 0;
+                    table.setPageIndex(page);
+                  }}
+                  className="input input-bordered w-20 input-sm mx-2"
+                />
+              </span>
+              <select
+                value={table.getState().pagination.pageSize}
+                onChange={(e) => {
+                  table.setPageSize(Number(e.target.value));
+                }}
+                className="select select-sm select-bordered"
+              >
+                {[10, 20, 30, 40, 50].map((pageSize) => (
+                  <option key={pageSize} value={pageSize}>
+                    Show {pageSize}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
         </div>
       </>
     </ProtectedRoute>
