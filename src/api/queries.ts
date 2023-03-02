@@ -9,7 +9,7 @@ async function request<T>(url: string): Promise<T> {
   return await response.json();
 }
 
-interface IPlayerData {
+export interface IPlayerData {
   gamesPlayed: number;
   id: string;
   name: string;
