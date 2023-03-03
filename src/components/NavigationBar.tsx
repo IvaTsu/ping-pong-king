@@ -17,6 +17,10 @@ const NavigationBar = (): JSX.Element => {
     navigate("/profile");
   };
 
+  const _onAddGameClick = (): void => {
+    navigate(paths.addGame);
+  };
+
   const _onSignOutClick = (): void => {
     clearSession();
     clearUser();
@@ -52,9 +56,11 @@ const NavigationBar = (): JSX.Element => {
                   <a onClick={_onRootClick}>Homepage</a>
                 </li>
               )}
-              <li>
-                <a>Add game</a>
-              </li>
+              {location.pathname !== paths.addGame && (
+                <li>
+                  <a onClick={_onAddGameClick}>Add game</a>
+                </li>
+              )}
             </ul>
           </div>
         </div>
