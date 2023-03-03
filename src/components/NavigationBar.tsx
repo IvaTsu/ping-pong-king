@@ -10,11 +10,11 @@ const NavigationBar = (): JSX.Element => {
   const { clear: clearSession } = useSessionStore();
 
   const _onRootClick = (): void => {
-    navigate("/");
+    navigate(paths.root);
   };
 
   const _onProfileClick = (): void => {
-    navigate("/profile");
+    navigate(paths.profile);
   };
 
   const _onAddGameClick = (): void => {
