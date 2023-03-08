@@ -17,6 +17,9 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
       clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
       authorizationParams={{
         redirect_uri: window.location.origin,
+        audience: `https://${
+          import.meta.env.VITE_AUTH0_DOMAIN as string
+        }/api/v2/`,
       }}
     >
       <QueryClientProvider client={queryClient}>
