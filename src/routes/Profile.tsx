@@ -1,16 +1,21 @@
 import "../App.css";
 
+import { useAuth0 } from "@auth0/auth0-react";
+
 import NavigationBar from "../components/NavigationBar";
 import ProtectedRoute from "../routes/ProtectedRoute";
 import { useUserStore } from "../store";
 
 function Profile(): JSX.Element {
+  const { logout } = useAuth0();
+
   const { clear: clearUser, getUser } = useUserStore();
 
   const user = getUser();
 
   const _onSignOutClick = (): void => {
     clearUser();
+    logout({ logoutParams: { returnTo: `${window.location.origin}/login` } });
   };
 
   return (
