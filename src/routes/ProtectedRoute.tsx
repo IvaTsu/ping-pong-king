@@ -1,11 +1,10 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import { Navigate } from "react-router-dom";
 
-import useAuth from "../hooks/useAuth";
-
 function ProtectedRoute({ children }: { children: JSX.Element }): JSX.Element {
-  const isUserAuthenticated = useAuth();
+  const { isAuthenticated, isLoading } = useAuth0();
 
-  if (!isUserAuthenticated) {
+  if (!isLoading && !isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
