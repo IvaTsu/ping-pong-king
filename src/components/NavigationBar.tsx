@@ -1,13 +1,12 @@
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { paths } from "../router/router";
-import { useSessionStore, useUserStore } from "../store";
+import { useUserStore } from "../store";
 
 const NavigationBar = (): JSX.Element => {
   const location = useLocation();
   const navigate = useNavigate();
   const { clear: clearUser, getUser } = useUserStore();
-  const { clear: clearSession } = useSessionStore();
 
   const _onRootClick = (): void => {
     navigate("/");
@@ -18,7 +17,6 @@ const NavigationBar = (): JSX.Element => {
   };
 
   const _onSignOutClick = (): void => {
-    clearSession();
     clearUser();
   };
 

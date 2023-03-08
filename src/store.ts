@@ -19,44 +19,6 @@ interface IUserStateActions {
   getUser: () => IUser | undefined;
 }
 
-interface ISession {
-  jwt: string | undefined;
-  exp: number | undefined;
-}
-
-interface ISessionState {
-  session: ISession | undefined;
-}
-
-interface ISessionStateActions {
-  clear: () => void;
-  setSession: (session: ISession) => void;
-  getSession: () => ISession | undefined;
-}
-
-export const useSessionStore = create<ISessionState & ISessionStateActions>()(
-  persist(
-    (set, get) => ({
-      session: undefined,
-      clear: () => {
-        set({
-          session: undefined,
-        });
-      },
-      setSession: (session) => {
-        set({
-          session,
-        });
-      },
-      getSession: () => get().session,
-    }),
-    {
-      name: "session-storage", // name of the item in the storage (must be unique)
-      storage: createJSONStorage(() => sessionStorage),
-    }
-  )
-);
-
 export const useUserStore = create<IUserState & IUserStateActions>()(
   persist(
     (set, get) => ({

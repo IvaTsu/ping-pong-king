@@ -2,16 +2,14 @@ import "../App.css";
 
 import NavigationBar from "../components/NavigationBar";
 import ProtectedRoute from "../routes/ProtectedRoute";
-import { useSessionStore, useUserStore } from "../store";
+import { useUserStore } from "../store";
 
 function Profile(): JSX.Element {
-  const { clear: clearSession } = useSessionStore();
   const { clear: clearUser, getUser } = useUserStore();
 
   const user = getUser();
 
   const _onSignOutClick = (): void => {
-    clearSession();
     clearUser();
   };
 
