@@ -2,14 +2,12 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { paths } from "../router/router";
-import { useUserStore } from "../store";
 
 const NavigationBar = (): JSX.Element => {
-  const { logout } = useAuth0();
+  const { logout, user } = useAuth0();
 
   const location = useLocation();
   const navigate = useNavigate();
-  const { clear: clearUser, getUser } = useUserStore();
 
   const _onRootClick = (): void => {
     navigate("/");
@@ -20,7 +18,6 @@ const NavigationBar = (): JSX.Element => {
   };
 
   const _onSignOutClick = (): void => {
-    clearUser();
     logout({ logoutParams: { returnTo: `${window.location.origin}/login` } });
   };
 
@@ -69,7 +66,7 @@ const NavigationBar = (): JSX.Element => {
           <div className="dropdown dropdown-end">
             <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
               <div className="w-10 rounded-full">
-                <img src={getUser()?.picture} />
+                <img src={user?.picture} />
               </div>
             </label>
             <ul
