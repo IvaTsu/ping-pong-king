@@ -1,7 +1,7 @@
 import "../App.css";
 
 import { useAuth0 } from "@auth0/auth0-react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 import { createPlayer } from "../api/player/post/mutations";
@@ -14,6 +14,7 @@ import { useUserStore } from "../store";
 interface ITournamentPostBody {
   name: string;
   email: string;
+  profileImage: string;
   tournamentRef: {
     id: string;
   };
@@ -25,8 +26,7 @@ function Profile(): JSX.Element {
   const { user } = useAuth0();
 
   const { accessToken } = useAccessToken();
-
-  const queryClient = useQueryClient();
+  const { setUser } = useUserStore();
 
   const { data: tournamentList, isLoading } = useQuery(
     ["tournamentList", fetchTournamentList, accessToken],
@@ -37,7 +37,7 @@ function Profile(): JSX.Element {
   const { mutate: createPlayerMutation } = useMutation({
     mutationFn: createPlayer,
     onSuccess: (player) => {
-      queryClient.setQueryData(["player", user?.name], player);
+      setUser(player);
     },
   });
 
@@ -94,11 +94,13 @@ function Profile(): JSX.Element {
                     accessToken != null &&
                     user?.name != null &&
                     user?.email != null &&
+                    user?.picture != null &&
                     tournamentId != null
                   ) {
                     _onTournamentSubmit(accessToken, {
-                      name: user?.name,
-                      email: user?.email,
+                      name: user.name,
+                      email: user.email,
+                      profileImage: user.picture,
                       tournamentRef: {
                         id: tournamentId,
                       },
@@ -112,7 +114,10 @@ function Profile(): JSX.Element {
           ) : (
             <div className="card card-side bg-base-100 shadow-xl mt-10">
               <figure>
-                <img src={user?.picture} alt="Movie" />
+                <img
+                  src={currentUser.profileImage}
+                  alt={`Picture of ${currentUser.name}`}
+                />
               </figure>
               <div className="card-body text-center">
                 <p>{currentUser.name}</p>
