@@ -11,6 +11,7 @@ import {
 import { useMemo, useState } from "react";
 
 import { fetchPlayersList, type IPlayerData } from "../api/queries";
+import { useAccessToken } from "../hooks/useAccessToken";
 import { LoadingSpinner } from "./LoadingSpinner";
 
 const columnHelper = createColumnHelper<IPlayerData>();
@@ -52,10 +53,17 @@ export const Table = (): JSX.Element => {
     [pageIndex, pageSize]
   );
 
+  const { accessToken } = useAccessToken();
+
   const { data: playersList, isLoading } = useQuery(
-    ["playersList", fetchPlayersList, pagination],
-    async () => await fetchPlayersList({ page: pageIndex, size: pageSize }),
-    { keepPreviousData: true, retry: false }
+    ["playersList", fetchPlayersList, pagination, accessToken],
+    async () =>
+      await fetchPlayersList({
+        accessToken: accessToken as string,
+        page: pageIndex,
+        size: pageSize,
+      }),
+    { keepPreviousData: true, retry: false, enabled: accessToken != null }
   );
 
   const table = useReactTable({
