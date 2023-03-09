@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-import { type IPlayer } from "./api/queries";
+import { type IPlayer } from "./api/player/get/types";
 
 interface IUser {
   isRegistered: boolean;

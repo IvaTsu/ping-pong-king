@@ -4,7 +4,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
-import { createPlayer, fetchTournamentList } from "../api/queries";
+import { createPlayer } from "../api/player/post/mutations";
+import { fetchTournamentList } from "../api/tournament/get/queries";
 import NavigationBar from "../components/NavigationBar";
 import { useAccessToken } from "../hooks/useAccessToken";
 import ProtectedRoute from "../routes/ProtectedRoute";

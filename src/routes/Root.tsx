@@ -2,7 +2,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 
-import { fetchPlayer } from "../api/queries";
+import { fetchPlayer } from "../api/player/get/queries";
 import NavigationBar from "../components/NavigationBar";
 import { Table } from "../components/Table";
 import { useAccessToken } from "../hooks/useAccessToken";

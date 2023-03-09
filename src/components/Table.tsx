@@ -10,11 +10,12 @@ import {
 } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
 
-import { fetchPlayersList, type IPlayerData } from "../api/queries";
+import { fetchPlayerList } from "../api/player/get/queries";
+import { type IPlayer } from "../api/player/get/types";
 import { useAccessToken } from "../hooks/useAccessToken";
 import { LoadingSpinner } from "./LoadingSpinner";
 
-const columnHelper = createColumnHelper<IPlayerData>();
+const columnHelper = createColumnHelper<IPlayer>();
 export const userColumnDefs = [
   columnHelper.accessor((row) => row.name, {
     id: "name",
@@ -55,10 +56,10 @@ export const Table = (): JSX.Element => {
 
   const { accessToken } = useAccessToken();
 
-  const { data: playersList, isLoading } = useQuery(
-    ["playersList", fetchPlayersList, pagination, accessToken],
+  const { data: playerList, isLoading } = useQuery(
+    ["playerList", fetchPlayerList, pagination, accessToken],
     async () =>
-      await fetchPlayersList({
+      await fetchPlayerList({
         accessToken: accessToken as string,
         page: pageIndex,
         size: pageSize,
@@ -68,8 +69,8 @@ export const Table = (): JSX.Element => {
 
   const table = useReactTable({
     columns: userColumnDefs,
-    data: playersList?.content ?? [],
-    pageCount: playersList?.pageable.totalPages,
+    data: playerList?.content ?? [],
+    pageCount: playerList?.pageable.totalPages,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     state: {
