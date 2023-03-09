@@ -3,20 +3,14 @@ import { createJSONStorage, persist } from "zustand/middleware";
 
 import { type IPlayer } from "./api/player/get/types";
 
-interface IUser {
-  isRegistered: boolean;
-}
-
-interface IPlayerUser extends IPlayer, IUser {}
-
 interface IUserState {
-  user: IPlayerUser | undefined;
+  user: IPlayer | undefined;
 }
 
 interface IUserStateActions {
   clear: () => void;
-  setUser: (user: IPlayerUser | undefined) => void;
-  getUser: () => IPlayerUser | undefined;
+  setUser: (user: IPlayer | undefined) => void;
+  getUser: () => IPlayer | undefined;
 }
 
 export const useUserStore = create<IUserState & IUserStateActions>()(
