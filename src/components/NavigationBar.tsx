@@ -10,7 +10,7 @@ const NavigationBar = (): JSX.Element => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { getUser } = useUserStore();
+  const { getUser, clear: clearUser } = useUserStore();
   const currentUser = getUser();
 
   const _onRootClick = (): void => {
@@ -23,6 +23,7 @@ const NavigationBar = (): JSX.Element => {
 
   const _onSignOutClick = (): void => {
     logout({ logoutParams: { returnTo: `${window.location.origin}/login` } });
+    clearUser();
   };
 
   return (
