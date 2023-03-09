@@ -1,61 +1,17 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-interface IUser {
-  email: string | undefined;
-  family_name: string | undefined;
-  given_name: string | undefined;
-  name: string | undefined;
-  picture: string | undefined;
-}
+import { type IPlayer } from "./api/player/get/types";
 
 interface IUserState {
-  user: IUser | undefined;
+  user: IPlayer | undefined;
 }
 
 interface IUserStateActions {
   clear: () => void;
-  setUser: (user: IUser) => void;
-  getUser: () => IUser | undefined;
+  setUser: (user: IPlayer | undefined) => void;
+  getUser: () => IPlayer | undefined;
 }
-
-interface ISession {
-  jwt: string | undefined;
-  exp: number | undefined;
-}
-
-interface ISessionState {
-  session: ISession | undefined;
-}
-
-interface ISessionStateActions {
-  clear: () => void;
-  setSession: (session: ISession) => void;
-  getSession: () => ISession | undefined;
-}
-
-export const useSessionStore = create<ISessionState & ISessionStateActions>()(
-  persist(
-    (set, get) => ({
-      session: undefined,
-      clear: () => {
-        set({
-          session: undefined,
-        });
-      },
-      setSession: (session) => {
-        set({
-          session,
-        });
-      },
-      getSession: () => get().session,
-    }),
-    {
-      name: "session-storage", // name of the item in the storage (must be unique)
-      storage: createJSONStorage(() => sessionStorage),
-    }
-  )
-);
 
 export const useUserStore = create<IUserState & IUserStateActions>()(
   persist(
@@ -63,13 +19,7 @@ export const useUserStore = create<IUserState & IUserStateActions>()(
       user: undefined,
       clear: () => {
         set({
-          user: {
-            email: undefined,
-            family_name: undefined,
-            given_name: undefined,
-            name: undefined,
-            picture: undefined,
-          },
+          user: undefined,
         });
       },
       setUser: (user) => {

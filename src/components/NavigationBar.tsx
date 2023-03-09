@@ -1,13 +1,17 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { paths } from "../router/router";
-import { useSessionStore, useUserStore } from "../store";
+import { useUserStore } from "../store";
 
 const NavigationBar = (): JSX.Element => {
+  const { logout, user } = useAuth0();
+
   const location = useLocation();
   const navigate = useNavigate();
-  const { clear: clearUser, getUser } = useUserStore();
-  const { clear: clearSession } = useSessionStore();
+
+  const { getUser, clear: clearUser } = useUserStore();
+  const currentUser = getUser();
 
   const _onRootClick = (): void => {
     navigate("/");
@@ -18,7 +22,7 @@ const NavigationBar = (): JSX.Element => {
   };
 
   const _onSignOutClick = (): void => {
-    clearSession();
+    logout({ logoutParams: { returnTo: `${window.location.origin}/login` } });
     clearUser();
   };
 
@@ -65,9 +69,19 @@ const NavigationBar = (): JSX.Element => {
         </div>
         <div className="navbar-end">
           <div className="dropdown dropdown-end">
-            <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+            <label
+              tabIndex={0}
+              className={`btn btn-ghost btn-circle avatar ${
+                currentUser?.registeredWhen == null ? "indicator" : ""
+              }`}
+            >
+              {currentUser?.registeredWhen == null && (
+                <span className="indicator-item badge badge-secondary">
+                  Action required
+                </span>
+              )}
               <div className="w-10 rounded-full">
-                <img src={getUser()?.picture} />
+                <img src={user?.picture} />
               </div>
             </label>
             <ul
@@ -78,6 +92,9 @@ const NavigationBar = (): JSX.Element => {
                 <li>
                   <a className="justify-between" onClick={_onProfileClick}>
                     Profile
+                    {currentUser?.registeredWhen == null && (
+                      <span className="badge">update</span>
+                    )}
                   </a>
                 </li>
               )}

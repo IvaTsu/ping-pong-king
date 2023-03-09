@@ -1,44 +1,38 @@
 import "../App.css";
 
-import { GoogleLogin } from "@react-oauth/google";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
+import { Navigate } from "react-router-dom";
 
-import useAuth from "../hooks/useAuth";
-import { useSessionStore, useUserStore } from "../store";
-import { decodeJWT } from "../utils/decodeJWT";
+import { LoadingSpinner } from "../components/LoadingSpinner";
 
 function Login(): JSX.Element {
-  const { setSession } = useSessionStore();
-  const { setUser } = useUserStore();
-  const navigate = useNavigate();
-  const isUserAuthenticated = useAuth();
+  const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
 
-  return isUserAuthenticated ? (
+  const _onLogInClick = async (): Promise<void> => {
+    try {
+      await loginWithRedirect();
+    } catch (error) {
+      // NOOP
+      // TODO: handle error with the Toast notification for the user.
+    }
+  };
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  return !isLoading && isAuthenticated ? (
     <Navigate to="/" replace />
   ) : (
     <div className="App">
       <div className="card">
-        <GoogleLogin
-          useOneTap
-          onSuccess={(credentialResponse) => {
-            const userPayload = decodeJWT(credentialResponse.credential);
-            setSession({
-              jwt: credentialResponse.credential,
-              exp: userPayload?.exp,
-            });
-            setUser({
-              email: userPayload?.email,
-              family_name: userPayload?.family_name,
-              given_name: userPayload?.given_name,
-              name: userPayload?.name,
-              picture: userPayload?.picture,
-            });
-            navigate("/");
+        <button
+          onClick={() => {
+            void _onLogInClick();
           }}
-          onError={() => {
-            console.log("Login Failed");
-          }}
-        />
+        >
+          Log In
+        </button>
       </div>
     </div>
   );

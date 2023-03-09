@@ -1,208 +1,53 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import { useQuery } from "@tanstack/react-query";
-import {
-  createColumnHelper,
-  flexRender,
-  getCoreRowModel,
-  getSortedRowModel,
-  type PaginationState,
-  type SortingState,
-  useReactTable,
-} from "@tanstack/react-table";
-import { useMemo, useState } from "react";
+import { useEffect } from "react";
 
-import { fetchPlayersList, type IPlayerData } from "../api/queries";
+import { fetchPlayer } from "../api/player/get/queries";
 import NavigationBar from "../components/NavigationBar";
+import { Table } from "../components/Table";
+import { useAccessToken } from "../hooks/useAccessToken";
 import ProtectedRoute from "../routes/ProtectedRoute";
-
-const columnHelper = createColumnHelper<IPlayerData>();
-export const userColumnDefs = [
-  columnHelper.accessor((row) => row.name, {
-    id: "name",
-    cell: (info) => <span>{info.getValue()}</span>,
-    header: () => <span>Name</span>,
-  }),
-  columnHelper.accessor((row) => row.rating, {
-    id: "rating",
-    cell: (info) => <span>{info.getValue()}</span>,
-    header: () => <span>Rating</span>,
-  }),
-  columnHelper.accessor((row) => row.tournamentRef.name, {
-    id: "office",
-    cell: (info) => <span>{info.getValue()}</span>,
-    header: () => <span>Office</span>,
-  }),
-  columnHelper.accessor((row) => row.gamesPlayed, {
-    id: "gamesPlayed",
-    cell: (info) => <span>{info.getValue()}</span>,
-    header: () => <span>Games played</span>,
-  }),
-];
+import { useUserStore } from "../store";
 
 function Root(): JSX.Element {
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [{ pageIndex, pageSize }, setPagination] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: 10,
-  });
+  const { user } = useAuth0();
 
-  const pagination = useMemo(
-    () => ({
-      pageIndex,
-      pageSize,
-    }),
-    [pageIndex, pageSize]
+  const { accessToken } = useAccessToken();
+
+  const { data: player, isLoading } = useQuery(
+    ["player", fetchPlayer, user?.name, accessToken],
+    async () =>
+      await fetchPlayer({
+        accessToken: accessToken as string,
+        name: user?.name as string,
+      }),
+    { enabled: user?.name != null && accessToken != null }
   );
 
-  const { data: playersList } = useQuery(
-    ["playersList", fetchPlayersList, pagination],
-    async () => await fetchPlayersList({ page: pageIndex, size: pageSize }),
-    { keepPreviousData: true }
-  );
+  const { setUser, getUser } = useUserStore();
+  const currentUser = getUser();
 
-  const table = useReactTable({
-    columns: userColumnDefs,
-    data: playersList?.content ?? [],
-    pageCount: playersList?.pageable.totalPages,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    state: {
-      sorting,
-      pagination,
-    },
-    onSortingChange: setSorting,
-    onPaginationChange: setPagination,
-    manualPagination: true,
-  });
-  const headers = table.getFlatHeaders();
-  const rows = table.getRowModel().rows;
+  useEffect(() => {
+    if (currentUser != null) return;
+    if (!isLoading && player?.length !== 0) {
+      const currentUser = player?.filter(
+        (player) => player.email === user?.email
+      )[0];
+      if (currentUser != null) {
+        setUser(currentUser);
+      } else {
+        setUser(undefined);
+      }
+    } else {
+      setUser(undefined);
+    }
+  }, [user?.name, player, currentUser]);
 
   return (
     <ProtectedRoute>
       <>
         <NavigationBar />
-        <div className="overflow-x-auto">
-          <table className="table w-full">
-            <thead>
-              <tr>
-                {headers.map((header) => {
-                  const direction = header.column.getIsSorted();
-                  const arrow = {
-                    asc: "🔼",
-                    desc: "🔽",
-                  };
-                  const sortIndicator =
-                    (direction === "asc" || direction === "desc") &&
-                    arrow[direction];
-                  return (
-                    <th key={header.id}>
-                      {header.isPlaceholder ? null : (
-                        <div
-                          onClick={header.column.getToggleSortingHandler()}
-                          className="cursor-pointer flex gap-4"
-                        >
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                          {direction !== false && <span>{sortIndicator}</span>}
-                        </div>
-                      )}
-                    </th>
-                  );
-                })}
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row) => (
-                <tr key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <div className="my-2">
-            <div className="flex items-center gap-2">
-              <div className="btn-group btn-sm">
-                <button
-                  className="btn btn-sm"
-                  onClick={() => {
-                    table.setPageIndex(0);
-                  }}
-                  disabled={!table.getCanPreviousPage()}
-                >
-                  {"<<"}
-                </button>
-                <button
-                  className="btn btn-sm"
-                  onClick={() => {
-                    table.previousPage();
-                  }}
-                  disabled={!table.getCanPreviousPage()}
-                >
-                  {"<"}
-                </button>
-                <button
-                  className="btn btn-sm"
-                  onClick={() => {
-                    table.nextPage();
-                  }}
-                  disabled={!table.getCanNextPage()}
-                >
-                  {">"}
-                </button>
-                <button
-                  className="btn btn-sm"
-                  onClick={() => {
-                    table.setPageIndex(table.getPageCount() - 1);
-                  }}
-                  disabled={!table.getCanNextPage()}
-                >
-                  {">>"}
-                </button>
-              </div>
-              <span className="flex items-center gap-1">
-                <div>Page</div>
-                <strong>
-                  {table.getState().pagination.pageIndex + 1} of{" "}
-                  {table.getPageCount()}
-                </strong>
-              </span>
-              <span className="flex items-center gap-1">
-                | Go to page:
-                <input
-                  defaultValue={table.getState().pagination.pageIndex + 1}
-                  type="number"
-                  onChange={(e) => {
-                    const page =
-                      e.target.value != null ? Number(e.target.value) - 1 : 0;
-                    table.setPageIndex(page);
-                  }}
-                  className="input input-bordered w-20 input-sm mx-2"
-                />
-              </span>
-              <select
-                value={table.getState().pagination.pageSize}
-                onChange={(e) => {
-                  table.setPageSize(Number(e.target.value));
-                }}
-                className="select select-sm select-bordered"
-              >
-                {[10, 20, 30, 40, 50].map((pageSize) => (
-                  <option key={pageSize} value={pageSize}>
-                    Show {pageSize}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </div>
+        <Table />
       </>
     </ProtectedRoute>
   );
