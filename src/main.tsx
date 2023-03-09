@@ -1,6 +1,6 @@
 import "./index.css";
 
-import { GoogleOAuthProvider } from "@react-oauth/google";
+import { Auth0Provider } from "@auth0/auth0-react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
 import ReactDOM from "react-dom/client";
@@ -12,17 +12,19 @@ const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <GoogleOAuthProvider
-      clientId={`${
-        (import.meta.env.VITE_GOOGLE_OAUTH_CLIENT_ID as string | undefined) !=
-        null
-          ? (import.meta.env.VITE_GOOGLE_OAUTH_CLIENT_ID as string)
-          : ""
-      }`}
+    <Auth0Provider
+      domain={import.meta.env.VITE_AUTH0_DOMAIN}
+      clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
+      authorizationParams={{
+        redirect_uri: window.location.origin,
+        audience: `https://${
+          import.meta.env.VITE_AUTH0_DOMAIN as string
+        }/api/v2/`,
+      }}
     >
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
       </QueryClientProvider>
-    </GoogleOAuthProvider>
+    </Auth0Provider>
   </React.StrictMode>
 );
