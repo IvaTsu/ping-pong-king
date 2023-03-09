@@ -2,12 +2,16 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { paths } from "../router/router";
+import { useUserStore } from "../store";
 
 const NavigationBar = (): JSX.Element => {
   const { logout, user } = useAuth0();
 
   const location = useLocation();
   const navigate = useNavigate();
+
+  const { getUser } = useUserStore();
+  const currentUser = getUser();
 
   const _onRootClick = (): void => {
     navigate("/");
@@ -64,7 +68,17 @@ const NavigationBar = (): JSX.Element => {
         </div>
         <div className="navbar-end">
           <div className="dropdown dropdown-end">
-            <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+            <label
+              tabIndex={0}
+              className={`btn btn-ghost btn-circle avatar ${
+                currentUser?.isRegistered ? "" : "indicator"
+              }`}
+            >
+              {!currentUser?.isRegistered && (
+                <span className="indicator-item badge badge-secondary">
+                  Action required
+                </span>
+              )}
               <div className="w-10 rounded-full">
                 <img src={user?.picture} />
               </div>
@@ -77,6 +91,9 @@ const NavigationBar = (): JSX.Element => {
                 <li>
                   <a className="justify-between" onClick={_onProfileClick}>
                     Profile
+                    {!currentUser?.isRegistered && (
+                      <span className="badge">update</span>
+                    )}
                   </a>
                 </li>
               )}
