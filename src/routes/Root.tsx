@@ -24,22 +24,24 @@ function Root(): JSX.Element {
     { enabled: user?.name != null && accessToken != null }
   );
 
-  const { setUser } = useUserStore();
+  const { setUser, getUser } = useUserStore();
+  const currentUser = getUser();
 
   useEffect(() => {
+    if (currentUser != null) return;
     if (!isLoading && player?.length !== 0) {
       const currentUser = player?.filter(
         (player) => player.email === user?.email
       )[0];
       if (currentUser != null) {
-        setUser({ isRegistered: true, ...currentUser });
+        setUser(currentUser);
       } else {
         setUser(undefined);
       }
     } else {
       setUser(undefined);
     }
-  }, [user?.name, player]);
+  }, [user?.name, player, currentUser]);
 
   return (
     <ProtectedRoute>
