@@ -1,22 +1,22 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
+import { type IPlayer } from "./api/queries";
+
 interface IUser {
-  email: string | undefined;
-  family_name: string | undefined;
-  given_name: string | undefined;
-  name: string | undefined;
-  picture: string | undefined;
+  isRegistered: boolean;
 }
 
+interface IPlayerUser extends IPlayer, IUser {}
+
 interface IUserState {
-  user: IUser | undefined;
+  user: IPlayerUser | undefined;
 }
 
 interface IUserStateActions {
   clear: () => void;
-  setUser: (user: IUser) => void;
-  getUser: () => IUser | undefined;
+  setUser: (user: IPlayerUser | undefined) => void;
+  getUser: () => IPlayerUser | undefined;
 }
 
 export const useUserStore = create<IUserState & IUserStateActions>()(
@@ -25,13 +25,7 @@ export const useUserStore = create<IUserState & IUserStateActions>()(
       user: undefined,
       clear: () => {
         set({
-          user: {
-            email: undefined,
-            family_name: undefined,
-            given_name: undefined,
-            name: undefined,
-            picture: undefined,
-          },
+          user: undefined,
         });
       },
       setUser: (user) => {
