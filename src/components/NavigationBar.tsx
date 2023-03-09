@@ -72,10 +72,10 @@ const NavigationBar = (): JSX.Element => {
             <label
               tabIndex={0}
               className={`btn btn-ghost btn-circle avatar ${
-                currentUser?.isRegistered === true ? "" : "indicator"
+                currentUser?.registeredWhen == null ? "indicator" : ""
               }`}
             >
-              {currentUser?.isRegistered === false && (
+              {currentUser?.registeredWhen == null && (
                 <span className="indicator-item badge badge-secondary">
                   Action required
                 </span>
@@ -92,7 +92,7 @@ const NavigationBar = (): JSX.Element => {
                 <li>
                   <a className="justify-between" onClick={_onProfileClick}>
                     Profile
-                    {currentUser?.isRegistered === false && (
+                    {currentUser?.registeredWhen == null && (
                       <span className="badge">update</span>
                     )}
                   </a>
