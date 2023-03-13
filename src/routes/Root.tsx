@@ -28,7 +28,6 @@ function Root(): JSX.Element {
   const currentUser = getUser();
 
   useEffect(() => {
-    if (currentUser != null) return;
     if (!isLoading && player?.length !== 0) {
       const currentUser = player?.filter(
         (player) => player.email === user?.email
@@ -38,8 +37,6 @@ function Root(): JSX.Element {
       } else {
         setUser(undefined);
       }
-    } else {
-      setUser(undefined);
     }
   }, [user?.name, player, currentUser]);
 
