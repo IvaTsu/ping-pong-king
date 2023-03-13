@@ -18,6 +18,8 @@ import ProtectedRoute from "./ProtectedRoute";
 
 export default function AddGame(): JSX.Element {
   const navigate = useNavigate();
+  const { accessToken } = useAccessToken();
+
   const [opponentSearchedValue, setOpponentSearchedValue] = useState("");
   const [currentUserScore, setCurrentUserScore] = useState<number | undefined>(
     undefined
@@ -25,12 +27,15 @@ export default function AddGame(): JSX.Element {
   const [opponentScore, setOpponentScore] = useState<number | undefined>(
     undefined
   );
+
   const debouncedOpponentSearchValue = useDebounce<string>(
     opponentSearchedValue,
     500
   );
 
-  const { accessToken } = useAccessToken();
+  const { mutate: createGameMutation, isSuccess } = useMutation({
+    mutationFn: createGame,
+  });
   const { data: playersList, isLoading } = useQuery(
     ["player", fetchPlayer, accessToken, debouncedOpponentSearchValue],
     async () =>
@@ -39,9 +44,7 @@ export default function AddGame(): JSX.Element {
         name: debouncedOpponentSearchValue,
       })
   );
-  const { mutate: createGameMutation, isSuccess } = useMutation({
-    mutationFn: createGame,
-  });
+
   const { getUser } = useUserStore();
   const currentUser = getUser();
   const { getOpponent, clear: clearOpponent } = useOpponentStore();
