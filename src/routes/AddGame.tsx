@@ -15,7 +15,7 @@ import ProtectedRoute from "./ProtectedRoute";
 
 export default function AddGame(): JSX.Element {
   const navigate = useNavigate();
-  const [opponentSearchedValue, setOpponentValue] = useState("");
+  const [opponentSearchedValue, setOpponentSearchedValue] = useState("");
   const [currentUserScore, setCurrentUserScore] = useState<number | undefined>(
     undefined
   );
@@ -165,7 +165,7 @@ export default function AddGame(): JSX.Element {
                     className="input input-bordered"
                     value={opponentSearchedValue}
                     onChange={(e) => {
-                      setOpponentValue(e.currentTarget.value);
+                      setOpponentSearchedValue(e.currentTarget.value);
                     }}
                   />
                 </label>
