@@ -7,6 +7,7 @@ import { fetchPlayer } from "../api/player/get/queries";
 import { type IPlayer } from "../api/player/get/types";
 import { LoadingSpinner } from "../components/LoadingSpinner";
 import NavigationBar from "../components/NavigationBar";
+import { Steps } from "../components/Steps";
 import { useAccessToken } from "../hooks/useAccessToken";
 import { useDebounce } from "../hooks/useDebounce";
 import { paths } from "../router/router";
@@ -198,24 +199,7 @@ export default function AddGame(): JSX.Element {
           )}
         </div>
 
-        <div className="absolute inset-x-0 bottom-20 ">
-          <ul className="steps steps-vertical lg:steps-horizontal">
-            <li
-              className={`step ${
-                currentOpponent != null ? "step-success" : "step-warning"
-              }`}
-            >
-              Opponent
-            </li>
-            <li
-              className={`step ${
-                currentOpponent == null ? "" : "step-warning"
-              } ${isSuccess ? "step-success" : ""}`}
-            >
-              Game Results
-            </li>
-          </ul>
-        </div>
+        <Steps currentOpponent={currentOpponent} isSuccess={isSuccess} />
       </>
     </ProtectedRoute>
   );
