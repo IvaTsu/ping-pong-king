@@ -7,6 +7,7 @@ import { fetchPlayer } from "../api/player/get/queries";
 import { LoadingSpinner } from "../components/LoadingSpinner";
 import NavigationBar from "../components/NavigationBar";
 import { PlayersSearchList } from "../components/PlayersSearchList";
+import { ScoreInput } from "../components/ScoreInput";
 import { SearchOpponentByName } from "../components/SearchOpponentByName";
 import { Steps } from "../components/Steps";
 import { useAccessToken } from "../hooks/useAccessToken";
@@ -80,18 +81,6 @@ export default function AddGame(): JSX.Element {
     }
   };
 
-  const _onCurrentUserScoreChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ): void => {
-    setCurrentUserScore(Number.parseInt(e.target.value, 10));
-  };
-
-  const _onOpponentScoreChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ): void => {
-    setOpponentScore(Number.parseInt(e.target.value, 10));
-  };
-
   return (
     <ProtectedRoute>
       <>
@@ -101,42 +90,14 @@ export default function AddGame(): JSX.Element {
             <>
               <div className="max-w-md mt-10">
                 <h3 className="text-xl font-bold">Game results</h3>
-                <div>
-                  <label className="label">
-                    <span className="label-text">
-                      {currentUser?.name}&apos;s Score
-                    </span>
-                  </label>
-                  <label className="input-group">
-                    <span>Score</span>
-                    <input
-                      type="text"
-                      placeholder="11"
-                      className="input input-bordered"
-                      onChange={(e) => {
-                        _onCurrentUserScoreChange(e);
-                      }}
-                    />
-                  </label>
-                </div>
-                <div>
-                  <label className="label">
-                    <span className="label-text">
-                      {currentOpponent.name}&apos; Score
-                    </span>
-                  </label>
-                  <label className="input-group">
-                    <span>Score</span>
-                    <input
-                      type="text"
-                      placeholder="8"
-                      className="input input-bordered"
-                      onChange={(e) => {
-                        _onOpponentScoreChange(e);
-                      }}
-                    />
-                  </label>
-                </div>
+                <ScoreInput
+                  user={currentUser}
+                  setUserScore={setCurrentUserScore}
+                />
+                <ScoreInput
+                  user={currentOpponent}
+                  setUserScore={setOpponentScore}
+                />
                 <button
                   className="btn btn-success mt-4"
                   onClick={_onCreateGameClick}
