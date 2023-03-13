@@ -35,3 +35,38 @@ export const useUserStore = create<IUserState & IUserStateActions>()(
     }
   )
 );
+
+interface IOpponentState {
+  opponent: IPlayer | undefined;
+}
+
+interface IOpponentStateActions {
+  clear: () => void;
+  setOpponent: (user: IPlayer | undefined) => void;
+  getOpponent: () => IPlayer | undefined;
+}
+
+export const useOpponentStore = create<
+  IOpponentState & IOpponentStateActions
+>()(
+  persist(
+    (set, get) => ({
+      opponent: undefined,
+      clear: () => {
+        set({
+          opponent: undefined,
+        });
+      },
+      setOpponent: (opponent) => {
+        set({
+          opponent,
+        });
+      },
+      getOpponent: () => get().opponent,
+    }),
+    {
+      name: "opponent-storage", // name of the item in the storage (must be unique)
+      storage: createJSONStorage(() => localStorage),
+    }
+  )
+);
