@@ -7,6 +7,7 @@ import { fetchPlayer } from "../api/player/get/queries";
 import { LoadingSpinner } from "../components/LoadingSpinner";
 import NavigationBar from "../components/NavigationBar";
 import { PlayersSearchList } from "../components/PlayersSearchList";
+import { SearchOpponentByName } from "../components/SearchOpponentByName";
 import { Steps } from "../components/Steps";
 import { useAccessToken } from "../hooks/useAccessToken";
 import { useDebounce } from "../hooks/useDebounce";
@@ -146,30 +147,15 @@ export default function AddGame(): JSX.Element {
             </>
           ) : (
             <div>
-              <label className="label">
-                <span className="label-text">Opponent Name</span>
-              </label>
-
-              <div>
-                <label className="input-group">
-                  <span>Opponent</span>
-                  <input
-                    type="text"
-                    placeholder="Search…"
-                    className="input input-bordered"
-                    value={opponentSearchedValue}
-                    onChange={(e) => {
-                      setOpponentSearchedValue(e.currentTarget.value);
-                    }}
-                  />
-                </label>
-
-                {isLoading ? (
-                  <LoadingSpinner />
-                ) : (
-                  <PlayersSearchList playersList={playersList} />
-                )}
-              </div>
+              <SearchOpponentByName
+                value={opponentSearchedValue}
+                onChange={setOpponentSearchedValue}
+              />
+              {isLoading ? (
+                <LoadingSpinner />
+              ) : (
+                <PlayersSearchList playersList={playersList} />
+              )}
             </div>
           )}
         </div>
