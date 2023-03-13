@@ -38,9 +38,6 @@ export default function AddGame(): JSX.Element {
   );
   const { mutate: createGameMutation, isSuccess } = useMutation({
     mutationFn: createGame,
-    onSuccess: (payload) => {
-      console.log({ payload });
-    },
   });
   const { getUser } = useUserStore();
   const currentUser = getUser();
