@@ -1,165 +1,222 @@
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
+import { createGame } from "../api/game/post/mutations";
+import { fetchPlayer } from "../api/player/get/queries";
+import { type IPlayer } from "../api/player/get/types";
+import { LoadingSpinner } from "../components/LoadingSpinner";
 import NavigationBar from "../components/NavigationBar";
+import { useAccessToken } from "../hooks/useAccessToken";
+import { useDebounce } from "../hooks/useDebounce";
+import { paths } from "../router/router";
+import { useOpponentStore, useUserStore } from "../store";
 import ProtectedRoute from "./ProtectedRoute";
 
 export default function AddGame(): JSX.Element {
-  const [playerA, setPlayerA] = useState("");
+  const navigate = useNavigate();
+  const [opponentSearchedValue, setOpponentValue] = useState("");
+  const [currentUserScore, setCurrentUserScore] = useState<number | undefined>(
+    undefined
+  );
+  const [opponentScore, setOpponentScore] = useState<number | undefined>(
+    undefined
+  );
+  const debouncedOpponentSearchValue = useDebounce<string>(
+    opponentSearchedValue,
+    500
+  );
+
+  const { accessToken } = useAccessToken();
+  const { data: playersList, isLoading } = useQuery(
+    ["player", fetchPlayer, accessToken, debouncedOpponentSearchValue],
+    async () =>
+      await fetchPlayer({
+        accessToken: accessToken as string,
+        name: debouncedOpponentSearchValue,
+      })
+  );
+  const { mutate: createGameMutation, isSuccess } = useMutation({
+    mutationFn: createGame,
+    onSuccess: (payload) => {
+      console.log({ payload });
+    },
+  });
+  const { getUser } = useUserStore();
+  const currentUser = getUser();
+  const { setOpponent, getOpponent, clear: clearOpponent } = useOpponentStore();
+  const currentOpponent = getOpponent();
+
+  const _onOpponentSelect = (player: IPlayer): void => {
+    setOpponent(player);
+  };
+
+  const _onCreateGameClick = (): void => {
+    if (
+      accessToken != null &&
+      currentUserScore != null &&
+      opponentScore != null
+    ) {
+      createGameMutation({
+        accessToken,
+        body: {
+          playerRefA: {
+            id: currentUser?.id,
+          },
+          playerRefB: {
+            id: currentOpponent?.id,
+          },
+          // TODO: this should be a separate selector
+          tournamentRef: {
+            id: currentUser?.tournamentRef.id,
+          },
+          gameResult: {
+            playerAScore: currentUserScore,
+            playerBScore: opponentScore,
+            winnerId:
+              currentUserScore > opponentScore
+                ? currentUser?.id
+                : currentOpponent?.id,
+          },
+        },
+      });
+      clearOpponent();
+      navigate(paths.root);
+    }
+  };
+
+  const _onCurrentUserScoreChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    setCurrentUserScore(Number.parseInt(e.target.value, 10));
+  };
+
+  const _onOpponentScoreChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    setOpponentScore(Number.parseInt(e.target.value, 10));
+  };
 
   return (
     <ProtectedRoute>
       <>
         <NavigationBar />
-
-        {/* <div className="flex flex-row justify-between items-center w-full">
-          <div>
-            <label className="label">
-              <span className="label-text">PlayerA Name</span>
-            </label>
-            <label className="input-group">
-              <span>Player A</span>
-              <input
-                type="text"
-                placeholder="Search…"
-                className="input input-bordered"
-              />
-              <button className="btn btn-square">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
-              </button>
-            </label>
-          </div>
-
-          <div>
-            <label className="label">
-              <span className="label-text">PlayerB Name</span>
-            </label>
-            <label className="input-group">
-              <span>Player B</span>
-              <input
-                type="text"
-                placeholder="Search…"
-                className="input input-bordered"
-              />
-              <button className="btn btn-square">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
-              </button>
-            </label>
-          </div>
-
-          <div>
-            <label className="label">
-              <span className="label-text">Office</span>
-            </label>
-            <select className="select select-bordered">
-              <option disabled selected>
-                Pick office
-              </option>
-              <option>T-shirts</option>
-              <option>Mugs</option>
-            </select>
-            <button className="btn">Go</button>
-          </div>
-        </div>
-        <div className="hero-content text-center">
-          <div className="max-w-md">
-            <h3 className="text-xl font-bold">Game results</h3>
-            <div>
-              <label className="label">
-                <span className="label-text">PlayerA Score</span>
-              </label>
-              <label className="input-group">
-                <span>Score</span>
-                <input
-                  type="text"
-                  placeholder="11"
-                  className="input input-bordered"
-                />
-              </label>
-            </div>
-            <div>
-              <label className="label">
-                <span className="label-text">PlayerB Score</span>
-              </label>
-              <label className="input-group">
-                <span>Score</span>
-                <input
-                  type="text"
-                  placeholder="8"
-                  className="input input-bordered"
-                />
-              </label>
-            </div>
-            <button className="btn btn-success mt-4">Create Game</button>
-          </div>
-        </div> */}
         <div className="flex justify-center items-center">
-          <div>
-            <label className="label">
-              <span className="label-text">PlayerA Name</span>
-            </label>
-            <label className="input-group">
-              <span>Player A</span>
-              <input
-                type="text"
-                placeholder="Search…"
-                className="input input-bordered"
-                value={playerA}
-                onChange={(e) => {
-                  setPlayerA(e.currentTarget.value);
-                }}
-              />
-              <button className="btn btn-square">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+          {currentOpponent != null ? (
+            <>
+              <div className="max-w-md mt-10">
+                <h3 className="text-xl font-bold">Game results</h3>
+                <div>
+                  <label className="label">
+                    <span className="label-text">
+                      {currentUser?.name}&apos;s Score
+                    </span>
+                  </label>
+                  <label className="input-group">
+                    <span>Score</span>
+                    <input
+                      type="text"
+                      placeholder="11"
+                      className="input input-bordered"
+                      onChange={(e) => {
+                        _onCurrentUserScoreChange(e);
+                      }}
+                    />
+                  </label>
+                </div>
+                <div>
+                  <label className="label">
+                    <span className="label-text">
+                      {currentOpponent.name}&apos; Score
+                    </span>
+                  </label>
+                  <label className="input-group">
+                    <span>Score</span>
+                    <input
+                      type="text"
+                      placeholder="8"
+                      className="input input-bordered"
+                      onChange={(e) => {
+                        _onOpponentScoreChange(e);
+                      }}
+                    />
+                  </label>
+                </div>
+                <button
+                  className="btn btn-success mt-4"
+                  onClick={_onCreateGameClick}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  Create Game
+                </button>
+              </div>
+            </>
+          ) : (
+            <div>
+              <label className="label">
+                <span className="label-text">Opponent Name</span>
+              </label>
+
+              <div>
+                <label className="input-group">
+                  <span>Opponent</span>
+                  <input
+                    type="text"
+                    placeholder="Search…"
+                    className="input input-bordered"
+                    value={opponentSearchedValue}
+                    onChange={(e) => {
+                      setOpponentValue(e.currentTarget.value);
+                    }}
                   />
-                </svg>
-              </button>
-            </label>
-          </div>
+                </label>
+
+                {isLoading ? (
+                  <LoadingSpinner />
+                ) : (
+                  <ul className="card bg-base-100 shadow-xl mt-2 max-h-96 overflow-auto">
+                    {playersList != null && playersList.length !== 0 ? (
+                      <>
+                        {playersList.map((player) => {
+                          return (
+                            <li key={player.id} className="m-2">
+                              <button
+                                className="w-full"
+                                onClick={() => {
+                                  _onOpponentSelect(player);
+                                }}
+                              >
+                                {player.name}
+                              </button>
+                            </li>
+                          );
+                        })}
+                      </>
+                    ) : (
+                      <>not found</>
+                    )}
+                  </ul>
+                )}
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="absolute inset-x-0 bottom-20 ">
           <ul className="steps steps-vertical lg:steps-horizontal">
-            <li className="step step-warning step-success">PlayerA</li>
-            <li className="step">PlayerB</li>
-            <li className="step">Office</li>
-            <li className="step">Game Results</li>
+            <li
+              className={`step ${
+                currentOpponent != null ? "step-success" : "step-warning"
+              }`}
+            >
+              Opponent
+            </li>
+            <li
+              className={`step ${
+                currentOpponent == null ? "" : "step-warning"
+              } ${isSuccess ? "step-success" : ""}`}
+            >
+              Game Results
+            </li>
           </ul>
         </div>
       </>
