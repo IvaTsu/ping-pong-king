@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 
 import { createGame } from "../api/game/post/mutations";
 import { fetchPlayer } from "../api/player/get/queries";
-import { type IPlayer } from "../api/player/get/types";
 import { LoadingSpinner } from "../components/LoadingSpinner";
 import NavigationBar from "../components/NavigationBar";
+import { PlayersSearchList } from "../components/PlayersSearchList";
 import { Steps } from "../components/Steps";
 import { useAccessToken } from "../hooks/useAccessToken";
 import { useDebounce } from "../hooks/useDebounce";
@@ -42,12 +42,8 @@ export default function AddGame(): JSX.Element {
   });
   const { getUser } = useUserStore();
   const currentUser = getUser();
-  const { setOpponent, getOpponent, clear: clearOpponent } = useOpponentStore();
+  const { getOpponent, clear: clearOpponent } = useOpponentStore();
   const currentOpponent = getOpponent();
-
-  const _onOpponentSelect = (player: IPlayer): void => {
-    setOpponent(player);
-  };
 
   const _onCreateGameClick = (): void => {
     if (
@@ -171,28 +167,7 @@ export default function AddGame(): JSX.Element {
                 {isLoading ? (
                   <LoadingSpinner />
                 ) : (
-                  <ul className="card bg-base-100 shadow-xl mt-2 max-h-96 overflow-auto">
-                    {playersList != null && playersList.length !== 0 ? (
-                      <>
-                        {playersList.map((player) => {
-                          return (
-                            <li key={player.id} className="m-2">
-                              <button
-                                className="w-full"
-                                onClick={() => {
-                                  _onOpponentSelect(player);
-                                }}
-                              >
-                                {player.name}
-                              </button>
-                            </li>
-                          );
-                        })}
-                      </>
-                    ) : (
-                      <>not found</>
-                    )}
-                  </ul>
+                  <PlayersSearchList playersList={playersList} />
                 )}
               </div>
             </div>
