@@ -5,6 +5,8 @@ import {
   getCoreRowModel,
   getSortedRowModel,
   type PaginationState,
+  type Row,
+  type RowData,
   type SortingState,
   useReactTable,
 } from "@tanstack/react-table";
@@ -12,8 +14,14 @@ import { useMemo, useState } from "react";
 
 import { fetchPlayerList } from "../api/player/get/queries";
 import { type IPlayer } from "../api/player/get/types";
+import { BLACK_LEATHER_JACKET } from "../constants/colors";
 import { useAccessToken } from "../hooks/useAccessToken";
+import { useUserStore } from "../store";
 import { LoadingSpinner } from "./LoadingSpinner";
+
+interface ICustomTableMeta<TData extends RowData> {
+  getRowStyles: (row: Row<TData>) => React.CSSProperties;
+}
 
 const columnHelper = createColumnHelper<IPlayer>();
 export const userColumnDefs = [
@@ -56,6 +64,9 @@ export const Table = (): JSX.Element => {
 
   const { accessToken } = useAccessToken();
 
+  const { getUser } = useUserStore();
+  const currentUser = getUser();
+
   const { data: playerList, isLoading } = useQuery(
     ["playerList", fetchPlayerList, pagination, accessToken],
     async () =>
@@ -80,6 +91,12 @@ export const Table = (): JSX.Element => {
     onSortingChange: setSorting,
     onPaginationChange: setPagination,
     manualPagination: true,
+    meta: {
+      getRowStyles: (row: Row<IPlayer>) =>
+        row.original.id === currentUser?.id
+          ? { backgroundColor: BLACK_LEATHER_JACKET }
+          : {},
+    },
   });
   const headers = table.getFlatHeaders();
   const rows = table.getRowModel().rows;
@@ -123,7 +140,14 @@ export const Table = (): JSX.Element => {
           {rows.map((row) => (
             <tr key={row.id}>
               {row.getVisibleCells().map((cell) => (
-                <td key={cell.id}>
+                <td
+                  key={cell.id}
+                  style={{
+                    ...(
+                      table.options.meta as ICustomTableMeta<IPlayer>
+                    )?.getRowStyles(row),
+                  }}
+                >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               ))}
