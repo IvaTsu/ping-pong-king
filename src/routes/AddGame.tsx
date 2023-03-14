@@ -52,6 +52,8 @@ export default function AddGame(): JSX.Element {
 
   const _onCreateGameClick = (): void => {
     if (
+      currentUser?.id != null &&
+      currentOpponent?.id != null &&
       accessToken != null &&
       currentUserScore != null &&
       opponentScore != null
