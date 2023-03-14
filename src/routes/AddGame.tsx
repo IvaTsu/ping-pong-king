@@ -22,14 +22,9 @@ export default function AddGame(): JSX.Element {
   const { accessToken } = useAccessToken();
 
   const [opponentSearchedValue, setOpponentSearchedValue] = useState('');
-  const [currentUserScore, setCurrentUserScore] = useState<number | undefined>(
-    undefined
-  );
-  const [opponentScore, setOpponentScore] = useState<number | undefined>(
-    undefined
-  );
-  const [successNotificationOpen, setSuccessNotificationOpen] =
-    useState<boolean>(false);
+  const [currentUserScore, setCurrentUserScore] = useState<number | ''>('');
+  const [opponentScore, setOpponentScore] = useState<number | ''>('');
+  const [inputError, setInputError] = useState<boolean>(false);
 
   const debouncedOpponentSearchValue = useDebounce<string>(
     opponentSearchedValue,
@@ -49,11 +44,10 @@ export default function AddGame(): JSX.Element {
   );
 
   useEffect(() => {
-    console.log(isSuccess);
-    isSuccess
-      ? setSuccessNotificationOpen(true)
-      : setSuccessNotificationOpen(false);
-  }, [isSuccess]);
+    opponentScore === currentUserScore
+      ? setInputError(true)
+      : setInputError(false);
+  }, [currentUserScore, opponentScore]);
 
   const { getUser } = useUserStore();
   const currentUser = getUser();
@@ -65,8 +59,8 @@ export default function AddGame(): JSX.Element {
       currentUser?.id != null &&
       currentOpponent?.id != null &&
       accessToken != null &&
-      currentUserScore != null &&
-      opponentScore != null
+      currentUserScore !== '' &&
+      opponentScore !== ''
     ) {
       createGameMutation({
         accessToken,
@@ -91,7 +85,9 @@ export default function AddGame(): JSX.Element {
           }
         }
       });
-      clearOpponent();
+
+      setCurrentUserScore('');
+      setOpponentScore('');
     }
   };
 
@@ -107,8 +103,8 @@ export default function AddGame(): JSX.Element {
     <ProtectedRoute>
       <>
         <NavigationBar />
-        <div className="flex justify-center items-center flex-col">
-          {successNotificationOpen && <SuccessNotification />}
+        <div className="flex justify-center items-center flex-col relative">
+          <SuccessNotification isOpen={isSuccess} />
           {currentOpponent != null ? (
             <>
               <div className="max-w-lg mt-10">
@@ -116,15 +112,18 @@ export default function AddGame(): JSX.Element {
                 <ScoreInput
                   user={currentUser}
                   setUserScore={setCurrentUserScore}
+                  value={currentUserScore}
                 />
                 <ScoreInput
                   user={currentOpponent}
                   setUserScore={setOpponentScore}
+                  value={opponentScore}
                 />
                 <div className="p-10 flex flex-col">
                   <button
                     className="btn btn-success mt-4"
                     onClick={_onCreateGameClick}
+                    disabled={inputError}
                   >
                     Create Game
                   </button>
