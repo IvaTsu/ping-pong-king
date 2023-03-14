@@ -22,7 +22,7 @@ function Root(): JSX.Element {
         accessToken: accessToken as string,
         name: user?.name as string
       }),
-    { enabled: user?.name != null && accessToken != null }
+    { refetchOnMount: "always" }
   );
 
   const { setUser, getUser } = useUserStore();

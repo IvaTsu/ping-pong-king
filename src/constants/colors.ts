@@ -1,0 +1,1 @@
+export const BLACK_LEATHER_JACKET = "#2B3D2E";

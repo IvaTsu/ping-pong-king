@@ -5,20 +5,12 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 import { createPlayer } from "../api/player/post/mutations";
+import { type IPostPlayerBody } from "../api/player/post/types";
 import { fetchTournamentList } from "../api/tournament/get/queries";
 import NavigationBar from "../components/NavigationBar";
 import { useAccessToken } from "../hooks/useAccessToken";
 import ProtectedRoute from "../routes/ProtectedRoute";
 import { useUserStore } from "../store";
-
-interface ITournamentPostBody {
-  name: string;
-  email: string;
-  profileImage: string;
-  tournamentRef: {
-    id: string;
-  };
-}
 
 function Profile(): JSX.Element {
   const [tournamentId, setTournamentId] = useState<string>();
@@ -52,7 +44,7 @@ function Profile(): JSX.Element {
 
   const _onTournamentSubmit = (
     accessToken: string,
-    body: ITournamentPostBody
+    body: IPostPlayerBody
   ): void => {
     createPlayerMutation({ accessToken, body });
   };
