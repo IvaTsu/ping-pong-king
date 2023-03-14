@@ -1,8 +1,8 @@
-import { useAuth0 } from "@auth0/auth0-react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth0 } from '@auth0/auth0-react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-import { paths } from "../router/router";
-import { useUserStore } from "../store";
+import { paths } from '../router/router';
+import { useUserStore } from '../store';
 
 const NavigationBar = (): JSX.Element => {
   const { logout, user } = useAuth0();
@@ -29,6 +29,7 @@ const NavigationBar = (): JSX.Element => {
     logout({ logoutParams: { returnTo: `${window.location.origin}/login` } });
     clearUser();
   };
+  console.log(currentUser);
 
   return (
     <>
@@ -78,7 +79,7 @@ const NavigationBar = (): JSX.Element => {
             <label
               tabIndex={0}
               className={`btn btn-ghost btn-circle avatar ${
-                currentUser?.registeredWhen == null ? "indicator" : ""
+                currentUser?.registeredWhen == null ? 'indicator' : ''
               }`}
             >
               {currentUser?.registeredWhen == null && (
