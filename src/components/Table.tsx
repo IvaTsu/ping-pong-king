@@ -19,7 +19,7 @@ import { useAccessToken } from "../hooks/useAccessToken";
 import { useUserStore } from "../store";
 import { LoadingSpinner } from "./LoadingSpinner";
 
-interface CustomTableMeta<TData extends RowData> {
+interface ICustomTableMeta<TData extends RowData> {
   getRowStyles: (row: Row<TData>) => React.CSSProperties;
 }
 
@@ -144,7 +144,7 @@ export const Table = (): JSX.Element => {
                   key={cell.id}
                   style={{
                     ...(
-                      table.options.meta as CustomTableMeta<IPlayer>
+                      table.options.meta as ICustomTableMeta<IPlayer>
                     )?.getRowStyles(row),
                   }}
                 >
