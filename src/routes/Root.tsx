@@ -20,7 +20,8 @@ function Root(): JSX.Element {
       await fetchPlayer({
         accessToken: accessToken as string,
         name: user?.name as string,
-      })
+      }),
+    { refetchOnMount: "always" }
   );
 
   const { setUser, getUser } = useUserStore();
