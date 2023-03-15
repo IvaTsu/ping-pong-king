@@ -116,7 +116,11 @@ export default function AddGame(): JSX.Element {
                   <button
                     className="btn btn-success mt-4"
                     onClick={_onCreateGameClick}
-                    disabled={opponentScore === currentUserScore}
+                    disabled={
+                      currentUserScore === opponentScore ||
+                      typeof currentUserScore === "string" ||
+                      typeof opponentScore === "string"
+                    }
                   >
                     Create Game
                   </button>

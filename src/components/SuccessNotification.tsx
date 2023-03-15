@@ -5,7 +5,6 @@ interface SuccessNotificationProps {
 export default function SuccessNotification({
   isOpen,
 }: SuccessNotificationProps): JSX.Element {
-  console.log(isOpen);
   const [opacity, setOpacity] = useState<string>("opacity-0");
   useEffect(() => {
     isOpen ? setOpacity("opacity-100") : setOpacity("opacity-0");
