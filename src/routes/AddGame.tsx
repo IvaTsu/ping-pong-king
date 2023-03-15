@@ -1,29 +1,29 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import { createGame } from '../api/game/post/mutations';
-import { fetchPlayer } from '../api/player/get/queries';
-import { LoadingSpinner } from '../components/LoadingSpinner';
-import NavigationBar from '../components/NavigationBar';
-import { PlayersSearchList } from '../components/PlayersSearchList';
-import { ScoreInput } from '../components/ScoreInput';
-import { SearchOpponentByName } from '../components/SearchOpponentByName';
-import { Steps } from '../components/Steps';
-import SuccessNotification from '../components/SuccessNotification';
-import { useAccessToken } from '../hooks/useAccessToken';
-import { useDebounce } from '../hooks/useDebounce';
-import { paths } from '../router/router';
-import { useOpponentStore, useUserStore } from '../store';
-import ProtectedRoute from './ProtectedRoute';
+import { createGame } from "../api/game/post/mutations";
+import { fetchPlayer } from "../api/player/get/queries";
+import { LoadingSpinner } from "../components/LoadingSpinner";
+import NavigationBar from "../components/NavigationBar";
+import { PlayersSearchList } from "../components/PlayersSearchList";
+import { ScoreInput } from "../components/ScoreInput";
+import { SearchOpponentByName } from "../components/SearchOpponentByName";
+import { Steps } from "../components/Steps";
+import SuccessNotification from "../components/SuccessNotification";
+import { useAccessToken } from "../hooks/useAccessToken";
+import { useDebounce } from "../hooks/useDebounce";
+import { paths } from "../router/router";
+import { useOpponentStore, useUserStore } from "../store";
+import ProtectedRoute from "./ProtectedRoute";
 
 export default function AddGame(): JSX.Element {
   const navigate = useNavigate();
   const { accessToken } = useAccessToken();
 
-  const [opponentSearchedValue, setOpponentSearchedValue] = useState('');
-  const [currentUserScore, setCurrentUserScore] = useState<number | ''>('');
-  const [opponentScore, setOpponentScore] = useState<number | ''>('');
+  const [opponentSearchedValue, setOpponentSearchedValue] = useState("");
+  const [currentUserScore, setCurrentUserScore] = useState<number | "">("");
+  const [opponentScore, setOpponentScore] = useState<number | "">("");
   const [inputError, setInputError] = useState<boolean>(false);
 
   const debouncedOpponentSearchValue = useDebounce<string>(
@@ -32,14 +32,14 @@ export default function AddGame(): JSX.Element {
   );
 
   const { mutate: createGameMutation, isSuccess } = useMutation({
-    mutationFn: createGame
+    mutationFn: createGame,
   });
   const { data: playersList, isLoading } = useQuery(
-    ['player', fetchPlayer, accessToken, debouncedOpponentSearchValue],
+    ["player", fetchPlayer, accessToken, debouncedOpponentSearchValue],
     async () =>
       await fetchPlayer({
         accessToken: accessToken as string,
-        name: debouncedOpponentSearchValue
+        name: debouncedOpponentSearchValue,
       })
   );
 
@@ -59,21 +59,21 @@ export default function AddGame(): JSX.Element {
       currentUser?.id != null &&
       currentOpponent?.id != null &&
       accessToken != null &&
-      currentUserScore !== '' &&
-      opponentScore !== ''
+      currentUserScore !== "" &&
+      opponentScore !== ""
     ) {
       createGameMutation({
         accessToken,
         body: {
           playerRefA: {
-            id: currentUser?.id
+            id: currentUser?.id,
           },
           playerRefB: {
-            id: currentOpponent?.id
+            id: currentOpponent?.id,
           },
           // TODO: this should be a separate selector
           tournamentRef: {
-            id: currentUser?.tournamentRef.id
+            id: currentUser?.tournamentRef.id,
           },
           gameResult: {
             playerAScore: currentUserScore,
@@ -81,13 +81,13 @@ export default function AddGame(): JSX.Element {
             winnerId:
               currentUserScore > opponentScore
                 ? currentUser?.id
-                : currentOpponent?.id
-          }
-        }
+                : currentOpponent?.id,
+          },
+        },
       });
 
-      setCurrentUserScore('');
-      setOpponentScore('');
+      setCurrentUserScore("");
+      setOpponentScore("");
     }
   };
 

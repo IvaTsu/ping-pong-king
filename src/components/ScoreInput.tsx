@@ -1,18 +1,18 @@
-import { type Dispatch, type SetStateAction } from 'react';
+import { type Dispatch, type SetStateAction } from "react";
 
-import { type IPlayer } from '../api/player/get/types';
+import { type IPlayer } from "../api/player/get/types";
 
 export const ScoreInput = ({
   user,
   setUserScore,
-  value
+  value,
 }: {
   user: IPlayer | undefined;
-  setUserScore: Dispatch<SetStateAction<number | ''>>;
-  value: number | '';
+  setUserScore: Dispatch<SetStateAction<number | "">>;
+  value: number | "";
 }): JSX.Element => {
   const _onUserScoreChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    if (e.target.value === '') setUserScore('');
+    if (e.target.value === "") setUserScore("");
     else setUserScore(Number.parseInt(e.target.value, 10));
   };
   return (

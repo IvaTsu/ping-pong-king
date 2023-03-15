@@ -1,13 +1,13 @@
-import { useAuth0 } from '@auth0/auth0-react';
-import { useQuery } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { useAuth0 } from "@auth0/auth0-react";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 
-import { fetchPlayer } from '../api/player/get/queries';
-import NavigationBar from '../components/NavigationBar';
-import { Table } from '../components/Table';
-import { useAccessToken } from '../hooks/useAccessToken';
-import ProtectedRoute from '../routes/ProtectedRoute';
-import { useUserStore } from '../store';
+import { fetchPlayer } from "../api/player/get/queries";
+import NavigationBar from "../components/NavigationBar";
+import { Table } from "../components/Table";
+import { useAccessToken } from "../hooks/useAccessToken";
+import ProtectedRoute from "../routes/ProtectedRoute";
+import { useUserStore } from "../store";
 
 function Root(): JSX.Element {
   const { user, isAuthenticated } = useAuth0();
@@ -16,11 +16,11 @@ function Root(): JSX.Element {
   const { accessToken } = useAccessToken();
 
   const { data: player, isLoading } = useQuery(
-    ['player', fetchPlayer, user?.name, accessToken],
+    ["player", fetchPlayer, user?.name, accessToken],
     async () =>
       await fetchPlayer({
         accessToken: accessToken as string,
-        name: user?.name as string
+        name: user?.name as string,
       }),
     { refetchOnMount: "always" }
   );

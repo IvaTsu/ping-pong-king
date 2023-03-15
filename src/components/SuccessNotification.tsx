@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 interface SuccessNotificationProps {
   isOpen: boolean;
 }
 export default function SuccessNotification({
-  isOpen
+  isOpen,
 }: SuccessNotificationProps): JSX.Element {
   const [opacity, setOpacity] = useState<number>(0);
   useEffect(() => {
