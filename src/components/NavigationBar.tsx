@@ -29,7 +29,6 @@ const NavigationBar = (): JSX.Element => {
     logout({ logoutParams: { returnTo: `${window.location.origin}/login` } });
     clearUser();
   };
-  console.log(currentUser);
 
   return (
     <>

@@ -10,8 +10,7 @@ import ProtectedRoute from "../routes/ProtectedRoute";
 import { useUserStore } from "../store";
 
 function Root(): JSX.Element {
-  const { user, isAuthenticated } = useAuth0();
-  console.log(isAuthenticated);
+  const { user } = useAuth0();
 
   const { accessToken } = useAccessToken();
 
