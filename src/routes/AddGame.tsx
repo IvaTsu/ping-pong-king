@@ -10,6 +10,7 @@ import { PlayersSearchList } from "../components/PlayersSearchList";
 import { ScoreInput } from "../components/ScoreInput";
 import { SearchOpponentByName } from "../components/SearchOpponentByName";
 import { Steps } from "../components/Steps";
+import SuccessNotification from "../components/SuccessNotification";
 import { useAccessToken } from "../hooks/useAccessToken";
 import { useDebounce } from "../hooks/useDebounce";
 import { paths } from "../router/router";
@@ -21,12 +22,8 @@ export default function AddGame(): JSX.Element {
   const { accessToken } = useAccessToken();
 
   const [opponentSearchedValue, setOpponentSearchedValue] = useState("");
-  const [currentUserScore, setCurrentUserScore] = useState<number | undefined>(
-    undefined
-  );
-  const [opponentScore, setOpponentScore] = useState<number | undefined>(
-    undefined
-  );
+  const [currentUserScore, setCurrentUserScore] = useState<number | "">("");
+  const [opponentScore, setOpponentScore] = useState<number | "">("");
 
   const debouncedOpponentSearchValue = useDebounce<string>(
     opponentSearchedValue,
@@ -55,8 +52,8 @@ export default function AddGame(): JSX.Element {
       currentUser?.id != null &&
       currentOpponent?.id != null &&
       accessToken != null &&
-      currentUserScore != null &&
-      opponentScore != null
+      currentUserScore !== "" &&
+      opponentScore !== ""
     ) {
       createGameMutation({
         accessToken,
@@ -81,34 +78,64 @@ export default function AddGame(): JSX.Element {
           },
         },
       });
-      clearOpponent();
-      navigate(paths.root);
+
+      setCurrentUserScore("");
+      setOpponentScore("");
     }
+  };
+
+  const _toOpponents = (): void => {
+    clearOpponent();
+  };
+  const _getBack = (): void => {
+    clearOpponent();
+    navigate(paths.root);
   };
 
   return (
     <ProtectedRoute>
       <>
         <NavigationBar />
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center flex-col relative">
+          <SuccessNotification isOpen={isSuccess} />
           {currentOpponent != null ? (
             <>
-              <div className="max-w-md mt-10">
+              <div className="max-w-lg mt-10">
                 <h3 className="text-xl font-bold">Game results</h3>
                 <ScoreInput
                   user={currentUser}
                   setUserScore={setCurrentUserScore}
+                  value={currentUserScore}
                 />
                 <ScoreInput
                   user={currentOpponent}
                   setUserScore={setOpponentScore}
+                  value={opponentScore}
                 />
-                <button
-                  className="btn btn-success mt-4"
-                  onClick={_onCreateGameClick}
-                >
-                  Create Game
-                </button>
+                <div className="p-10 flex flex-col">
+                  <button
+                    className="btn btn-success mt-4"
+                    onClick={_onCreateGameClick}
+                    disabled={
+                      currentUserScore === opponentScore ||
+                      typeof currentUserScore === "string" ||
+                      typeof opponentScore === "string"
+                    }
+                  >
+                    Create Game
+                  </button>
+
+                  <button
+                    className="btn btn-success mt-4"
+                    onClick={_toOpponents}
+                  >
+                    To opponents
+                  </button>
+
+                  <button className="btn btn-success mt-4" onClick={_getBack}>
+                    To main page
+                  </button>
+                </div>
               </div>
             </>
           ) : (
