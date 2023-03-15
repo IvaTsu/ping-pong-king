@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { createGame } from "../api/game/post/mutations";
@@ -24,7 +24,6 @@ export default function AddGame(): JSX.Element {
   const [opponentSearchedValue, setOpponentSearchedValue] = useState("");
   const [currentUserScore, setCurrentUserScore] = useState<number | "">("");
   const [opponentScore, setOpponentScore] = useState<number | "">("");
-  const [inputError, setInputError] = useState<boolean>(false);
 
   const debouncedOpponentSearchValue = useDebounce<string>(
     opponentSearchedValue,
@@ -42,12 +41,6 @@ export default function AddGame(): JSX.Element {
         name: debouncedOpponentSearchValue,
       })
   );
-
-  useEffect(() => {
-    opponentScore === currentUserScore
-      ? setInputError(true)
-      : setInputError(false);
-  }, [currentUserScore, opponentScore]);
 
   const { getUser } = useUserStore();
   const currentUser = getUser();
@@ -123,7 +116,7 @@ export default function AddGame(): JSX.Element {
                   <button
                     className="btn btn-success mt-4"
                     onClick={_onCreateGameClick}
-                    disabled={inputError}
+                    disabled={opponentScore === currentUserScore}
                   >
                     Create Game
                   </button>
