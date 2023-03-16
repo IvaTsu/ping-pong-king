@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { createGame } from "../api/game/post/mutations";
@@ -34,11 +34,6 @@ export default function AddGame(): JSX.Element {
   const { getOpponent, clear: clearOpponent } = useOpponentStore();
   const currentOpponent = getOpponent();
 
-  const resetInterval = (): number =>
-    setTimeout(() => {
-      reset();
-    }, 3000);
-
   const {
     mutate: createGameMutation,
     isSuccess,
@@ -49,10 +44,18 @@ export default function AddGame(): JSX.Element {
       setCurrentUserScore("");
       setOpponentScore("");
       setInputIsDirty(false);
-      resetInterval();
-      // clearInterval(resetInterval);
     },
   });
+
+  useEffect(() => {
+    const resetInterval = setTimeout(() => {
+      reset();
+    }, 3000);
+    return () => {
+      clearInterval(resetInterval);
+    };
+  }, [isSuccess]);
+
   const inputsAreInvalid =
     currentUserScore === opponentScore ||
     typeof currentUserScore === "string" ||
