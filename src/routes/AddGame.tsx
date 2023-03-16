@@ -20,19 +20,54 @@ import ProtectedRoute from "./ProtectedRoute";
 export default function AddGame(): JSX.Element {
   const navigate = useNavigate();
   const { accessToken } = useAccessToken();
-
+  const [inputIsDirty, setInputIsDirty] = useState<boolean>(false);
   const [opponentSearchedValue, setOpponentSearchedValue] = useState("");
   const [currentUserScore, setCurrentUserScore] = useState<number | "">("");
   const [opponentScore, setOpponentScore] = useState<number | "">("");
-
   const debouncedOpponentSearchValue = useDebounce<string>(
     opponentSearchedValue,
     500
   );
 
-  const { mutate: createGameMutation, isSuccess } = useMutation({
+  const { getUser } = useUserStore();
+  const currentUser = getUser();
+  const { getOpponent, clear: clearOpponent } = useOpponentStore();
+  const currentOpponent = getOpponent();
+
+  const resetInterval = (): number =>
+    setTimeout(() => {
+      reset();
+    }, 3000);
+
+  const {
+    mutate: createGameMutation,
+    isSuccess,
+    reset,
+  } = useMutation({
     mutationFn: createGame,
+    onSuccess: () => {
+      setCurrentUserScore("");
+      setOpponentScore("");
+      setInputIsDirty(false);
+      resetInterval();
+      // clearInterval(resetInterval);
+    },
   });
+  const inputsAreInvalid =
+    currentUserScore === opponentScore ||
+    typeof currentUserScore === "string" ||
+    typeof opponentScore === "string";
+
+  const showErrors = !isSuccess && inputIsDirty && inputsAreInvalid;
+  const handleOpponentScore = (value: number | ""): void => {
+    setOpponentScore(value);
+    setInputIsDirty(true);
+  };
+  const handleCurrentUserScore = (value: number | ""): void => {
+    setCurrentUserScore(value);
+    setInputIsDirty(true);
+  };
+
   const { data: playersList, isLoading } = useQuery(
     ["player", fetchPlayer, accessToken, debouncedOpponentSearchValue],
     async () =>
@@ -41,11 +76,6 @@ export default function AddGame(): JSX.Element {
         name: debouncedOpponentSearchValue,
       })
   );
-
-  const { getUser } = useUserStore();
-  const currentUser = getUser();
-  const { getOpponent, clear: clearOpponent } = useOpponentStore();
-  const currentOpponent = getOpponent();
 
   const _onCreateGameClick = (): void => {
     if (
@@ -78,9 +108,6 @@ export default function AddGame(): JSX.Element {
           },
         },
       });
-
-      setCurrentUserScore("");
-      setOpponentScore("");
     }
   };
 
@@ -102,37 +129,47 @@ export default function AddGame(): JSX.Element {
             <>
               <div className="max-w-lg mt-10">
                 <h3 className="text-xl font-bold">Game results</h3>
-                <ScoreInput
-                  user={currentUser}
-                  setUserScore={setCurrentUserScore}
-                  value={currentUserScore}
-                />
-                <ScoreInput
-                  user={currentOpponent}
-                  setUserScore={setOpponentScore}
-                  value={opponentScore}
-                />
+                <div className="flex flex-col content-center items-center">
+                  <ScoreInput
+                    user={currentUser}
+                    setUserScore={handleCurrentUserScore}
+                    value={currentUserScore}
+                    isInvalid={showErrors}
+                  />
+                  <ScoreInput
+                    user={currentOpponent}
+                    setUserScore={handleOpponentScore}
+                    value={opponentScore}
+                    isInvalid={showErrors}
+                  />
+
+                  {showErrors && (
+                    <div className="pt-5 text-rose break-words max-w-[280px] label-text">
+                      Wrong input value! Either one of the inputs is empty, or
+                      both players have the same score.
+                    </div>
+                  )}
+                </div>
                 <div className="p-10 flex flex-col">
                   <button
-                    className="btn btn-success mt-4"
+                    className="btn btn-success mt-4 transition-all duration-200 hover:bg-aqua"
                     onClick={_onCreateGameClick}
-                    disabled={
-                      currentUserScore === opponentScore ||
-                      typeof currentUserScore === "string" ||
-                      typeof opponentScore === "string"
-                    }
+                    disabled={inputsAreInvalid}
                   >
                     Create Game
                   </button>
 
                   <button
-                    className="btn btn-success mt-4"
+                    className="btn btn-success mt-4 transition-all duration-200 hover:bg-aqua"
                     onClick={_toOpponents}
                   >
                     To opponents
                   </button>
 
-                  <button className="btn btn-success mt-4" onClick={_getBack}>
+                  <button
+                    className="btn btn-success mt-4 transition-all duration-200 hover:bg-aqua"
+                    onClick={_getBack}
+                  >
                     To main page
                   </button>
                 </div>

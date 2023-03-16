@@ -70,8 +70,8 @@ const NavigationBar = (): JSX.Element => {
           </div>
         </div>
         <div className="navbar-center">
-          <a className="btn btn-ghost normal-case text-xl" href="/">
-            Ping Pong King
+          <a className="btn btn-ghost normal-case text-2xl" href="/">
+            PING PONG KING
           </a>
         </div>
         <div className="navbar-end">
