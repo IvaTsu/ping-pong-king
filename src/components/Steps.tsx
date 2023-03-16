@@ -7,6 +7,8 @@ export const Steps = ({
   currentOpponent: IPlayer | undefined;
   isSuccess: boolean;
 }): JSX.Element => {
+  const lastStepStyle =
+    currentOpponent !== null && isSuccess ? "step-success" : "step-warning";
   return (
     <div className="absolute inset-x-0 bottom-20 ">
       <ul className="steps steps-vertical lg:steps-horizontal">
@@ -17,13 +19,7 @@ export const Steps = ({
         >
           Opponent
         </li>
-        <li
-          className={`step ${currentOpponent == null ? "" : "step-warning"} ${
-            isSuccess ? "step-success" : ""
-          }`}
-        >
-          Game Results
-        </li>
+        <li className={`step ${lastStepStyle}`}>Game Results</li>
       </ul>
     </div>
   );
