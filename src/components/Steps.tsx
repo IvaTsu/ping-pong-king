@@ -10,8 +10,8 @@ export const Steps = ({
   const lastStepStyle =
     currentOpponent !== null && isSuccess ? "step-success" : "step-warning";
   return (
-    <div className="absolute inset-x-0 bottom-20 ">
-      <ul className="steps steps-vertical lg:steps-horizontal">
+    <div className="inset-x-0 bottom-20 ">
+      <ul className="steps lg:steps-horizontal">
         <li
           className={`step ${
             currentOpponent != null ? "step-success" : "step-warning"
