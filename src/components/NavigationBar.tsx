@@ -1,9 +1,8 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { paths } from "../../router/router";
-import { useUserStore } from "../../store";
-import styles from "./NavigationBar.module.css";
+import { paths } from "../router/router";
+import { useUserStore } from "../store";
 
 const NavigationBar = (): JSX.Element => {
   const { logout, user } = useAuth0();
@@ -54,7 +53,7 @@ const NavigationBar = (): JSX.Element => {
             </label>
             <ul
               tabIndex={0}
-              className={`menu menu-compact dropdown-content mt-3 p-2 shadow ${styles.navbar_dropdown} rounded-box w-52`}
+              className={`menu menu-compact dropdown-content mt-3 p-2 shadow bg-cloudBirst rounded-box w-52`}
             >
               {location.pathname !== paths.root && (
                 <li>
@@ -70,8 +69,8 @@ const NavigationBar = (): JSX.Element => {
           </div>
         </div>
         <div className="navbar-center">
-          <a className="btn btn-ghost normal-case text-xl" href="/">
-            Ping Pong King
+          <a className="btn btn-ghost normal-case text-2xl" href="/">
+            PING PONG KING
           </a>
         </div>
         <div className="navbar-end">
@@ -93,7 +92,7 @@ const NavigationBar = (): JSX.Element => {
             </label>
             <ul
               tabIndex={0}
-              className={`menu menu-compact dropdown-content mt-3 p-2 shadow ${styles.navbar_dropdown} rounded-box w-52`}
+              className={`menu menu-compact dropdown-content mt-3 p-2 shadow bg-cloudBirst rounded-box w-52`}
             >
               {location.pathname !== paths.profile && (
                 <li>
