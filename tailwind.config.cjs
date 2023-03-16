@@ -5,7 +5,8 @@ module.exports = {
     colors: {
       navy: "#0C0C91",
       aqua: "#7FFFD4",
-      rose: "#E11D48"
+      rose: "#E11D48",
+      cloud_birst: "#374151"
     },
     extend: {},
   },
