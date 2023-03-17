@@ -70,3 +70,42 @@ export const useOpponentStore = create<
     }
   )
 );
+
+interface IAuth {
+  accessToken: string;
+  refreshToken: string;
+  idToken: string;
+}
+
+interface IAuthState {
+  auth: IAuth | undefined;
+}
+
+interface IAuthStateActions {
+  clear: () => void;
+  setAuth: (auth: IAuth | undefined) => void;
+  getAuth: () => IAuth | undefined;
+}
+
+export const useAuthStore = create<IAuthState & IAuthStateActions>()(
+  persist(
+    (set, get) => ({
+      auth: undefined,
+      clear: () => {
+        set({
+          auth: undefined,
+        });
+      },
+      setAuth: (auth) => {
+        set({
+          auth,
+        });
+      },
+      getAuth: () => get().auth,
+    }),
+    {
+      name: "auth-storage", // name of the item in the storage (must be unique)
+      storage: createJSONStorage(() => localStorage),
+    }
+  )
+);
