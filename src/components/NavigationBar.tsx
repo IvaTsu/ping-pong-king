@@ -33,6 +33,7 @@ const NavigationBar = (): JSX.Element => {
     clearAuth();
     clearUser();
     clearOpponent();
+    navigate(paths.login);
   };
 
   return (
