@@ -1,16 +1,27 @@
-import { useAuth0 } from "@auth0/auth0-react";
+import { useQuery } from "@tanstack/react-query";
 import { Navigate } from "react-router-dom";
 
-import { LoadingSpinner } from "../components/LoadingSpinner";
+import { fetchPlayer } from "../api/player/get/queries";
+import { useAuthStore } from "../store";
+import { decodeJWT } from "../utils/decodeJWT";
 
 function ProtectedRoute({ children }: { children: JSX.Element }): JSX.Element {
-  const { isAuthenticated, isLoading } = useAuth0();
+  const { getAuth } = useAuthStore();
+  const auth = getAuth();
 
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
+  const userFromIdToken = decodeJWT(auth?.idToken);
 
-  if (!isLoading && !isAuthenticated) {
+  const { isLoading, isError } = useQuery(
+    ["player", fetchPlayer, auth?.accessToken, userFromIdToken?.name],
+    async () =>
+      await fetchPlayer({
+        accessToken: auth?.accessToken as string,
+        name: userFromIdToken?.name as string,
+      }),
+    { enabled: userFromIdToken?.name != null }
+  );
+
+  if (!isLoading && auth?.accessToken === undefined && isError) {
     return <Navigate to="/login" replace />;
   }
 
