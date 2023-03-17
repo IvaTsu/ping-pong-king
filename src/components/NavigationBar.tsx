@@ -1,17 +1,21 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { paths } from "../router/router";
-import { useUserStore } from "../store";
+import { useAuthStore, useOpponentStore, useUserStore } from "../store";
+import { decodeJWT } from "../utils/decodeJWT";
 
 const NavigationBar = (): JSX.Element => {
-  const { logout, user } = useAuth0();
-
   const location = useLocation();
   const navigate = useNavigate();
 
+  const { getAuth, clear: clearAuth } = useAuthStore();
+  const auth = getAuth();
+  const userFromIdToken = decodeJWT(auth?.idToken);
+
   const { getUser, clear: clearUser } = useUserStore();
   const currentUser = getUser();
+
+  const { clear: clearOpponent } = useOpponentStore();
 
   const _onRootClick = (): void => {
     navigate(paths.root);
@@ -26,8 +30,10 @@ const NavigationBar = (): JSX.Element => {
   };
 
   const _onSignOutClick = (): void => {
-    logout({ logoutParams: { returnTo: `${window.location.origin}/login` } });
+    clearAuth();
     clearUser();
+    clearOpponent();
+    navigate(paths.login);
   };
 
   return (
@@ -87,7 +93,7 @@ const NavigationBar = (): JSX.Element => {
                 </span>
               )}
               <div className="w-10 rounded-full">
-                <img src={user?.picture} />
+                <img src={userFromIdToken?.picture} />
               </div>
             </label>
             <ul

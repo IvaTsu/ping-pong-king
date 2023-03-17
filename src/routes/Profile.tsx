@@ -1,6 +1,5 @@
 import "../App.css";
 
-import { useAuth0 } from "@auth0/auth0-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
@@ -8,22 +7,22 @@ import { createPlayer } from "../api/player/post/mutations";
 import { type IPostPlayerBody } from "../api/player/post/types";
 import { fetchTournamentList } from "../api/tournament/get/queries";
 import NavigationBar from "../components/NavigationBar";
-import { useAccessToken } from "../hooks/useAccessToken";
 import ProtectedRoute from "../routes/ProtectedRoute";
-import { useUserStore } from "../store";
+import { useAuthStore, useUserStore } from "../store";
+import { decodeJWT } from "../utils/decodeJWT";
 
 function Profile(): JSX.Element {
   const [tournamentId, setTournamentId] = useState<string>();
 
-  const { user } = useAuth0();
-
-  const { accessToken } = useAccessToken();
+  const { getAuth } = useAuthStore();
+  const auth = getAuth();
+  const userFromIdToken = decodeJWT(auth?.idToken);
   const { setUser } = useUserStore();
 
   const { data: tournamentList, isLoading } = useQuery(
-    ["tournamentList", fetchTournamentList, accessToken],
-    async () => await fetchTournamentList(accessToken as string),
-    { enabled: accessToken != null }
+    ["tournamentList", fetchTournamentList, auth?.accessToken],
+    async () => await fetchTournamentList(auth?.accessToken as string),
+    { enabled: auth?.accessToken != null }
   );
 
   const { mutate: createPlayerMutation } = useMutation({
@@ -56,7 +55,7 @@ function Profile(): JSX.Element {
         <div className="App">
           {currentUser == null ? (
             <div>
-              <h1>Hello, {user?.name}</h1>
+              <h1>Hello, {userFromIdToken?.name}</h1>
               <p className="my-5">Assign yourself to the Office</p>
 
               <select
@@ -83,16 +82,14 @@ function Profile(): JSX.Element {
                 }  ${isLoading ? "loading" : ""}`}
                 onClick={() => {
                   if (
-                    accessToken != null &&
-                    user?.name != null &&
-                    user?.email != null &&
-                    user?.picture != null &&
-                    tournamentId != null
+                    auth?.accessToken != null &&
+                    tournamentId != null &&
+                    userFromIdToken != null
                   ) {
-                    _onTournamentSubmit(accessToken, {
-                      name: user.name,
-                      email: user.email,
-                      profileImage: user.picture,
+                    _onTournamentSubmit(auth?.accessToken, {
+                      name: userFromIdToken.name,
+                      email: userFromIdToken.email,
+                      profileImage: userFromIdToken.picture,
                       tournamentRef: {
                         id: tournamentId,
                       },

@@ -1,25 +1,25 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 
 import { fetchPlayer } from "../api/player/get/queries";
 import NavigationBar from "../components/NavigationBar";
 import { Table } from "../components/Table";
-import { useAccessToken } from "../hooks/useAccessToken";
 import ProtectedRoute from "../routes/ProtectedRoute";
-import { useUserStore } from "../store";
+import { useAuthStore, useUserStore } from "../store";
+import { decodeJWT } from "../utils/decodeJWT";
 
 function Root(): JSX.Element {
-  const { user } = useAuth0();
+  const { getAuth } = useAuthStore();
+  const auth = getAuth();
 
-  const { accessToken } = useAccessToken();
+  const userFromIdToken = decodeJWT(auth?.idToken);
 
   const { data: player, isLoading } = useQuery(
-    ["player", fetchPlayer, user?.name, accessToken],
+    ["player", fetchPlayer, auth?.accessToken, userFromIdToken?.name],
     async () =>
       await fetchPlayer({
-        accessToken: accessToken as string,
-        name: user?.name as string,
+        accessToken: auth?.accessToken as string,
+        name: userFromIdToken?.name as string,
       }),
     { refetchOnMount: "always" }
   );
@@ -30,7 +30,7 @@ function Root(): JSX.Element {
   useEffect(() => {
     if (!isLoading && player?.length !== 0) {
       const currentUser = player?.filter(
-        (player) => player.email === user?.email
+        (player) => player.email === userFromIdToken?.email
       )[0];
       if (currentUser != null) {
         setUser(currentUser);
@@ -38,7 +38,7 @@ function Root(): JSX.Element {
         setUser(undefined);
       }
     }
-  }, [user?.name, player, currentUser]);
+  }, [userFromIdToken?.email, player, currentUser]);
 
   return (
     <ProtectedRoute>
