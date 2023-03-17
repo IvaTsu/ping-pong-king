@@ -21,7 +21,7 @@ function ProtectedRoute({ children }: { children: JSX.Element }): JSX.Element {
     { enabled: userFromIdToken?.name != null }
   );
 
-  if (!isLoading && auth?.accessToken === undefined && isError) {
+  if ((!isLoading && isError) || auth?.accessToken === undefined) {
     return <Navigate to="/login" replace />;
   }
 
