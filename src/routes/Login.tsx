@@ -55,7 +55,21 @@ function Login(): JSX.Element {
         {code != null || isCreateTokenLoading ? (
           <LoadingSpinner />
         ) : (
-          <a href={encodeURI(import.meta.env.VITE_AUTH0_AUTHORIZE)}>Log in</a>
+          <a
+            href={encodeURI(
+              `https://${
+                import.meta.env.VITE_AUTH0_DOMAIN as string
+              }/authorize?response_type=code&client_id=${
+                import.meta.env.VITE_AUTH0_CLIENT_ID as string
+              }&redirect_uri=${
+                import.meta.env.VITE_CLIENT_REDIRECT as string
+              }&scope=${import.meta.env.VITE_AUTH0_SCOPE as string}&audience=${
+                import.meta.env.VITE_API_AUDIENCE_URL as string
+              }&state=${import.meta.env.VITE_AUTH0_STATE as string}`
+            )}
+          >
+            Log in
+          </a>
         )}
       </div>
     </div>
