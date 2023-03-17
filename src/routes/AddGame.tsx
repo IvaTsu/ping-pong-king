@@ -11,15 +11,17 @@ import { ScoreInput } from "../components/ScoreInput";
 import { SearchOpponentByName } from "../components/SearchOpponentByName";
 import { Steps } from "../components/Steps";
 import SuccessNotification from "../components/SuccessNotification";
-import { useAccessToken } from "../hooks/useAccessToken";
 import { useDebounce } from "../hooks/useDebounce";
 import { paths } from "../router/router";
-import { useOpponentStore, useUserStore } from "../store";
+import { useAuthStore, useOpponentStore, useUserStore } from "../store";
 import ProtectedRoute from "./ProtectedRoute";
 
 export default function AddGame(): JSX.Element {
   const navigate = useNavigate();
-  const { accessToken } = useAccessToken();
+
+  const { getAuth } = useAuthStore();
+  const auth = getAuth();
+
   const [inputIsDirty, setInputIsDirty] = useState<boolean>(false);
   const [opponentSearchedValue, setOpponentSearchedValue] = useState("");
   const [currentUserScore, setCurrentUserScore] = useState<number | "">("");
@@ -72,10 +74,10 @@ export default function AddGame(): JSX.Element {
   };
 
   const { data: playersList, isLoading } = useQuery(
-    ["player", fetchPlayer, accessToken, debouncedOpponentSearchValue],
+    ["player", fetchPlayer, auth?.accessToken, debouncedOpponentSearchValue],
     async () =>
       await fetchPlayer({
-        accessToken: accessToken as string,
+        accessToken: auth?.accessToken as string,
         name: debouncedOpponentSearchValue,
       })
   );
@@ -84,12 +86,12 @@ export default function AddGame(): JSX.Element {
     if (
       currentUser?.id != null &&
       currentOpponent?.id != null &&
-      accessToken != null &&
+      auth?.accessToken != null &&
       currentUserScore !== "" &&
       opponentScore !== ""
     ) {
       createGameMutation({
-        accessToken,
+        accessToken: auth.accessToken,
         body: {
           playerRefA: {
             id: currentUser?.id,
