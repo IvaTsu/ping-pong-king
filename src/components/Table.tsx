@@ -104,7 +104,7 @@ export const Table = (): JSX.Element => {
   return isLoading ? (
     <LoadingSpinner />
   ) : (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto py-10">
       <table className="table w-full">
         <thead>
           <tr>

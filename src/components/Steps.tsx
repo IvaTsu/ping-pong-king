@@ -10,7 +10,7 @@ export const Steps = ({
   const lastStepStyle =
     currentOpponent !== null && isSuccess ? "step-success" : "step-warning";
   return (
-    <div className="inset-x-0 bottom-20 ">
+    <div className="inset-x-0 bottom-20 p-10">
       <ul className="steps lg:steps-horizontal">
         <li
           className={`step ${
