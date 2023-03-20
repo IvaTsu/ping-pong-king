@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import { paths } from "../router/router";
 import { useAuthStore, useOpponentStore, useUserStore } from "../store";
-import { decodeJWT } from "../utils/decodeJWT";
+import { decodeJWT, type IDecodedIdToken } from "../utils/decodeJWT";
 
 const NavigationBar = (): JSX.Element => {
   const location = useLocation();
@@ -10,7 +10,7 @@ const NavigationBar = (): JSX.Element => {
 
   const { getAuth, clear: clearAuth } = useAuthStore();
   const auth = getAuth();
-  const userFromIdToken = decodeJWT(auth?.idToken);
+  const userFromIdToken = decodeJWT<IDecodedIdToken>(auth?.idToken);
 
   const { getUser, clear: clearUser } = useUserStore();
   const currentUser = getUser();
@@ -92,9 +92,20 @@ const NavigationBar = (): JSX.Element => {
                   Action required
                 </span>
               )}
-              <div className="w-10 rounded-full">
-                <img src={userFromIdToken?.picture} />
-              </div>
+              {userFromIdToken?.picture != null ? (
+                <div className="w-10 rounded-full">
+                  <img src={userFromIdToken.picture} />
+                </div>
+              ) : (
+                <div className="avatar placeholder">
+                  <div className="bg-neutral-focus text-neutral-content rounded-full w-10">
+                    <span className="text-xl">
+                      {userFromIdToken?.given_name?.charAt(0)}
+                      {userFromIdToken?.family_name?.charAt(0)}
+                    </span>
+                  </div>
+                </div>
+              )}
             </label>
             <ul
               tabIndex={0}
