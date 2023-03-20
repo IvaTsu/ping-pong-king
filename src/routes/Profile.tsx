@@ -9,14 +9,14 @@ import { fetchTournamentList } from "../api/tournament/get/queries";
 import NavigationBar from "../components/NavigationBar";
 import ProtectedRoute from "../routes/ProtectedRoute";
 import { useAuthStore, useUserStore } from "../store";
-import { decodeJWT } from "../utils/decodeJWT";
+import { decodeJWT, type IDecodedIdToken } from "../utils/decodeJWT";
 
 function Profile(): JSX.Element {
   const [tournamentId, setTournamentId] = useState<string>();
 
   const { getAuth } = useAuthStore();
   const auth = getAuth();
-  const userFromIdToken = decodeJWT(auth?.idToken);
+  const userFromIdToken = decodeJWT<IDecodedIdToken>(auth?.idToken);
   const { setUser } = useUserStore();
 
   const { data: tournamentList, isLoading } = useQuery(
