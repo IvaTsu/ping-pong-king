@@ -7,7 +7,10 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "prettier-format": "prettier --config .prettierrc 'src/**/*.tsx' --write"
+    "lint": "eslint --ignore-path .eslintignore --ext .js,.jsx,.ts,.tsx .",
+    "check-types": "tsc --noemit",
+    "prettier-format": "prettier --config .prettierrc 'src/**/*.tsx' --write",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@tanstack/react-query": "^4.24.10",
@@ -33,6 +36,7 @@
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-simple-import-sort": "^10.0.0",
+    "husky": "^8.0.3",
     "postcss": "^8.4.21",
     "prettier": "^2.8.4",
     "tailwindcss": "^3.2.7",
