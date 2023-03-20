@@ -130,72 +130,98 @@ export default function AddGame(): JSX.Element {
         <NavigationBar />
         <div className="flex justify-center items-center flex-col relative">
           <SuccessNotification isOpen={isSuccess} />
-          {currentOpponent != null ? (
-            <>
-              <div className="max-w-lg mt-10">
-                <h3 className="text-xl font-bold">Game results</h3>
-                <div className="flex flex-col content-center items-center">
-                  <ScoreInput
-                    user={currentUser}
-                    setUserScore={handleCurrentUserScore}
-                    value={currentUserScore}
-                    isInvalid={showErrors}
-                  />
-                  <ScoreInput
-                    user={currentOpponent}
-                    setUserScore={handleOpponentScore}
-                    value={opponentScore}
-                    isInvalid={showErrors}
-                  />
+          <>
+            {currentUser?.registeredWhen != null ? (
+              <>
+                {currentOpponent != null ? (
+                  <>
+                    <div className="max-w-lg mt-10">
+                      <h3 className="text-xl font-bold">Game results</h3>
+                      <div className="flex flex-col content-center items-center">
+                        <ScoreInput
+                          user={currentUser}
+                          setUserScore={handleCurrentUserScore}
+                          value={currentUserScore}
+                          isInvalid={showErrors}
+                        />
+                        <ScoreInput
+                          user={currentOpponent}
+                          setUserScore={handleOpponentScore}
+                          value={opponentScore}
+                          isInvalid={showErrors}
+                        />
 
-                  {showErrors && (
-                    <div className="pt-5 text-rose break-words max-w-[280px] label-text">
-                      Wrong input value! Either one of the inputs is empty, or
-                      both players have the same score.
+                        {showErrors && (
+                          <div className="pt-5 text-rose break-words max-w-[280px] label-text">
+                            Wrong input value! Either one of the inputs is
+                            empty, or both players have the same score.
+                          </div>
+                        )}
+                      </div>
+                      <div className="p-10 flex flex-col">
+                        <button
+                          className="btn btn-success mt-4 transition-all duration-200 hover:bg-aqua"
+                          onClick={_onCreateGameClick}
+                          disabled={inputsAreInvalid}
+                        >
+                          Create Game
+                        </button>
+
+                        <button
+                          className="btn btn-success mt-4 transition-all duration-200 hover:bg-aqua"
+                          onClick={_toOpponents}
+                        >
+                          To opponents
+                        </button>
+
+                        <button
+                          className="btn btn-success mt-4 transition-all duration-200 hover:bg-aqua"
+                          onClick={_getBack}
+                        >
+                          To main page
+                        </button>
+                      </div>
                     </div>
-                  )}
-                </div>
-                <div className="p-10 flex flex-col">
-                  <button
-                    className="btn btn-success mt-4 transition-all duration-200 hover:bg-aqua"
-                    onClick={_onCreateGameClick}
-                    disabled={inputsAreInvalid}
-                  >
-                    Create Game
-                  </button>
-
-                  <button
-                    className="btn btn-success mt-4 transition-all duration-200 hover:bg-aqua"
-                    onClick={_toOpponents}
-                  >
-                    To opponents
-                  </button>
-
-                  <button
-                    className="btn btn-success mt-4 transition-all duration-200 hover:bg-aqua"
-                    onClick={_getBack}
-                  >
-                    To main page
-                  </button>
+                  </>
+                ) : (
+                  <div>
+                    <SearchOpponentByName
+                      value={opponentSearchedValue}
+                      onChange={setOpponentSearchedValue}
+                    />
+                    {isLoading ? (
+                      <LoadingSpinner />
+                    ) : (
+                      <PlayersSearchList playersList={playersList} />
+                    )}
+                  </div>
+                )}
+                <Steps
+                  currentOpponent={currentOpponent}
+                  isSuccess={isSuccess}
+                />
+              </>
+            ) : (
+              <div className="card w-96 bg-base-100 shadow-xl mt-10">
+                <div className="card-body">
+                  <h2 className="card-title">
+                    Please assign yourself to the office first 🏢
+                  </h2>
+                  <div className="card-actions justify-center">
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => {
+                        navigate(paths.profile);
+                      }}
+                    >
+                      Go to Profile
+                    </button>
+                  </div>
                 </div>
               </div>
-            </>
-          ) : (
-            <div>
-              <SearchOpponentByName
-                value={opponentSearchedValue}
-                onChange={setOpponentSearchedValue}
-              />
-              {isLoading ? (
-                <LoadingSpinner />
-              ) : (
-                <PlayersSearchList playersList={playersList} />
-              )}
-            </div>
-          )}
+            )}
+          </>
         </div>
-
-        <Steps currentOpponent={currentOpponent} isSuccess={isSuccess} />
       </>
     </ProtectedRoute>
   );
