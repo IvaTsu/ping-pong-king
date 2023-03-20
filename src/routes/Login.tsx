@@ -1,38 +1,76 @@
 import "../App.css";
 
-import { useAuth0 } from "@auth0/auth0-react";
+import { useMutation } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { Navigate } from "react-router-dom";
 
+import { createToken } from "../api/auth/post/mutations";
 import { LoadingSpinner } from "../components/LoadingSpinner";
+import { useQueryParams } from "../hooks/useQueryParams";
+import { useAuthStore } from "../store";
 
 function Login(): JSX.Element {
-  const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
+  const { setAuth, getAuth } = useAuthStore();
+  const query = useQueryParams();
+  const code = query.get("code");
 
-  const _onLogInClick = async (): Promise<void> => {
-    try {
-      await loginWithRedirect();
-    } catch (error) {
-      // NOOP
-      // TODO: handle error with the Toast notification for the user.
+  const {
+    mutate: createTokenMutation,
+    isLoading: isCreateTokenLoading,
+    isSuccess,
+  } = useMutation({
+    mutationFn: createToken,
+    onSuccess: (data) => {
+      setAuth({
+        accessToken: data.access_token,
+        refreshToken: data.refresh_token,
+        idToken: data.id_token,
+      });
+    },
+  });
+
+  useEffect(() => {
+    if (code != null) {
+      createTokenMutation({
+        body: new URLSearchParams({
+          grant_type: "authorization_code",
+          client_id: import.meta.env.VITE_AUTH0_CLIENT_ID,
+          client_secret: import.meta.env.VITE_AUTH0_CLIENT_SECRET,
+          code,
+          redirect_uri: import.meta.env.VITE_CLIENT,
+        }),
+      });
     }
-  };
+  }, []);
 
-  if (isLoading) {
-    return <LoadingSpinner />;
+  if (getAuth()?.accessToken != null) {
+    return <Navigate to="/" replace />;
   }
 
-  return !isLoading && isAuthenticated ? (
+  return isSuccess ? (
     <Navigate to="/" replace />
   ) : (
     <div className="App">
       <div className="card">
-        <button
-          onClick={() => {
-            void _onLogInClick();
-          }}
-        >
-          Log In
-        </button>
+        {code != null || isCreateTokenLoading ? (
+          <LoadingSpinner />
+        ) : (
+          <a
+            href={encodeURI(
+              `https://${
+                import.meta.env.VITE_AUTH0_DOMAIN as string
+              }/authorize?response_type=code&client_id=${
+                import.meta.env.VITE_AUTH0_CLIENT_ID as string
+              }&redirect_uri=${
+                import.meta.env.VITE_CLIENT_REDIRECT as string
+              }&scope=${import.meta.env.VITE_AUTH0_SCOPE as string}&audience=${
+                import.meta.env.VITE_API_AUDIENCE_URL as string
+              }&state=${import.meta.env.VITE_AUTH0_STATE as string}`
+            )}
+          >
+            Log in
+          </a>
+        )}
       </div>
     </div>
   );

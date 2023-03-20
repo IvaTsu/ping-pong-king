@@ -15,8 +15,7 @@ import { useMemo, useState } from "react";
 import { fetchPlayerList } from "../api/player/get/queries";
 import { type IPlayer } from "../api/player/get/types";
 import { BLACK_LEATHER_JACKET } from "../constants/colors";
-import { useAccessToken } from "../hooks/useAccessToken";
-import { useUserStore } from "../store";
+import { useAuthStore, useUserStore } from "../store";
 import { LoadingSpinner } from "./LoadingSpinner";
 
 interface ICustomTableMeta<TData extends RowData> {
@@ -62,20 +61,20 @@ export const Table = (): JSX.Element => {
     [pageIndex, pageSize]
   );
 
-  const { accessToken } = useAccessToken();
-
+  const { getAuth } = useAuthStore();
+  const auth = getAuth();
   const { getUser } = useUserStore();
   const currentUser = getUser();
 
   const { data: playerList, isLoading } = useQuery(
-    ["playerList", fetchPlayerList, pagination, accessToken],
+    ["playerList", fetchPlayerList, pagination, auth?.accessToken],
     async () =>
       await fetchPlayerList({
-        accessToken: accessToken as string,
+        accessToken: auth?.accessToken as string,
         page: pageIndex,
         size: pageSize,
       }),
-    { keepPreviousData: true, retry: false, enabled: accessToken != null }
+    { keepPreviousData: true, retry: false, enabled: auth?.accessToken != null }
   );
 
   const table = useReactTable({
