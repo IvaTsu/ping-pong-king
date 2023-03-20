@@ -23,7 +23,7 @@ export const PlayersSearchList = ({
               return (
                 <li key={player.id} className="m-2">
                   <button
-                    className="w-full"
+                    className="w-full transition-all duration-200 hover:bg-darkGrey"
                     onClick={() => {
                       _onOpponentSelect(player);
                     }}

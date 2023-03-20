@@ -8,7 +8,7 @@ export const SearchOpponentByName = ({
   onChange: Dispatch<SetStateAction<string>>;
 }): JSX.Element => {
   return (
-    <>
+    <div className="py-10">
       <label className="label">
         <span className="label-text">Opponent Name</span>
       </label>
@@ -19,7 +19,7 @@ export const SearchOpponentByName = ({
           <input
             type="text"
             placeholder="Search…"
-            className="input input-bordered"
+            className="input input-bordered focus:outline-none dark:focus:border-aqua focus:border-navy"
             value={value}
             onChange={(e) => {
               onChange(e.target.value);
@@ -27,6 +27,6 @@ export const SearchOpponentByName = ({
           />
         </label>
       </div>
-    </>
+    </div>
   );
 };

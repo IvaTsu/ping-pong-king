@@ -3,11 +3,12 @@ module.exports = {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx,svelte}"],
   theme: {
     colors: {
-      navy: "#0C0C91",
+      navy: "#0B0BFF",
       aqua: "#7FFFD4",
       rose: "#E11D48",
       cloud: "#232933",
-      cloudBirst: "#374151"
+      cloudBirst: "#374151",
+      darkGrey: "#cccccc"
     },
     extend: {},
   },

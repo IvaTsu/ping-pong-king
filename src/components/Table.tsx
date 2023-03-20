@@ -14,7 +14,8 @@ import { useMemo, useState } from "react";
 
 import { fetchPlayerList } from "../api/player/get/queries";
 import { type IPlayer } from "../api/player/get/types";
-import { BLACK_LEATHER_JACKET } from "../constants/colors";
+import { AQUA, NAVY } from "../constants/colors";
+import { useDetectDarkTheme } from "../hooks/useDetectColorMode";
 import { useAuthStore, useUserStore } from "../store";
 import { LoadingSpinner } from "./LoadingSpinner";
 
@@ -65,6 +66,8 @@ export const Table = (): JSX.Element => {
   const auth = getAuth();
   const { getUser } = useUserStore();
   const currentUser = getUser();
+  const isDarkTheme = useDetectDarkTheme();
+  const currentUserRowBgColor = isDarkTheme ? AQUA : NAVY;
 
   const { data: playerList, isLoading } = useQuery(
     ["playerList", fetchPlayerList, pagination, auth?.accessToken],
@@ -93,7 +96,7 @@ export const Table = (): JSX.Element => {
     meta: {
       getRowStyles: (row: Row<IPlayer>) =>
         row.original.id === currentUser?.id
-          ? { backgroundColor: BLACK_LEATHER_JACKET }
+          ? { border: `${currentUserRowBgColor} 2px solid` }
           : {},
     },
   });
@@ -137,16 +140,16 @@ export const Table = (): JSX.Element => {
         </thead>
         <tbody>
           {rows.map((row) => (
-            <tr key={row.id}>
+            <tr
+              key={row.id}
+              style={{
+                ...(
+                  table.options.meta as ICustomTableMeta<IPlayer>
+                )?.getRowStyles(row),
+              }}
+            >
               {row.getVisibleCells().map((cell) => (
-                <td
-                  key={cell.id}
-                  style={{
-                    ...(
-                      table.options.meta as ICustomTableMeta<IPlayer>
-                    )?.getRowStyles(row),
-                  }}
-                >
+                <td key={cell.id}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               ))}
@@ -211,7 +214,7 @@ export const Table = (): JSX.Element => {
                   e.target.value != null ? Number(e.target.value) - 1 : 0;
                 table.setPageIndex(page);
               }}
-              className="input input-bordered w-20 input-sm mx-2"
+              className="input input-bordered w-20 input-sm mx-2 focus:outline-none dark:focus:border-aqua focus:border-navy"
             />
           </span>
           <select
@@ -219,7 +222,7 @@ export const Table = (): JSX.Element => {
             onChange={(e) => {
               table.setPageSize(Number(e.target.value));
             }}
-            className="select select-sm select-bordered"
+            className="select select-sm select-bordered focus:outline-none dark:focus:border-aqua focus:border-navy"
           >
             {[10, 20, 30, 40, 50].map((pageSize) => (
               <option key={pageSize} value={pageSize}>
