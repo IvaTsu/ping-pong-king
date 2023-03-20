@@ -31,6 +31,7 @@ export const ScoreInput = ({
           onChange={(e) => {
             _onUserScoreChange(e);
           }}
+          min="0"
         />
       </label>
     </div>
