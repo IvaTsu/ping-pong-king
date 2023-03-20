@@ -6,13 +6,13 @@ import NavigationBar from "../components/NavigationBar";
 import { Table } from "../components/Table";
 import ProtectedRoute from "../routes/ProtectedRoute";
 import { useAuthStore, useUserStore } from "../store";
-import { decodeJWT } from "../utils/decodeJWT";
+import { decodeJWT, type IDecodedIdToken } from "../utils/decodeJWT";
 
 function Root(): JSX.Element {
   const { getAuth } = useAuthStore();
   const auth = getAuth();
 
-  const userFromIdToken = decodeJWT(auth?.idToken);
+  const userFromIdToken = decodeJWT<IDecodedIdToken>(auth?.idToken);
 
   const { data: player, isLoading } = useQuery(
     ["player", fetchPlayer, auth?.accessToken, userFromIdToken?.name],
