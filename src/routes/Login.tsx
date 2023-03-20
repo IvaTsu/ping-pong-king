@@ -8,11 +8,14 @@ import { createToken } from "../api/auth/post/mutations";
 import { LoadingSpinner } from "../components/LoadingSpinner";
 import { useQueryParams } from "../hooks/useQueryParams";
 import { useAuthStore } from "../store";
+import { decodeJWT, type IDecodedAccessToken } from "../utils/decodeJWT";
 
 function Login(): JSX.Element {
   const { setAuth, getAuth } = useAuthStore();
+  const auth = getAuth();
   const query = useQueryParams();
   const code = query.get("code");
+  const accessTokenDecoded = decodeJWT<IDecodedAccessToken>(auth?.accessToken);
 
   const {
     mutate: createTokenMutation,
@@ -43,7 +46,11 @@ function Login(): JSX.Element {
     }
   }, []);
 
-  if (getAuth()?.accessToken != null) {
+  if (
+    auth?.accessToken != null &&
+    accessTokenDecoded?.exp != null &&
+    new Date(accessTokenDecoded.exp) > new Date()
+  ) {
     return <Navigate to="/" replace />;
   }
 

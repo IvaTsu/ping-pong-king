@@ -1,6 +1,6 @@
 import jwt_decode from "jwt-decode";
 
-interface IDecodedIdToken {
+export interface IDecodedIdToken {
   aud: string;
   email: string;
   email_verified: boolean;
@@ -18,9 +18,18 @@ interface IDecodedIdToken {
   updated_at: string;
 }
 
-export function decodeJWT(
-  jwtToken: string | undefined
-): IDecodedIdToken | undefined {
+export interface IDecodedAccessToken {
+  email: string;
+  iss: string;
+  sub: string;
+  aud: string[];
+  iat: number;
+  exp: number;
+  azp: string;
+  scope: string;
+}
+
+export function decodeJWT<T>(jwtToken: string | undefined): T | undefined {
   if (jwtToken == null) {
     return undefined;
   }

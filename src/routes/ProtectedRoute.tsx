@@ -3,13 +3,18 @@ import { Navigate } from "react-router-dom";
 
 import { fetchPlayer } from "../api/player/get/queries";
 import { useAuthStore } from "../store";
-import { decodeJWT } from "../utils/decodeJWT";
+import {
+  decodeJWT,
+  type IDecodedAccessToken,
+  type IDecodedIdToken,
+} from "../utils/decodeJWT";
 
 function ProtectedRoute({ children }: { children: JSX.Element }): JSX.Element {
   const { getAuth } = useAuthStore();
   const auth = getAuth();
 
-  const userFromIdToken = decodeJWT(auth?.idToken);
+  const userFromIdToken = decodeJWT<IDecodedIdToken>(auth?.idToken);
+  const accessTokenDecoded = decodeJWT<IDecodedAccessToken>(auth?.accessToken);
 
   const { isLoading, isError } = useQuery(
     ["player", fetchPlayer, auth?.accessToken, userFromIdToken?.name],
@@ -21,7 +26,12 @@ function ProtectedRoute({ children }: { children: JSX.Element }): JSX.Element {
     { enabled: userFromIdToken?.name != null }
   );
 
-  if ((!isLoading && isError) || auth?.accessToken === undefined) {
+  if (
+    (!isLoading && isError) ||
+    auth?.accessToken === undefined ||
+    (accessTokenDecoded?.exp != null &&
+      new Date(accessTokenDecoded.exp) < new Date())
+  ) {
     return <Navigate to="/login" replace />;
   }
 
