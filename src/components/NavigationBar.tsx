@@ -38,7 +38,7 @@ const NavigationBar = (): JSX.Element => {
 
   return (
     <>
-      <div className="navbar bg-base-100">
+      <div className="navbar pb-15 bg-aqua dark:bg-cloud ">
         <div className="navbar-start">
           <div className="dropdown">
             <label tabIndex={0} className="btn btn-ghost btn-circle">
@@ -59,7 +59,7 @@ const NavigationBar = (): JSX.Element => {
             </label>
             <ul
               tabIndex={0}
-              className={`menu menu-compact dropdown-content mt-3 p-2 shadow bg-cloudBirst rounded-box w-52`}
+              className={`menu menu-compact dropdown-content mt-3 p-2 shadow bg-aqua dark:bg-cloudBirst rounded-box w-52`}
             >
               {location.pathname !== paths.root && (
                 <li>
@@ -79,6 +79,7 @@ const NavigationBar = (): JSX.Element => {
             PING PONG KING
           </a>
         </div>
+
         <div className="navbar-end">
           <div className="dropdown dropdown-end">
             <label
@@ -109,7 +110,7 @@ const NavigationBar = (): JSX.Element => {
             </label>
             <ul
               tabIndex={0}
-              className={`menu menu-compact dropdown-content mt-3 p-2 shadow bg-cloudBirst rounded-box w-52`}
+              className={`menu menu-compact dropdown-content mt-3 p-2 shadow bg-aqua dark:bg-cloudBirst rounded-box w-52`}
             >
               {location.pathname !== paths.profile && (
                 <li>

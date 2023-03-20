@@ -14,29 +14,30 @@ export const PlayersSearchList = ({
   };
 
   return (
-    <ul className="card bg-base-100 shadow-xl mt-2 max-h-96 overflow-auto">
-      {playersList != null && playersList.length !== 0 ? (
-        <>
+    <>
+      {playersList != null &&
+      playersList.length !== 0 &&
+      playersList.filter((player) => player.id !== currentUser?.id).length !==
+        0 ? (
+        <ul className="card bg-base-100 shadow-xl mt-2 max-h-96 overflow-auto">
           {playersList
             .filter((player) => player.id !== currentUser?.id)
-            .map((player) => {
-              return (
-                <li key={player.id} className="m-2">
-                  <button
-                    className="w-full"
-                    onClick={() => {
-                      _onOpponentSelect(player);
-                    }}
-                  >
-                    {player.name}
-                  </button>
-                </li>
-              );
-            })}
-        </>
+            .map((player) => (
+              <li key={player.id} className="m-2">
+                <button
+                  className="w-full transition-all duration-200 hover:bg-darkGrey"
+                  onClick={() => {
+                    _onOpponentSelect(player);
+                  }}
+                >
+                  {player.name}
+                </button>
+              </li>
+            ))}
+        </ul>
       ) : (
-        <>not found</>
+        <>Nothing found 🤷🏻‍♂️</>
       )}
-    </ul>
+    </>
   );
 };
