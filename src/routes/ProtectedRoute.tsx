@@ -30,7 +30,7 @@ function ProtectedRoute({ children }: { children: JSX.Element }): JSX.Element {
     (!isLoading && isError) ||
     auth?.accessToken === undefined ||
     (accessTokenDecoded?.exp != null &&
-      new Date(accessTokenDecoded.exp) < new Date())
+      new Date(accessTokenDecoded.exp * 1000) < new Date())
   ) {
     return <Navigate to="/login" replace />;
   }

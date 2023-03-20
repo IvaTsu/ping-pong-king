@@ -49,7 +49,7 @@ function Login(): JSX.Element {
   if (
     auth?.accessToken != null &&
     accessTokenDecoded?.exp != null &&
-    new Date(accessTokenDecoded.exp) > new Date()
+    new Date(accessTokenDecoded.exp * 1000) > new Date()
   ) {
     return <Navigate to="/" replace />;
   }
