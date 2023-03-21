@@ -3,4 +3,28 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  font-family: "Ubuntu";
+  
 }
+
+@media only screen and (max-width: 639px) {
+  #root {
+    padding: 1rem;
+  }
+}
+
+@font-face {
+  font-family: "Ubuntu";
+  src: url("Ubuntu-Light.ttf") format("truetype")
+}
+
+@font-face {
+  font-family: "UbuntuBold";
+  src: url("Ubuntu-Bold.ttf") format("truetype")
+}
+
+@font-face {
+  font-family: "UbuntuRegular";
+  src: url("Ubuntu-Regular.ttf") format("truetype")
+}
+

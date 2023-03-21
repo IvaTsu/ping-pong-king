@@ -52,7 +52,7 @@ function Profile(): JSX.Element {
     <ProtectedRoute>
       <>
         <NavigationBar />
-        <div>
+        <div className="flex justify-center">
           {currentUser == null ? (
             <div>
               <h1>Hello, {userFromIdToken?.name}</h1>
@@ -101,15 +101,18 @@ function Profile(): JSX.Element {
               </button>
             </div>
           ) : (
-            <div className="card card-side bg-base-100 shadow-xl mt-10">
-              <figure>
+            <div className="card card-side bg-base-100 shadow-xl mt-10 w-96 p-3 sm:p-5">
+              <div>
                 <img
                   src={currentUser.profileImage}
                   alt={`Picture of ${currentUser.name}`}
+                  className="rounded-md border-darkGrey border-2"
                 />
-              </figure>
-              <div className="card-body text-center">
-                <p>{currentUser.name}</p>
+              </div>
+              <div className="text-start pl-5">
+                <p className="text-navy font-ubuntuRegular dark:text-aqua text-l sm:text-xl pb-2">
+                  {currentUser.name}
+                </p>
                 <p>{currentUser.email}</p>
                 <p>Rating: {currentUser.rating}</p>
                 <p>Games played: {currentUser.gamesPlayed}</p>

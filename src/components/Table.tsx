@@ -124,7 +124,7 @@ export const Table = (): JSX.Element => {
                   {header.isPlaceholder ? null : (
                     <div
                       onClick={header.column.getToggleSortingHandler()}
-                      className="cursor-pointer flex gap-4"
+                      className="cursor-pointer flex gap-4 font-ubuntuBold"
                     >
                       {flexRender(
                         header.column.columnDef.header,
@@ -158,78 +158,82 @@ export const Table = (): JSX.Element => {
         </tbody>
       </table>
       <div className="my-2">
-        <div className="flex items-center gap-2">
-          <div className="btn-group btn-sm">
-            <button
-              className="btn btn-sm"
-              onClick={() => {
-                table.setPageIndex(0);
-              }}
-              disabled={!table.getCanPreviousPage()}
-            >
-              {"<<"}
-            </button>
-            <button
-              className="btn btn-sm"
-              onClick={() => {
-                table.previousPage();
-              }}
-              disabled={!table.getCanPreviousPage()}
-            >
-              {"<"}
-            </button>
-            <button
-              className="btn btn-sm"
-              onClick={() => {
-                table.nextPage();
-              }}
-              disabled={!table.getCanNextPage()}
-            >
-              {">"}
-            </button>
-            <button
-              className="btn btn-sm"
-              onClick={() => {
-                table.setPageIndex(table.getPageCount() - 1);
-              }}
-              disabled={!table.getCanNextPage()}
-            >
-              {">>"}
-            </button>
+        <div className="flex items-start sm:items-center flex-col sm:flex-row  gap-2">
+          <div className="btn-group flex justify-between sm:justify-start w-full sm:w-fit">
+            <div>
+              <button
+                className="btn btn-sm"
+                onClick={() => {
+                  table.setPageIndex(0);
+                }}
+                disabled={!table.getCanPreviousPage()}
+              >
+                {"<<"}
+              </button>
+              <button
+                className="btn btn-sm"
+                onClick={() => {
+                  table.previousPage();
+                }}
+                disabled={!table.getCanPreviousPage()}
+              >
+                {"<"}
+              </button>
+              <button
+                className="btn btn-sm"
+                onClick={() => {
+                  table.nextPage();
+                }}
+                disabled={!table.getCanNextPage()}
+              >
+                {">"}
+              </button>
+              <button
+                className="btn btn-sm"
+                onClick={() => {
+                  table.setPageIndex(table.getPageCount() - 1);
+                }}
+                disabled={!table.getCanNextPage()}
+              >
+                {">>"}
+              </button>
+            </div>
+            <span className="flex items-center gap-1">
+              <div>Page</div>
+              <strong>
+                {table.getState().pagination.pageIndex + 1} of{" "}
+                {table.getPageCount()}
+              </strong>
+            </span>
           </div>
-          <span className="flex items-center gap-1">
-            <div>Page</div>
-            <strong>
-              {table.getState().pagination.pageIndex + 1} of{" "}
-              {table.getPageCount()}
-            </strong>
-          </span>
-          <span className="flex items-center gap-1">
-            | Go to page:
-            <input
-              defaultValue={table.getState().pagination.pageIndex + 1}
-              type="number"
+          <div className="flex">
+            <span className="flex items-center gap-1 before:content-[''] sm:before:content-['|_'] ">
+              Go to page:
+              <input
+                defaultValue={table.getState().pagination.pageIndex + 1}
+                type="number"
+                onChange={(e) => {
+                  const page =
+                    e.target.value != null ? Number(e.target.value) - 1 : 0;
+                  table.setPageIndex(page);
+                }}
+                className="input input-bordered w-20 input-sm mx-2 focus:outline-none dark:focus:border-aqua focus:border-navy"
+              />
+            </span>
+            <select
+              value={table.getState().pagination.pageSize}
               onChange={(e) => {
-                const page =
-                  e.target.value != null ? Number(e.target.value) - 1 : 0;
-                table.setPageIndex(page);
+                table.setPageSize(Number(e.target.value));
               }}
-              className="input input-bordered w-20 input-sm mx-2 focus:outline-none dark:focus:border-aqua focus:border-navy"
-            />
-          </span>
-          <select
-            value={table.getState().pagination.pageSize}
-            onChange={(e) => {
-              table.setPageSize(Number(e.target.value));
-            }}
-            className="select select-sm select-bordered focus:outline-none dark:focus:border-aqua focus:border-navy"
-          >
-            {[10, 20, 30, 40, 50].map((pageSize) => (
-              <option key={pageSize} value={pageSize}>
-                Show {pageSize}
-              </option>
-            ))}
-          </select>
+              className="select select-sm select-bordered focus:outline-none dark:focus:border-aqua focus:border-navy"
+            >
+              {[10, 20, 30, 40, 50].map((pageSize) => (
+                <option key={pageSize} value={pageSize}>
+                  Show {pageSize}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
     </div>
