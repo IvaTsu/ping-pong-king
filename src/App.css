@@ -15,16 +15,16 @@
 
 @font-face {
   font-family: "Ubuntu";
-  src: url("Ubuntu-Light.ttf") format("truetype")
+  src: url("./Ubuntu-Light.ttf") format("truetype")
 }
 
 @font-face {
   font-family: "UbuntuBold";
-  src: url("Ubuntu-Bold.ttf") format("truetype")
+  src: url("./Ubuntu-Bold.ttf") format("truetype")
 }
 
 @font-face {
   font-family: "UbuntuRegular";
-  src: url("Ubuntu-Regular.ttf") format("truetype")
+  src: url("./Ubuntu-Regular.ttf") format("truetype")
 }
 
