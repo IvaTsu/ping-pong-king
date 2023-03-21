@@ -9,10 +9,6 @@ export const SearchOpponentByName = ({
 }): JSX.Element => {
   return (
     <div className="py-10">
-      <label className="label">
-        <span className="label-text">Opponent Name</span>
-      </label>
-
       <div>
         <label className="input-group">
           <span>Opponent</span>

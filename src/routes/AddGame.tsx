@@ -136,10 +136,12 @@ export default function AddGame(): JSX.Element {
                 {currentOpponent != null ? (
                   <>
                     <div className="max-w-lg mt-10">
-                      <h3 className="text-xl font-bold">Game results</h3>
+                      <h3 className="text-xl font-ubuntuRegular ">
+                        Game results
+                      </h3>
                       <div className="flex flex-col content-center items-center">
                         <ScoreInput
-                          user={currentUser}
+                          user={null}
                           setUserScore={handleCurrentUserScore}
                           value={currentUserScore}
                           isInvalid={showErrors}

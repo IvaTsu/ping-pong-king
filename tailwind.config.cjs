@@ -10,7 +10,12 @@ module.exports = {
       cloudBirst: "#374151",
       darkGrey: "#cccccc"
     },
-    extend: {},
+      extend: {
+        fontFamily: {
+          'ubuntuBold': ['ubuntuBold', 'UbuntuBold'],
+          'ubuntuRegular': ['ubuntuRegular', 'UbuntuRegular']
+        },
+      },
   },
   plugins: [require("daisyui")],
 };
