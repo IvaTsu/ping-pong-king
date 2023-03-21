@@ -52,7 +52,7 @@ function Profile(): JSX.Element {
     <ProtectedRoute>
       <>
         <NavigationBar />
-        <div className="App">
+        <div>
           {currentUser == null ? (
             <div>
               <h1>Hello, {userFromIdToken?.name}</h1>
