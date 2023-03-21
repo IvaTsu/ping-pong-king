@@ -6,7 +6,7 @@ export const ScoreInput = ({
   value,
   isInvalid,
 }: {
-  user: IPlayer | undefined;
+  user: IPlayer | null;
   setUserScore: (value: number | "") => void;
   value: number | "";
   isInvalid: boolean;
@@ -16,10 +16,11 @@ export const ScoreInput = ({
     else setUserScore(Number.parseInt(e.target.value, 10));
   };
   const borderColor = isInvalid ? "border-rose" : " ";
+  const userName = user != null ? `${user?.name}'s Score` : "Your Score";
   return (
     <div>
       <label className="label">
-        <span className="label-text">{user?.name}&apos;s Score</span>
+        <span className="label-text">{userName}</span>
       </label>
       <label className="input-group">
         <span>Score</span>

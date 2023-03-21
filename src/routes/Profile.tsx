@@ -102,13 +102,13 @@ function Profile(): JSX.Element {
             </div>
           ) : (
             <div className="card card-side bg-base-100 shadow-xl mt-10 w-96 p-3 sm:p-5">
-              <div>
+              <figure>
                 <img
                   src={currentUser.profileImage}
                   alt={`Picture of ${currentUser.name}`}
                   className="rounded-md border-darkGrey border-2"
                 />
-              </div>
+              </figure>
               <div className="text-start pl-5">
                 <p className="text-navy font-ubuntuRegular dark:text-aqua text-l sm:text-xl pb-2">
                   {currentUser.name}

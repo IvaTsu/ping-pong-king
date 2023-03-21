@@ -141,7 +141,7 @@ export default function AddGame(): JSX.Element {
                       </h3>
                       <div className="flex flex-col content-center items-center">
                         <ScoreInput
-                          user={currentUser}
+                          user={null}
                           setUserScore={handleCurrentUserScore}
                           value={currentUserScore}
                           isInvalid={showErrors}
