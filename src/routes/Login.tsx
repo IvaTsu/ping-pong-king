@@ -57,42 +57,51 @@ function Login(): JSX.Element {
   return isSuccess ? (
     <Navigate to="/" replace />
   ) : (
-    <div>
-      <div className="hero min-h-screen bg-base-200">
+    <>
+      {code != null || isCreateTokenLoading ? (
+        <LoadingSpinner />
+      ) : (
         <div className="hero-content text-center">
           <div className="max-w-md">
-            <h1 className="text-5xl font-bold">Hello there</h1>
+            <h1 className="text-5xl font-bold">Welcome to Ping Pong King 👑</h1>
             <p className="py-6">
-              Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
-              excepturi exercitationem quasi. In deleniti eaque aut repudiandae
-              et a id nisi.
+              It will help you to track your ping pong games and count you in
+              the
+              {` `}
+              <a href="https://www.hiarcs.com/hce-manual/pc/Eloratings.html">
+                ELO-based
+              </a>
+              {` `}
+              rating system.
             </p>
-            <button className="btn btn-primary">Get Started</button>
+            <div className="indicator">
+              <span className="indicator-item badge badge-secondary">
+                with Google
+              </span>
+              <a
+                className="btn btn-primary"
+                href={encodeURI(
+                  `https://${
+                    import.meta.env.VITE_AUTH0_DOMAIN as string
+                  }/authorize?response_type=code&client_id=${
+                    import.meta.env.VITE_AUTH0_CLIENT_ID as string
+                  }&redirect_uri=${
+                    import.meta.env.VITE_CLIENT_REDIRECT as string
+                  }&scope=${
+                    import.meta.env.VITE_AUTH0_SCOPE as string
+                  }&audience=${
+                    import.meta.env.VITE_API_AUDIENCE_URL as string
+                  }&state=${import.meta.env.VITE_AUTH0_STATE as string}`
+                )}
+              >
+                Log in
+              </a>
+            </div>
           </div>
+          <p></p>
         </div>
-      </div>
-      <div className="card">
-        {code != null || isCreateTokenLoading ? (
-          <LoadingSpinner />
-        ) : (
-          <a
-            href={encodeURI(
-              `https://${
-                import.meta.env.VITE_AUTH0_DOMAIN as string
-              }/authorize?response_type=code&client_id=${
-                import.meta.env.VITE_AUTH0_CLIENT_ID as string
-              }&redirect_uri=${
-                import.meta.env.VITE_CLIENT_REDIRECT as string
-              }&scope=${import.meta.env.VITE_AUTH0_SCOPE as string}&audience=${
-                import.meta.env.VITE_API_AUDIENCE_URL as string
-              }&state=${import.meta.env.VITE_AUTH0_STATE as string}`
-            )}
-          >
-            Log in
-          </a>
-        )}
-      </div>
-    </div>
+      )}
+    </>
   );
 }
 
