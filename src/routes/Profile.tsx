@@ -1,8 +1,9 @@
 import "../App.css";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
+import { getGamesByUserId } from "../api/game/get/mutations";
 import { createPlayer } from "../api/player/post/mutations";
 import { type IPostPlayerBody } from "../api/player/post/types";
 import { fetchTournamentList } from "../api/tournament/get/queries";
@@ -32,9 +33,26 @@ function Profile(): JSX.Element {
     },
   });
 
+  const { mutate: getGameByUserIdMutation } = useMutation({
+    mutationFn: getGamesByUserId,
+    onSuccess: (gamelist) => {
+      console.log(gamelist);
+    },
+  });
+
   const { getUser } = useUserStore();
   const currentUser = getUser();
+  const accessToken = auth?.accessToken;
+  const id = currentUser?.id;
 
+  useEffect(() => {
+    accessToken != null &&
+      id != null &&
+      getGameByUserIdMutation({
+        accessToken,
+        id,
+      });
+  }, [accessToken, id]);
   const _onTournamentChange = (
     e: React.ChangeEvent<HTMLSelectElement>
   ): void => {
