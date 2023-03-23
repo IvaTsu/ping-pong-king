@@ -12,13 +12,6 @@ import ProtectedRoute from "../routes/ProtectedRoute";
 import { useAuthStore, useUserStore } from "../store";
 import { decodeJWT, type IDecodedIdToken } from "../utils/decodeJWT";
 
-interface GameHistory {
-  won: boolean;
-  opponentName: string;
-  score: string;
-  date: string;
-}
-
 function Profile(): JSX.Element {
   const [tournamentId, setTournamentId] = useState<string>();
 
@@ -26,7 +19,7 @@ function Profile(): JSX.Element {
   const auth = getAuth();
   const userFromIdToken = decodeJWT<IDecodedIdToken>(auth?.idToken);
   const { setUser } = useUserStore();
-  const [userHistory, setUserHistory] = useState<GameHistory[]>();
+  // const [userHistory, setUserHistory] = useState<GameHistory[]>();
 
   const { data: tournamentList, isLoading } = useQuery(
     ["tournamentList", fetchTournamentList, auth?.accessToken],
@@ -41,25 +34,21 @@ function Profile(): JSX.Element {
     },
   });
 
-  const { mutate: getGameByUserIdMutation } = useMutation({
+  const { mutate: getGameByUserIdMutation, data: gameList } = useMutation({
     mutationFn: getGamesByUserId,
-    onSuccess: (gamelist) => {
-      setUserHistory(
-        gamelist.content.map((game) => {
-          const gameDate = new Date(game.playedWhen)
-            .toISOString()
-            .split("T")[0];
-          const { gameResult, playerRefB } = game;
-          return {
-            opponentName: playerRefB.name,
-            won: gameResult.playerAScore > gameResult.playerBScore,
-            score: `${gameResult.playerAScore} : ${gameResult.playerBScore}`,
-            date: gameDate,
-          };
-        })
-      );
-    },
   });
+
+  const gameHistory = gameList?.content.map((game) => {
+    const gameDate = new Date(game.playedWhen).toISOString().split("T")[0];
+    const { gameResult, playerRefB } = game;
+    return {
+      opponentName: playerRefB.name,
+      won: gameResult.playerAScore > gameResult.playerBScore,
+      score: `${gameResult.playerAScore} : ${gameResult.playerBScore}`,
+      date: gameDate,
+    };
+  });
+
   const { getUser } = useUserStore();
   const currentUser = getUser();
   const accessToken = auth?.accessToken;
@@ -158,7 +147,7 @@ function Profile(): JSX.Element {
             </div>
           )}
 
-          {userHistory != null && userHistory?.length > 0 ? (
+          {gameHistory != null && gameHistory.length > 0 ? (
             <div className="mt-10 w-full flex items-start border-lightGrey flex-col sm:w-3/4">
               <p className="text-2xl font-ubuntuBold  text-navy dark:text-aqua mb-3 ml-10">
                 Game history
@@ -179,7 +168,7 @@ function Profile(): JSX.Element {
                   )}
                 </div>
                 <div className="p-2 flex flex-col">
-                  {userHistory.map((game, index) => {
+                  {gameHistory.map((game, index) => {
                     const { opponentName, won, date, score } = game;
                     return (
                       <div
