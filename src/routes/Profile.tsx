@@ -139,7 +139,7 @@ function Profile(): JSX.Element {
               </button>
             </div>
           ) : (
-            <div className="card card-side bg-base-100 shadow-xl mt-10 w-96 p-3 sm:p-5">
+            <div className="card card-side bg-base-100 shadow-xl mt-10 w-full sm:w-96 p-3 sm:p-5 flex">
               <figure className="rounded-none">
                 <img
                   src={currentUser.profileImage}
