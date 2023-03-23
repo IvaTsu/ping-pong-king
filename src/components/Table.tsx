@@ -83,7 +83,9 @@ export const Table = (): JSX.Element => {
   const table = useReactTable({
     columns: userColumnDefs,
     data:
-      playerList?.content.filter((player) => player.gamesPlayed !== 0) ?? [],
+      playerList?.content.filter(
+        (player) => player.gamesPlayed !== 0 || player.id === currentUser?.id
+      ) ?? [],
     pageCount: playerList?.pageable.totalPages,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
