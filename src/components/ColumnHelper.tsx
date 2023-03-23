@@ -2,7 +2,7 @@ import { type ColumnDef, createColumnHelper } from "@tanstack/react-table";
 
 import { type IPlayer, type IPlayerRating } from "../api/player/get/types";
 
-// make a generic component for building tables
+// let it be for now, may use later
 
 type ColumnHelper = IPlayer | IPlayerRating;
 
