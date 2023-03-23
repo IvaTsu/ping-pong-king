@@ -79,7 +79,6 @@ export const Table = (): JSX.Element => {
       }),
     { keepPreviousData: true, retry: false, enabled: auth?.accessToken != null }
   );
-
   const table = useReactTable({
     columns: userColumnDefs,
     data: playerList?.content ?? [],

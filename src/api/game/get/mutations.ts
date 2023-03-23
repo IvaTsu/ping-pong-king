@@ -6,6 +6,6 @@ import { getGamesByUserIdUrl } from "../urls";
 export async function getGamesByUserId({
   accessToken,
   id
-}: IGetGamesMutationParams): Promise<IGame[]> {
+}: IGetGamesMutationParams): Promise<{content: IGame[]}> {
   return await getRequest({ accessToken, url: getGamesByUserIdUrl(id) });
 }

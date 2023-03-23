@@ -12,6 +12,13 @@ import ProtectedRoute from "../routes/ProtectedRoute";
 import { useAuthStore, useUserStore } from "../store";
 import { decodeJWT, type IDecodedIdToken } from "../utils/decodeJWT";
 
+interface GameHistory {
+  won: boolean;
+  opponentName: string;
+  score: string;
+  date: string;
+}
+
 function Profile(): JSX.Element {
   const [tournamentId, setTournamentId] = useState<string>();
 
@@ -19,6 +26,7 @@ function Profile(): JSX.Element {
   const auth = getAuth();
   const userFromIdToken = decodeJWT<IDecodedIdToken>(auth?.idToken);
   const { setUser } = useUserStore();
+  const [userHistory, setUserHistory] = useState<GameHistory[]>();
 
   const { data: tournamentList, isLoading } = useQuery(
     ["tournamentList", fetchTournamentList, auth?.accessToken],
@@ -36,10 +44,22 @@ function Profile(): JSX.Element {
   const { mutate: getGameByUserIdMutation } = useMutation({
     mutationFn: getGamesByUserId,
     onSuccess: (gamelist) => {
-      console.log(gamelist);
+      setUserHistory(
+        gamelist.content.map((game) => {
+          const gameDate = new Date(game.playedWhen)
+            .toISOString()
+            .split("T")[0];
+          const { gameResult, playerRefB } = game;
+          return {
+            opponentName: playerRefB.name,
+            won: gameResult.playerAScore > gameResult.playerBScore,
+            score: `${gameResult.playerAScore} : ${gameResult.playerBScore}`,
+            date: gameDate,
+          };
+        })
+      );
     },
   });
-
   const { getUser } = useUserStore();
   const currentUser = getUser();
   const accessToken = auth?.accessToken;
@@ -70,7 +90,7 @@ function Profile(): JSX.Element {
     <ProtectedRoute>
       <>
         <NavigationBar />
-        <div className="flex justify-center">
+        <div className="flex items-center flex-col">
           {currentUser == null ? (
             <div>
               <h1>Hello, {userFromIdToken?.name}</h1>
@@ -128,7 +148,7 @@ function Profile(): JSX.Element {
                 />
               </figure>
               <div className="text-start pl-5">
-                <p className="text-navy font-ubuntuRegular dark:text-aqua text-l sm:text-xl pb-2">
+                <p className="text-navy dark:text-aqua font-ubuntuRegular  text-l sm:text-xl pb-2">
                   {currentUser.name}
                 </p>
                 <p>{currentUser.email}</p>
@@ -136,6 +156,54 @@ function Profile(): JSX.Element {
                 <p>Games played: {currentUser.gamesPlayed}</p>
               </div>
             </div>
+          )}
+
+          {userHistory != null && userHistory?.length > 0 ? (
+            <div className="mt-10 w-full flex items-start border-lightGrey flex-col sm:w-3/4">
+              <p className="text-2xl font-ubuntuBold  text-navy dark:text-aqua mb-3 ml-10">
+                Game history
+              </p>
+              <div className="card card-side bg-base-100 shadow-xl w-full flex flex-col p-2 sm:p-2 max-h-96 overflow-auto text-xs sm:text-base border border-lightGrey rounded dark:border-0">
+                <div className="flex w-full items-start justify-start text-center border-b-2 border-cloud dark:border-lightGrey">
+                  {["Opponent", "Result", "Score", "Date"].map(
+                    (header, index) => {
+                      return (
+                        <p
+                          className="w-1/4 font-ubuntuBold mb-2 text-center"
+                          key={index}
+                        >
+                          {header}
+                        </p>
+                      );
+                    }
+                  )}
+                </div>
+                <div className="p-2 flex flex-col">
+                  {userHistory.map((game, index) => {
+                    const { opponentName, won, date, score } = game;
+                    return (
+                      <div
+                        className="flex w-full items-start justify-start text-center py-2 border-b border-darkGrey  dark:border-lightGrey"
+                        key={index}
+                      >
+                        <p className="w-1/4">{opponentName}</p>
+                        <div className="w-1/4 flex justify-center">
+                          {won ? (
+                            <img src="check.svg" className="w-6" />
+                          ) : (
+                            <img src="denied.svg" className="w-6 color-rose" />
+                          )}
+                        </div>
+                        <p className="w-1/4">{score}</p>
+                        <p className="w-1/4">{date}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <></>
           )}
         </div>
       </>
