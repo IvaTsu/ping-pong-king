@@ -112,7 +112,13 @@ export const Table = (): JSX.Element => {
   return isLoading ? (
     <LoadingSpinner />
   ) : (
-    <div className="overflow-x-auto py-10">
+    <div className="overflow-x-auto py-10 flex flex-col">
+      <div className="w-full card bg-base-100 shadow-xl mt-2 h-24 mb-10 flex flex-col justify-center">
+        <p className="font-ubuntuRegular">
+          To be able to see yourself in the table you should play at least one
+          game! now GO!
+        </p>
+      </div>
       <table className="table w-full">
         <thead>
           <tr>
