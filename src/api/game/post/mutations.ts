@@ -1,7 +1,8 @@
 import { postRequest } from "../../request";
 import { type ICreateMutationParams } from "../../types";
-import { type IGame, type IPostGameBody } from "../types";
-import { gameCreate } from "../urls";
+import { type IGame } from "../types";
+import { type IPostGameBody } from "./types";
+import { gameCreate } from "./urls";
 
 export async function createGame({
   accessToken,

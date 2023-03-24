@@ -1,12 +1,13 @@
 import "../App.css";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import { getGamesByUserId } from "../api/game/get/mutations";
+import { fetchGamesByUserId } from "../api/game/get/queries";
 import { createPlayer } from "../api/player/post/mutations";
 import { type IPostPlayerBody } from "../api/player/post/types";
 import { fetchTournamentList } from "../api/tournament/get/queries";
+import { LoadingSpinner } from "../components/LoadingSpinner";
 import NavigationBar from "../components/NavigationBar";
 import ProtectedRoute from "../routes/ProtectedRoute";
 import { useAuthStore, useUserStore } from "../store";
@@ -34,34 +35,31 @@ function Profile(): JSX.Element {
     },
   });
 
-  const { mutate: getGameByUserIdMutation, data: gameList } = useMutation({
-    mutationFn: getGamesByUserId,
-  });
+  const { getUser } = useUserStore();
+  const currentUser = getUser();
+
+  const { data: gameList } = useQuery(
+    ["player", fetchGamesByUserId, auth?.accessToken],
+    async () =>
+      await fetchGamesByUserId(
+        auth?.accessToken as string,
+        currentUser?.id as string
+      )
+  );
 
   const gameHistory = gameList?.content.map((game) => {
-    const gameDate = new Date(game.playedWhen).toISOString().split("T")[0];
-    const { gameResult, playerRefB } = game;
+    const date = new Date(game.playedWhen).toISOString().split("T")[0];
+    const { gameResult, playerRefB, playerRefA } = game;
+    const opponentName =
+      playerRefB.name === currentUser?.name ? playerRefA.name : playerRefB.name;
     return {
-      opponentName: playerRefB.name,
+      opponentName,
       won: gameResult.playerAScore > gameResult.playerBScore,
       score: `${gameResult.playerAScore} : ${gameResult.playerBScore}`,
-      date: gameDate,
+      date,
     };
   });
 
-  const { getUser } = useUserStore();
-  const currentUser = getUser();
-  const accessToken = auth?.accessToken;
-  const id = currentUser?.id;
-
-  useEffect(() => {
-    accessToken != null &&
-      id != null &&
-      getGameByUserIdMutation({
-        accessToken,
-        id,
-      });
-  }, [accessToken, id]);
   const _onTournamentChange = (
     e: React.ChangeEvent<HTMLSelectElement>
   ): void => {
@@ -192,7 +190,7 @@ function Profile(): JSX.Element {
               </div>
             </div>
           ) : (
-            <></>
+            <LoadingSpinner />
           )}
         </div>
       </>

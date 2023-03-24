@@ -3,7 +3,4 @@ export interface ICreateMutationParams<T> {
   body: T;
 }
 
-export interface IGetGamesMutationParams {
-  accessToken: string;
-  id: string
-}
+
