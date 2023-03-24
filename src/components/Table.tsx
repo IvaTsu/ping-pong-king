@@ -10,7 +10,7 @@ import {
   type SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { fetchPlayerList } from "../api/player/get/queries";
 import { type IPlayer } from "../api/player/get/types";
@@ -50,6 +50,7 @@ export const userColumnDefs = [
 
 export const Table = (): JSX.Element => {
   const [sorting, setSorting] = useState<SortingState>([]);
+  const [showNotification, setShowNotification] = useState<boolean>(true);
   const [{ pageIndex, pageSize }, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
@@ -109,12 +110,32 @@ export const Table = (): JSX.Element => {
   });
   const headers = table.getFlatHeaders();
   const rows = table.getRowModel().rows;
+  useEffect(() => {
+    currentUser?.gamesPlayed != null && currentUser?.gamesPlayed > 0
+      ? setShowNotification(false)
+      : setShowNotification(false);
+  }, [currentUser?.gamesPlayed]);
+
+  const _onNotificationClose = (): void => {
+    setShowNotification(false);
+  };
 
   return isLoading ? (
     <LoadingSpinner />
   ) : (
-    <div className="overflow-x-auto py-10 flex flex-col">
-      <div className="w-full card bg-base-100 shadow-xl mt-2 h-24 mb-10 flex flex-col justify-center">
+    <div className="overflow-x-auto py-10 flex flex-col relative">
+      <div
+        className={`w-full card bg-base-100 shadow-xl mt-2 h-24 mb-10 p-2 sm:p-5 flex flex-col justify-center  ${
+          showNotification ? " " : "hidden"
+        }`}
+      >
+        <div className="w-4 absolute top-2 right-2 rounded-full hover:bg-lightGrey hover: cursor-pointer transition-all duration-200">
+          <img
+            src="close.svg"
+            className="w-4"
+            onClick={_onNotificationClose}
+          ></img>
+        </div>
         <p className="font-ubuntuRegular">
           To be able to see yourself in the table you should play at least one
           game! now GO!

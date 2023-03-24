@@ -168,12 +168,12 @@ function Profile(): JSX.Element {
 
           {gameHistory != null && gameHistory.length > 0 ? (
             <div className="mt-10 w-full flex items-start border-lightGrey flex-col sm:w-3/4">
-              <div className="w-full flex justify-start  mb-3 ml-10">
-                <p className="text-2xl font-ubuntuBold  text-navy dark:text-aqua">
+              <div className="w-full flex justify-start mb-3 ml-3 sm:ml-10 flex-col sm:flex-row">
+                <p className="text-2xl text-start font-ubuntuBold  text-navy dark:text-aqua">
                   Game history
                 </p>
                 <select
-                  className="ml-5 rounded p-2 border-r-8 border-transparent "
+                  className="ml-0 sm:ml-5 mt-2 sm:mt-0 rounded p-2 border-r-8 border-transparent w-56 focus:outline-none"
                   onChange={_onSelectGamesQuant}
                   name="games"
                 >
