@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -11,6 +11,7 @@ import { ScoreInput } from "../components/ScoreInput";
 import { SearchOpponentByName } from "../components/SearchOpponentByName";
 import { Steps } from "../components/Steps";
 import SuccessNotification from "../components/SuccessNotification";
+import { thirtyMinutes } from "../constants/time";
 import { useDebounce } from "../hooks/useDebounce";
 import { paths } from "../router/router";
 import { useAuthStore, useOpponentStore, useUserStore } from "../store";
@@ -18,6 +19,7 @@ import ProtectedRoute from "./ProtectedRoute";
 
 export default function AddGame(): JSX.Element {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const { getAuth } = useAuthStore();
   const auth = getAuth();
@@ -46,6 +48,15 @@ export default function AddGame(): JSX.Element {
       setCurrentUserScore("");
       setOpponentScore("");
       setInputIsDirty(false);
+      // invalidate `gamesByUserId` query once new game created
+      queryClient
+        .invalidateQueries({ queryKey: ["gamesByUserId"] })
+        .then(() => {
+          // NOOP
+        })
+        .catch((e) => {
+          // NOOP
+        });
     },
   });
 
@@ -74,12 +85,15 @@ export default function AddGame(): JSX.Element {
   };
 
   const { data: playersList, isLoading } = useQuery(
-    ["player", fetchPlayer, auth?.accessToken, debouncedOpponentSearchValue],
+    ["playerByName", auth?.accessToken, debouncedOpponentSearchValue],
     async () =>
       await fetchPlayer({
         accessToken: auth?.accessToken as string,
         name: debouncedOpponentSearchValue,
-      })
+      }),
+    {
+      staleTime: thirtyMinutes,
+    }
   );
 
   const _onCreateGameClick = (): void => {
