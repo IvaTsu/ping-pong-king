@@ -15,6 +15,7 @@ import { useMemo, useState } from "react";
 import { fetchPlayerList } from "../api/player/get/queries";
 import { type IPlayer } from "../api/player/get/types";
 import { AQUA, NAVY } from "../constants/colors";
+import { tenMinutes } from "../constants/time";
 import { useDetectDarkTheme } from "../hooks/useDetectColorMode";
 import { useAuthStore, useUserStore } from "../store";
 import { LoadingSpinner } from "./LoadingSpinner";
@@ -77,7 +78,12 @@ export const Table = (): JSX.Element => {
         page: pageIndex,
         size: pageSize,
       }),
-    { keepPreviousData: true, retry: false, enabled: auth?.accessToken != null }
+    {
+      keepPreviousData: true,
+      retry: false,
+      enabled: auth?.accessToken != null,
+      staleTime: tenMinutes,
+    }
   );
 
   const table = useReactTable({
