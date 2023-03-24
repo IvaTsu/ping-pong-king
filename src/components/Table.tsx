@@ -182,9 +182,23 @@ export const Table = (): JSX.Element => {
                 )?.getRowStyles(row),
               }}
             >
-              {row.getVisibleCells().map((cell) => (
+              {row.getVisibleCells().map((cell, index) => (
                 <td key={cell.id}>
+                  {playerList?.content[0].id === row.original.id &&
+                    index === 0 && (
+                      <div className="animate-bounce inline-block text-xl sm:text-2xl">
+                        👑
+                      </div>
+                    )}
+                  {`   `}
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  {`   `}
+                  {playerList?.content[0].id === row.original.id &&
+                    index === 0 && (
+                      <div className="animate-bounce inline-block text-xl sm:text-2xl">
+                        👑
+                      </div>
+                    )}
                 </td>
               ))}
             </tr>
