@@ -11,17 +11,20 @@ export async function fetchPlayerList({
   accessToken,
   page,
   size,
+  minGamesPlayed,
 }: IPlayerListParams & { accessToken: string }): Promise<IPlayerList> {
-  return await getRequest({ accessToken, url: playerList({ page, size }) });
+  return await getRequest({
+    accessToken,
+    url: playerList({ page, size, minGamesPlayed }),
+  });
 }
 
 export async function fetchPlayer({
   accessToken,
   name,
-  tournamentId,
 }: IPlayerFindParams & { accessToken: string }): Promise<IPlayer[]> {
   return await getRequest({
     accessToken,
-    url: playerFind({ name, tournamentId }),
+    url: playerFind({ name }),
   });
 }
