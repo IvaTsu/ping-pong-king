@@ -50,7 +50,7 @@ export default function AddGame(): JSX.Element {
       setInputIsDirty(false);
       // invalidate `gamesByUserId` query once new game created
       queryClient
-        .invalidateQueries({ queryKey: ["gamesByUserId"] })
+        .invalidateQueries({ queryKey: ["gamesByUserId", "player"] })
         .then(() => {
           // NOOP
         })
