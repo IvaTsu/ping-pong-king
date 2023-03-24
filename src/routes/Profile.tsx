@@ -9,6 +9,7 @@ import { type IPostPlayerBody } from "../api/player/post/types";
 import { fetchTournamentList } from "../api/tournament/get/queries";
 import { LoadingSpinner } from "../components/LoadingSpinner";
 import NavigationBar from "../components/NavigationBar";
+import { fiveMinutes } from "../constants/time";
 import ProtectedRoute from "../routes/ProtectedRoute";
 import { useAuthStore, useUserStore } from "../store";
 import { decodeJWT, type IDecodedIdToken } from "../utils/decodeJWT";
@@ -38,12 +39,16 @@ function Profile(): JSX.Element {
   const currentUser = getUser();
 
   const { data: gameList } = useQuery(
-    ["gamesById", fetchGamesByUserId, auth?.accessToken],
+    ["gamesByUserId", fetchGamesByUserId, auth?.accessToken],
     async () =>
       await fetchGamesByUserId(
         auth?.accessToken as string,
         currentUser?.id as string
-      )
+      ),
+    {
+      enabled: auth?.accessToken != null && currentUser?.id != null,
+      staleTime: fiveMinutes,
+    }
   );
 
   const gameHistory = useMemo(() => {
