@@ -1,11 +1,11 @@
 export interface IPlayerListParams {
   page: number;
   size: number;
+  minGamesPlayed?: number;
 }
 
 export interface IPlayerFindParams {
   name: string;
-  tournamentId?: string;
 }
 
 export interface IPlayer {
@@ -35,7 +35,7 @@ export interface IPlayerList {
 }
 
 export interface IPlayerRating {
-  opponentName: string,
-  gameScore: string,
-  userWon: boolean
+  opponentName: string;
+  gameScore: string;
+  userWon: boolean;
 }

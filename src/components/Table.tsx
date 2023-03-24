@@ -77,6 +77,7 @@ export const Table = (): JSX.Element => {
         accessToken: auth?.accessToken as string,
         page: pageIndex,
         size: pageSize,
+        minGamesPlayed: 1,
       }),
     {
       keepPreviousData: true,
