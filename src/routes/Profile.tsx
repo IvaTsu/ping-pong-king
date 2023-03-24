@@ -16,7 +16,8 @@ import { decodeJWT, type IDecodedIdToken } from "../utils/decodeJWT";
 
 function Profile(): JSX.Element {
   const [tournamentId, setTournamentId] = useState<string>();
-
+  const [gamesQuantity, setGamesQuantity] = useState<string>("All");
+  const [isDisabled, setIsDisabled] = useState(false);
   const { getAuth } = useAuthStore();
   const auth = getAuth();
   const userFromIdToken = decodeJWT<IDecodedIdToken>(auth?.idToken);
@@ -52,7 +53,12 @@ function Profile(): JSX.Element {
   );
 
   const gameHistory = useMemo(() => {
-    return gameList?.content.map((game) => {
+    const filteredGameList =
+      gamesQuantity === "All"
+        ? gameList?.content
+        : gameList?.content.slice(0, Number(gamesQuantity));
+
+    return filteredGameList?.map((game) => {
       const date = new Date(game.playedWhen).toISOString().split("T")[0];
       const { gameResult, playerRefB, playerRefA } = game;
       const opponentName =
@@ -68,7 +74,7 @@ function Profile(): JSX.Element {
         id,
       };
     });
-  }, [gameList?.content]);
+  }, [gameList?.content, gamesQuantity]);
 
   const _onTournamentChange = (
     e: React.ChangeEvent<HTMLSelectElement>
@@ -82,7 +88,12 @@ function Profile(): JSX.Element {
   ): void => {
     createPlayerMutation({ accessToken, body });
   };
-
+  const _onSelectGamesQuant = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ): void => {
+    setGamesQuantity(e.target.value);
+    setIsDisabled(true);
+  };
   return (
     <ProtectedRoute>
       <>
@@ -157,9 +168,25 @@ function Profile(): JSX.Element {
 
           {gameHistory != null && gameHistory.length > 0 ? (
             <div className="mt-10 w-full flex items-start border-lightGrey flex-col sm:w-3/4">
-              <p className="text-2xl font-ubuntuBold  text-navy dark:text-aqua mb-3 ml-10">
-                Game history
-              </p>
+              <div className="w-full flex justify-start  mb-3 ml-10">
+                <p className="text-2xl font-ubuntuBold  text-navy dark:text-aqua">
+                  Game history
+                </p>
+                <select
+                  className="ml-5 rounded p-2 border-r-8 border-transparent "
+                  onChange={_onSelectGamesQuant}
+                  name="games"
+                >
+                  <option disabled={isDisabled}>
+                    Choose a games quantity:
+                  </option>
+                  <option>5</option>
+                  <option>10</option>
+                  <option>15</option>
+                  <option>20</option>
+                  <option>All</option>
+                </select>
+              </div>
               <div className="card card-side bg-base-100 shadow-xl w-full flex flex-col p-2 sm:p-2 max-h-96 overflow-auto text-xs sm:text-base border border-lightGrey rounded dark:border-0">
                 <div className="flex w-full items-start justify-start text-center border-b-2 border-cloud dark:border-lightGrey">
                   {["Opponent", "Result", "Score", "Date"].map((header) => {
