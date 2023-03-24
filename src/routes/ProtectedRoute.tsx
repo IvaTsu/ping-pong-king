@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Navigate } from "react-router-dom";
 
 import { fetchPlayer } from "../api/player/get/queries";
+import { thirtyMinutes } from "../constants/time";
 import { useAuthStore } from "../store";
 import {
   decodeJWT,
@@ -23,7 +24,7 @@ function ProtectedRoute({ children }: { children: JSX.Element }): JSX.Element {
         accessToken: auth?.accessToken as string,
         name: userFromIdToken?.name as string,
       }),
-    { enabled: userFromIdToken?.name != null }
+    { enabled: userFromIdToken?.name != null, staleTime: thirtyMinutes }
   );
 
   if (
