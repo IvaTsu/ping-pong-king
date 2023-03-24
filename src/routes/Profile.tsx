@@ -1,7 +1,7 @@
 import "../App.css";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { fetchGamesByUserId } from "../api/game/get/queries";
 import { createPlayer } from "../api/player/post/mutations";
@@ -20,7 +20,6 @@ function Profile(): JSX.Element {
   const auth = getAuth();
   const userFromIdToken = decodeJWT<IDecodedIdToken>(auth?.idToken);
   const { setUser } = useUserStore();
-  // const [userHistory, setUserHistory] = useState<GameHistory[]>();
 
   const { data: tournamentList, isLoading } = useQuery(
     ["tournamentList", fetchTournamentList, auth?.accessToken],
@@ -47,18 +46,24 @@ function Profile(): JSX.Element {
       )
   );
 
-  const gameHistory = gameList?.content.map((game) => {
-    const date = new Date(game.playedWhen).toISOString().split("T")[0];
-    const { gameResult, playerRefB, playerRefA } = game;
-    const opponentName =
-      playerRefB.name === currentUser?.name ? playerRefA.name : playerRefB.name;
-    return {
-      opponentName,
-      won: gameResult.playerAScore > gameResult.playerBScore,
-      score: `${gameResult.playerAScore} : ${gameResult.playerBScore}`,
-      date,
-    };
-  });
+  const gameHistory = useMemo(() => {
+    return gameList?.content.map((game) => {
+      const date = new Date(game.playedWhen).toISOString().split("T")[0];
+      const { gameResult, playerRefB, playerRefA } = game;
+      const opponentName =
+        playerRefB.name === currentUser?.name
+          ? playerRefA.name
+          : playerRefB.name;
+      const id = game.id;
+      return {
+        opponentName,
+        won: gameResult.playerAScore > gameResult.playerBScore,
+        score: `${gameResult.playerAScore} : ${gameResult.playerBScore}`,
+        date,
+        id,
+      };
+    });
+  }, [gameList?.content]);
 
   const _onTournamentChange = (
     e: React.ChangeEvent<HTMLSelectElement>
@@ -152,26 +157,24 @@ function Profile(): JSX.Element {
               </p>
               <div className="card card-side bg-base-100 shadow-xl w-full flex flex-col p-2 sm:p-2 max-h-96 overflow-auto text-xs sm:text-base border border-lightGrey rounded dark:border-0">
                 <div className="flex w-full items-start justify-start text-center border-b-2 border-cloud dark:border-lightGrey">
-                  {["Opponent", "Result", "Score", "Date"].map(
-                    (header, index) => {
-                      return (
-                        <p
-                          className="w-1/4 font-ubuntuBold mb-2 text-center"
-                          key={index}
-                        >
-                          {header}
-                        </p>
-                      );
-                    }
-                  )}
+                  {["Opponent", "Result", "Score", "Date"].map((header) => {
+                    return (
+                      <p
+                        className="w-1/4 font-ubuntuBold mb-2 text-center"
+                        key={header}
+                      >
+                        {header}
+                      </p>
+                    );
+                  })}
                 </div>
                 <div className="p-2 flex flex-col">
-                  {gameHistory.map((game, index) => {
+                  {gameHistory.map((game) => {
                     const { opponentName, won, date, score } = game;
                     return (
                       <div
                         className="flex w-full items-start justify-start text-center py-2 border-b border-darkGrey  dark:border-lightGrey"
-                        key={index}
+                        key={game.id}
                       >
                         <p className="w-1/4">{opponentName}</p>
                         <div className="w-1/4 flex justify-center">
