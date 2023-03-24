@@ -198,7 +198,7 @@ export const Table = (): JSX.Element => {
                 {">>"}
               </button>
             </div>
-            <span className="flex items-center gap-1">
+            <span className="flex items-center gap-1 ml-1">
               <div>Page</div>
               <strong>
                 {table.getState().pagination.pageIndex + 1} of{" "}

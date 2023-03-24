@@ -8,7 +8,8 @@ module.exports = {
       rose: "#E11D48",
       cloud: "#232933",
       cloudBirst: "#374151",
-      darkGrey: "#cccccc"
+      darkGrey: "#СССССС",
+      lightGrey: "#D3D3D3"
     },
       extend: {
         fontFamily: {

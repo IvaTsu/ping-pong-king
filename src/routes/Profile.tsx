@@ -1,11 +1,13 @@
 import "../App.css";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
+import { fetchGamesByUserId } from "../api/game/get/queries";
 import { createPlayer } from "../api/player/post/mutations";
 import { type IPostPlayerBody } from "../api/player/post/types";
 import { fetchTournamentList } from "../api/tournament/get/queries";
+import { LoadingSpinner } from "../components/LoadingSpinner";
 import NavigationBar from "../components/NavigationBar";
 import ProtectedRoute from "../routes/ProtectedRoute";
 import { useAuthStore, useUserStore } from "../store";
@@ -35,6 +37,34 @@ function Profile(): JSX.Element {
   const { getUser } = useUserStore();
   const currentUser = getUser();
 
+  const { data: gameList } = useQuery(
+    ["gamesById", fetchGamesByUserId, auth?.accessToken],
+    async () =>
+      await fetchGamesByUserId(
+        auth?.accessToken as string,
+        currentUser?.id as string
+      )
+  );
+
+  const gameHistory = useMemo(() => {
+    return gameList?.content.map((game) => {
+      const date = new Date(game.playedWhen).toISOString().split("T")[0];
+      const { gameResult, playerRefB, playerRefA } = game;
+      const opponentName =
+        playerRefB.name === currentUser?.name
+          ? playerRefA.name
+          : playerRefB.name;
+      const id = game.id;
+      return {
+        opponentName,
+        won: gameResult.playerAScore > gameResult.playerBScore,
+        score: `${gameResult.playerAScore} : ${gameResult.playerBScore}`,
+        date,
+        id,
+      };
+    });
+  }, [gameList?.content]);
+
   const _onTournamentChange = (
     e: React.ChangeEvent<HTMLSelectElement>
   ): void => {
@@ -52,7 +82,7 @@ function Profile(): JSX.Element {
     <ProtectedRoute>
       <>
         <NavigationBar />
-        <div className="flex justify-center">
+        <div className="flex items-center flex-col">
           {currentUser == null ? (
             <div>
               <h1>Hello, {userFromIdToken?.name}</h1>
@@ -101,7 +131,7 @@ function Profile(): JSX.Element {
               </button>
             </div>
           ) : (
-            <div className="card card-side bg-base-100 shadow-xl mt-10 w-96 p-3 sm:p-5">
+            <div className="card card-side bg-base-100 shadow-xl mt-10 w-full sm:w-96 p-3 sm:p-5 flex">
               <figure className="rounded-none">
                 <img
                   src={currentUser.profileImage}
@@ -110,7 +140,7 @@ function Profile(): JSX.Element {
                 />
               </figure>
               <div className="text-start pl-5">
-                <p className="text-navy font-ubuntuRegular dark:text-aqua text-l sm:text-xl pb-2">
+                <p className="text-navy dark:text-aqua font-ubuntuRegular  text-l sm:text-xl pb-2">
                   {currentUser.name}
                 </p>
                 <p>{currentUser.email}</p>
@@ -118,6 +148,52 @@ function Profile(): JSX.Element {
                 <p>Games played: {currentUser.gamesPlayed}</p>
               </div>
             </div>
+          )}
+
+          {gameHistory != null && gameHistory.length > 0 ? (
+            <div className="mt-10 w-full flex items-start border-lightGrey flex-col sm:w-3/4">
+              <p className="text-2xl font-ubuntuBold  text-navy dark:text-aqua mb-3 ml-10">
+                Game history
+              </p>
+              <div className="card card-side bg-base-100 shadow-xl w-full flex flex-col p-2 sm:p-2 max-h-96 overflow-auto text-xs sm:text-base border border-lightGrey rounded dark:border-0">
+                <div className="flex w-full items-start justify-start text-center border-b-2 border-cloud dark:border-lightGrey">
+                  {["Opponent", "Result", "Score", "Date"].map((header) => {
+                    return (
+                      <p
+                        className="w-1/4 font-ubuntuBold mb-2 text-center"
+                        key={header}
+                      >
+                        {header}
+                      </p>
+                    );
+                  })}
+                </div>
+                <div className="p-2 flex flex-col">
+                  {gameHistory.map((game) => {
+                    const { opponentName, won, date, score } = game;
+                    return (
+                      <div
+                        className="flex w-full items-start justify-start text-center py-2 border-b border-darkGrey  dark:border-lightGrey"
+                        key={game.id}
+                      >
+                        <p className="w-1/4">{opponentName}</p>
+                        <div className="w-1/4 flex justify-center">
+                          {won ? (
+                            <img src="check.svg" className="w-6" />
+                          ) : (
+                            <img src="denied.svg" className="w-6 color-rose" />
+                          )}
+                        </div>
+                        <p className="w-1/4">{score}</p>
+                        <p className="w-1/4">{date}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <LoadingSpinner />
           )}
         </div>
       </>

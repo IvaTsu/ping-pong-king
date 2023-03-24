@@ -33,3 +33,9 @@ export interface IPlayerList {
     totalPages: number;
   };
 }
+
+export interface IPlayerRating {
+  opponentName: string,
+  gameScore: string,
+  userWon: boolean
+}
