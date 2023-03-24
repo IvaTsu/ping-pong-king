@@ -39,7 +39,7 @@ function Profile(): JSX.Element {
   const currentUser = getUser();
 
   const { data: gameList } = useQuery(
-    ["player", fetchGamesByUserId, auth?.accessToken],
+    ["gamesById", fetchGamesByUserId, auth?.accessToken],
     async () =>
       await fetchGamesByUserId(
         auth?.accessToken as string,
