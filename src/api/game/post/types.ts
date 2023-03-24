@@ -1,5 +1,3 @@
-
-
 export interface IPostGameBody {
   playerRefA: {
     id: string;
