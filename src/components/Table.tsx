@@ -113,7 +113,7 @@ export const Table = (): JSX.Element => {
   useEffect(() => {
     currentUser?.gamesPlayed != null && currentUser?.gamesPlayed > 0
       ? setShowNotification(false)
-      : setShowNotification(false);
+      : setShowNotification(true);
   }, [currentUser?.gamesPlayed]);
 
   const _onNotificationClose = (): void => {
@@ -125,8 +125,8 @@ export const Table = (): JSX.Element => {
   ) : (
     <div className="overflow-x-auto py-10 flex flex-col relative">
       <div
-        className={`w-full card bg-base-100 shadow-xl mt-2 h-24 mb-10 p-2 sm:p-5 flex flex-col justify-center  ${
-          showNotification ? " " : "hidden"
+        className={`w-full card bg-aqua dark:bg-cloudBirst shadow-xl mt-2 h-24 mb-10 p-2 sm:p-5 flex flex-col justify-center  ${
+          showNotification ? "" : "hidden"
         }`}
       >
         <div className="w-4 absolute top-2 right-2 rounded-full hover:bg-lightGrey hover: cursor-pointer transition-all duration-200">

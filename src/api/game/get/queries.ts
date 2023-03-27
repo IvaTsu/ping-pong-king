@@ -4,7 +4,8 @@ import { type IGame } from "../types";
 
 export async function fetchGamesByUserId(
   accessToken: string,
-  id: string
+  id: string,
+  size: string,
 ): Promise<{content: IGame[]}> {
-  return await getRequest({ accessToken, url: gamesByUserId(id) });
+  return await getRequest({ accessToken, url: gamesByUserId(id, size) });
 }

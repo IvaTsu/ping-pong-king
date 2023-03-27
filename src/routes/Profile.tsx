@@ -38,13 +38,13 @@ function Profile(): JSX.Element {
 
   const { getUser } = useUserStore();
   const currentUser = getUser();
-
   const { data: gameList } = useQuery(
-    ["gamesByUserId", fetchGamesByUserId, auth?.accessToken],
+    ["gamesByUserId", gamesQuantity, fetchGamesByUserId, auth?.accessToken],
     async () =>
       await fetchGamesByUserId(
         auth?.accessToken as string,
-        currentUser?.id as string
+        currentUser?.id as string,
+        gamesQuantity
       ),
     {
       enabled: auth?.accessToken != null && currentUser?.id != null,
@@ -53,12 +53,7 @@ function Profile(): JSX.Element {
   );
 
   const gameHistory = useMemo(() => {
-    const filteredGameList =
-      gamesQuantity === "All"
-        ? gameList?.content
-        : gameList?.content.slice(0, Number(gamesQuantity));
-
-    return filteredGameList?.map((game) => {
+    return gameList?.content.map((game) => {
       const date = new Date(game.playedWhen).toISOString().split("T")[0];
       const { gameResult, playerRefB, playerRefA } = game;
       const opponentName =
@@ -74,7 +69,7 @@ function Profile(): JSX.Element {
         id,
       };
     });
-  }, [gameList?.content, gamesQuantity]);
+  }, [gameList?.content]);
 
   const _onTournamentChange = (
     e: React.ChangeEvent<HTMLSelectElement>
