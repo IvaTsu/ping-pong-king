@@ -158,7 +158,7 @@ function Profile(): JSX.Element {
             </div>
           )}
 
-          {gameHistory != null && gameHistory.length > 0 ? (
+          {gameHistory === null ? (
             <div className="mt-10 w-full flex items-start border-lightGrey flex-col sm:w-3/4">
               <p className="text-2xl font-ubuntuBold  text-navy dark:text-aqua mb-3 ml-10">
                 Game history
@@ -201,7 +201,7 @@ function Profile(): JSX.Element {
               </div>
             </div>
           ) : gamesAreLoaded ? (
-            <div className="card bg-aqua dark:bg-cloudBirst w-full">
+            <div className="card flex justify-center bg-aqua dark:bg-cloudBirst w-full sm:w-96 h-16 mt-10 ">
               You haven't played any games yet!
             </div>
           ) : (
