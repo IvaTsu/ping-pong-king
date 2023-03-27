@@ -110,10 +110,6 @@ export const Table = (): JSX.Element => {
   const headers = table.getFlatHeaders();
   const rows = table.getRowModel().rows;
   const currentPage = table.getState().pagination.pageIndex;
-  const champion = useMemo(
-    () => playerList?.content.sort((a, b) => b.rating - a.rating)[0],
-    [playerList?.content]
-  );
   return isLoading ? (
     <LoadingSpinner />
   ) : (
@@ -161,7 +157,7 @@ export const Table = (): JSX.Element => {
             >
               {row.getVisibleCells().map((cell, index) => (
                 <td key={cell.id}>
-                  {champion?.id === row.original.id &&
+                  {playerList?.content[0].id === row.original.id &&
                     index === 0 &&
                     currentPage === 0 && (
                       <div className="animate-bounce inline-block text-xl sm:text-2xl">
@@ -171,7 +167,7 @@ export const Table = (): JSX.Element => {
                   {`   `}
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   {`   `}
-                  {champion?.id === row.original.id &&
+                  {playerList?.content[0].id === row.original.id &&
                     index === 0 &&
                     currentPage === 0 && (
                       <div className="animate-bounce inline-block text-xl sm:text-2xl">
@@ -237,7 +233,7 @@ export const Table = (): JSX.Element => {
             <span className="flex items-center gap-1 before:content-[''] sm:before:content-['|_'] ">
               Go to page:
               <input
-                defaultValue={table.getState().pagination.pageIndex + 1}
+                defaultValue={currentPage + 1}
                 type="number"
                 onChange={(e) => {
                   const page =
