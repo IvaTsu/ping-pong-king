@@ -28,7 +28,7 @@ export const ScoreInput = ({
           value={value}
           type="number"
           placeholder="Insert score number"
-          className={`input input-bordered ${borderColor} focus:outline-none dark:focus:border-aqua focus:border-navy placeholder-darkGrey`}
+          className={`input input-bordered ${borderColor} focus:outline-none dark:focus:border-aqua focus:border-navy`}
           onChange={(e) => {
             _onUserScoreChange(e);
           }}
