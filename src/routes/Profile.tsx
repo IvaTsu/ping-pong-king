@@ -54,6 +54,7 @@ function Profile(): JSX.Element {
     return gameList?.content.map((game) => {
       const date = new Date(game.playedWhen).toISOString().split("T")[0];
       const { gameResult, playerRefB, playerRefA } = game;
+      const { winnerId } = gameResult;
       const opponentName =
         playerRefB.name === currentUser?.name
           ? playerRefA.name
@@ -61,7 +62,7 @@ function Profile(): JSX.Element {
       const id = game.id;
       return {
         opponentName,
-        won: gameResult.playerAScore > gameResult.playerBScore,
+        won: winnerId === currentUser?.id,
         score: `${gameResult.playerAScore} : ${gameResult.playerBScore}`,
         date,
         id,
