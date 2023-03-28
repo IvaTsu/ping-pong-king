@@ -22,7 +22,7 @@ function Profile(): JSX.Element {
   const userFromIdToken = decodeJWT<IDecodedIdToken>(auth?.idToken);
   const { setUser } = useUserStore();
 
-  const { data: tournamentList, isLoading } = useQuery(
+  const { data: tournamentList } = useQuery(
     ["tournamentList", fetchTournamentList, auth?.accessToken],
     async () => await fetchTournamentList(auth?.accessToken as string),
     { enabled: auth?.accessToken != null }
@@ -38,7 +38,7 @@ function Profile(): JSX.Element {
   const { getUser } = useUserStore();
   const currentUser = getUser();
 
-  const { data: gameList } = useQuery(
+  const { data: gameList, isLoading } = useQuery(
     ["gamesByUserId", fetchGamesByUserId, auth?.accessToken],
     async () =>
       await fetchGamesByUserId(
@@ -200,7 +200,7 @@ function Profile(): JSX.Element {
                 </div>
               </div>
             </div>
-          ) : gamesAreLoaded ? (
+          ) : !isLoading ? (
             <div className="card flex justify-center bg-aqua dark:bg-cloudBirst w-full sm:w-96 h-16 mt-10">
               You haven't played any games yet!
             </div>
