@@ -16,7 +16,6 @@ import { decodeJWT, type IDecodedIdToken } from "../utils/decodeJWT";
 
 function Profile(): JSX.Element {
   const [tournamentId, setTournamentId] = useState<string>();
-  const [gamesAreLoaded, setGamesAreLoaded] = useState<boolean>(false);
   const { getAuth } = useAuthStore();
   const auth = getAuth();
   const userFromIdToken = decodeJWT<IDecodedIdToken>(auth?.idToken);
@@ -48,9 +47,6 @@ function Profile(): JSX.Element {
     {
       enabled: auth?.accessToken != null && currentUser?.id != null,
       staleTime: fiveMinutes,
-      onSuccess: () => {
-        setGamesAreLoaded(true);
-      },
     }
   );
 
