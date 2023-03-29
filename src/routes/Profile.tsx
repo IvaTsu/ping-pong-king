@@ -13,6 +13,7 @@ import { fiveMinutes } from "../constants/time";
 import ProtectedRoute from "../routes/ProtectedRoute";
 import { useAuthStore, useUserStore } from "../store";
 import { decodeJWT, type IDecodedIdToken } from "../utils/decodeJWT";
+import getRandomEmoji from "../utils/getRandomEmoji";
 
 function Profile(): JSX.Element {
   const [tournamentId, setTournamentId] = useState<string>();
@@ -60,10 +61,20 @@ function Profile(): JSX.Element {
           ? playerRefA.name
           : playerRefB.name;
       const id = game.id;
+      const isWinner = winnerId === currentUser?.id;
       return {
         opponentName,
-        won: winnerId === currentUser?.id,
+        won: isWinner,
         score: `${gameResult.playerAScore} : ${gameResult.playerBScore}`,
+        gainOrLoss: isWinner
+          ? Math.max(
+              gameResult.playerARatingAlteration,
+              gameResult.playerBRatingAlteration
+            )
+          : Math.min(
+              gameResult.playerARatingAlteration,
+              gameResult.playerBRatingAlteration
+            ),
         date,
         id,
       };
@@ -162,35 +173,50 @@ function Profile(): JSX.Element {
               </p>
               <div className="card card-side bg-base-100 shadow-xl w-full flex flex-col p-2 sm:p-2 max-h-96 overflow-auto text-xs sm:text-base border border-lightGrey rounded dark:border-0">
                 <div className="flex w-full items-start justify-start text-center border-b-2 border-cloud dark:border-lightGrey">
-                  {["Opponent", "Result", "Score", "Date"].map((header) => {
-                    return (
-                      <p
-                        className="w-1/4 font-ubuntuBold mb-2 text-center"
-                        key={header}
-                      >
-                        {header}
-                      </p>
-                    );
-                  })}
+                  {["Opponent", "Result", "Score", "Gain/Loss", "Date"].map(
+                    (header) => {
+                      return (
+                        <p
+                          className="w-1/4 font-ubuntuBold mb-2 text-center"
+                          key={header}
+                        >
+                          {header}
+                        </p>
+                      );
+                    }
+                  )}
                 </div>
                 <div className="p-2 flex flex-col">
                   {gameHistory.map((game) => {
-                    const { opponentName, won, date, score } = game;
+                    const { opponentName, won, date, score, gainOrLoss } = game;
                     return (
                       <div
                         className="flex w-full items-start justify-start text-center py-2 border-b border-darkGrey  dark:border-lightGrey"
                         key={game.id}
                       >
-                        <p className="w-1/4">{opponentName}</p>
-                        <div className="w-1/4 flex justify-center">
+                        <p className="w-1/5">{opponentName}</p>
+                        <div className="w-1/5 flex justify-center">
                           {won ? (
                             <img src="check.svg" className="w-6" />
                           ) : (
                             <img src="denied.svg" className="w-6 color-rose" />
                           )}
                         </div>
-                        <p className="w-1/4">{score}</p>
-                        <p className="w-1/4">{date}</p>
+                        <p className="w-1/5">{score}</p>
+                        <p className="w-1/5">
+                          {isNaN(gainOrLoss) ? (
+                            <span aria-hidden="true" role="img">
+                              {getRandomEmoji()}
+                            </span>
+                          ) : gainOrLoss > 0 ? (
+                            <span className="text-middleGreen">
+                              {gainOrLoss}
+                            </span>
+                          ) : (
+                            <span className="text-rose">{gainOrLoss}</span>
+                          )}
+                        </p>
+                        <p className="w-1/5">{date}</p>
                       </div>
                     );
                   })}
@@ -199,7 +225,7 @@ function Profile(): JSX.Element {
             </div>
           ) : !isLoading ? (
             <div className="card flex justify-center bg-aqua dark:bg-cloudBirst w-full sm:w-96 h-16 mt-10">
-              You haven't played any games yet!
+              You haven&apos;t played any games yet!
             </div>
           ) : (
             <LoadingSpinner />
