@@ -12,19 +12,3 @@
     padding: 1rem;
   }
 }
-
-@font-face {
-  font-family: "Ubuntu";
-  src: url("./../public/Ubuntu-Light.ttf") format("truetype")
-}
-
-@font-face {
-  font-family: "UbuntuBold";
-  src: url("./../public/Ubuntu-Bold.ttf") format("truetype")
-}
-
-@font-face {
-  font-family: "UbuntuRegular";
-  src: url("./../public/Ubuntu-Regular.ttf") format("truetype")
-}
-
