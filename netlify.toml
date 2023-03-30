@@ -1,6 +1,12 @@
 [[redirects]]
   from = "/*"
   to = "/"
+  from = "/fonts/Ubuntu-Light.ttf"
+  to = "/public/fonts/Ubuntu-Light.ttf"
+  from = "/fonts/Ubuntu-Bold.ttf"
+  to = "/public/fonts/Ubuntu-Bold.ttf"
+  from = "/fonts/Ubuntu-Regular.ttf"
+  to = "/public/fonts/Ubuntu-Regular.ttf"
   status = 200
 
 [[redirects]]
