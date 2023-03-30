@@ -22,7 +22,7 @@ function Profile(): JSX.Element {
   const userFromIdToken = decodeJWT<IDecodedIdToken>(auth?.idToken);
   const { setUser } = useUserStore();
 
-  const { data: tournamentList } = useQuery(
+  const { data: tournamentList, isLoading: isTournamentListLoading } = useQuery(
     ["tournamentList", fetchTournamentList, auth?.accessToken],
     async () => await fetchTournamentList(auth?.accessToken as string),
     { enabled: auth?.accessToken != null }
@@ -38,7 +38,7 @@ function Profile(): JSX.Element {
   const { getUser } = useUserStore();
   const currentUser = getUser();
 
-  const { data: gameList, isLoading } = useQuery(
+  const { data: gameList, isLoading: isGameListLoading } = useQuery(
     ["gamesByUserId", fetchGamesByUserId, auth?.accessToken],
     async () =>
       await fetchGamesByUserId(
@@ -125,7 +125,7 @@ function Profile(): JSX.Element {
                   tournamentId != null
                     ? "btn-outline btn-success"
                     : "btn-disabled"
-                }  ${isLoading ? "loading" : ""}`}
+                }  ${isTournamentListLoading ? "loading" : ""}`}
                 onClick={() => {
                   if (
                     auth?.accessToken != null &&
@@ -223,12 +223,16 @@ function Profile(): JSX.Element {
                 </div>
               </div>
             </div>
-          ) : !isLoading ? (
+          ) : !isGameListLoading &&
+            gameHistory != null &&
+            gameHistory.length === 0 ? (
             <div className="card flex justify-center bg-aqua dark:bg-cloudBirst w-full sm:w-96 h-16 mt-10">
               You haven&apos;t played any games yet!
             </div>
-          ) : (
+          ) : isGameListLoading ? (
             <LoadingSpinner />
+          ) : (
+            <></>
           )}
         </div>
       </>
