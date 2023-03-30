@@ -2,6 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "Ubuntu";
+  src: url("/fonts/Ubuntu-Light.ttf") format("truetype")
+}
+
+@font-face {
+  font-family: "UbuntuBold";
+  src: url("/fonts/Ubuntu-Bold.ttf") format("truetype")
+}
+
+@font-face {
+  font-family: "UbuntuRegular";
+  src: url("/fonts/Ubuntu-Regular.ttf") format("truetype")
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
