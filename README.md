@@ -1,8 +1,8 @@
 # ping-pong-king
 
-Ladder of the Ping-Pong Games
-
 [![Netlify Status](https://api.netlify.com/api/v1/badges/1f4f6ead-c9e3-4ae3-85cf-4c456b7e14ef/deploy-status)](https://app.netlify.com/sites/ping-pong-king/deploys)
+
+Ladder of the Ping-Pong Games
 
 ## ENV
 
