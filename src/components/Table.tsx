@@ -11,6 +11,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 
 import { fetchPlayerList } from "../api/player/get/queries";
 import { type IPlayer } from "../api/player/get/types";
@@ -18,6 +19,7 @@ import { AQUA, NAVY } from "../constants/colors";
 import { tenMinutes } from "../constants/time";
 import { useDetectDarkTheme } from "../hooks/useDetectColorMode";
 import { useAuthStore, useUserStore } from "../store";
+import { hyphenate } from "../utils/string";
 import { LoadingSpinner } from "./LoadingSpinner";
 
 interface ICustomTableMeta<TData extends RowData> {
@@ -165,7 +167,23 @@ export const Table = (): JSX.Element => {
                       </div>
                     )}
                   {`   `}
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  {index === 0 ? (
+                    <Link
+                      to={`/player-history/${hyphenate(row.original.name)}`}
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </Link>
+                  ) : (
+                    <>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </>
+                  )}
                   {`   `}
                   {playerList?.content[0].id === row.original.id &&
                     index === 0 &&
