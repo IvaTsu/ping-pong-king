@@ -1,9 +1,18 @@
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 const PlayerHistory = (): JSX.Element => {
+  const location = useLocation();
   const params = useParams();
 
-  return <>{JSON.stringify(params)}</>;
+  const { playerId } = location.state;
+  const { playerName } = params;
+
+  return (
+    <>
+      <p>{playerId}</p>
+      <p>{playerName}</p>
+    </>
+  );
 };
 
 export default PlayerHistory;

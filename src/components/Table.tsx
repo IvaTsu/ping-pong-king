@@ -170,6 +170,7 @@ export const Table = (): JSX.Element => {
                   {index === 0 ? (
                     <Link
                       to={`/player-history/${hyphenate(row.original.name)}`}
+                      state={{ playerId: row.original.id }}
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
