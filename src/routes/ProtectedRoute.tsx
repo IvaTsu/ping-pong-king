@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import { Navigate } from "react-router-dom";
 
 import { fetchPlayer } from "../api/player/get/queries";
-import { thirtyMinutes } from "../constants/time";
 import { useAuthStore, useUserStore } from "../store";
 import {
   decodeJWT,
@@ -27,7 +26,6 @@ function ProtectedRoute({ children }: { children: JSX.Element }): JSX.Element {
       }),
     {
       enabled: userFromIdToken?.name != null && auth?.accessToken != null,
-      staleTime: thirtyMinutes,
       onSuccess: (player) => {
         const currentUser = player?.filter(
           (player) => player.email === userFromIdToken?.email

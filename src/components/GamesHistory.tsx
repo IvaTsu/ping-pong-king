@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 
 import { fetchGamesByUserId } from "../api/game/get/queries";
-import { fiveMinutes } from "../constants/time";
 import { useAuthStore, useUserStore } from "../store";
 import getRandomEmoji from "../utils/getRandomEmoji";
 import { LoadingSpinner } from "./LoadingSpinner";
@@ -23,7 +22,6 @@ export const GamesHistory = (): JSX.Element => {
       ),
     {
       enabled: auth?.accessToken != null && currentUser?.id != null,
-      staleTime: fiveMinutes,
     }
   );
 
