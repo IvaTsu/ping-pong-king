@@ -15,7 +15,7 @@ export const GamesHistory = (): JSX.Element => {
   const currentUser = getUser();
 
   const { data: gameList, isLoading: isGameListLoading } = useQuery(
-    ["gamesByUserId", fetchGamesByUserId, auth?.accessToken],
+    ["gamesByUserId", currentUser?.id, fetchGamesByUserId, auth?.accessToken],
     async () =>
       await fetchGamesByUserId(
         auth?.accessToken as string,
