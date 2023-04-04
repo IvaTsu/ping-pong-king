@@ -1,10 +1,19 @@
 import { getRequest } from "../../request";
 import { gamesByUserId } from "../get/urls";
-import { type IGame } from "../types";
+import { type IGamesByUserId, type IGamesByUserIdParams } from "./types";
 
-export async function fetchGamesByUserId(
-  accessToken: string,
-  id: string
-): Promise<{content: IGame[]}> {
-  return await getRequest({ accessToken, url: gamesByUserId(id) });
+interface IFetchGamesByUserIdParams extends IGamesByUserIdParams {
+  accessToken: string;
+}
+
+export async function fetchGamesByUserId({
+  accessToken,
+  id,
+  page,
+  size,
+}: IFetchGamesByUserIdParams): Promise<IGamesByUserId> {
+  return await getRequest({
+    accessToken,
+    url: gamesByUserId({ id, page, size }),
+  });
 }
