@@ -17,10 +17,12 @@ export const GamesHistory = (): JSX.Element => {
   const { data: gameList, isLoading: isGameListLoading } = useQuery(
     ["gamesByUserId", currentUser?.id, fetchGamesByUserId, auth?.accessToken],
     async () =>
-      await fetchGamesByUserId(
-        auth?.accessToken as string,
-        currentUser?.id as string
-      ),
+      await fetchGamesByUserId({
+        accessToken: auth?.accessToken as string,
+        id: currentUser?.id as string,
+        page: 0,
+        size: 40,
+      }),
     {
       enabled: auth?.accessToken != null && currentUser?.id != null,
       staleTime: fiveMinutes,
