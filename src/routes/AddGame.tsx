@@ -49,14 +49,17 @@ export default function AddGame(): JSX.Element {
       setOpponentScore("");
       setInputIsDirty(false);
       // invalidate `gamesByUserId` and `player` queries once new game created
-      queryClient
-        .invalidateQueries({ queryKey: ["gamesByUserId", "player"] })
-        .then(() => {
-          // NOOP
-        })
-        .catch((e) => {
-          // NOOP
-        });
+      void queryClient.invalidateQueries({
+        queryKey: ["playerList"],
+      });
+
+      void queryClient.invalidateQueries({
+        queryKey: ["player"],
+      });
+
+      void queryClient.invalidateQueries({
+        queryKey: ["gamesByUserId"],
+      });
     },
   });
 
