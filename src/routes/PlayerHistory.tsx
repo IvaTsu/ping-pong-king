@@ -4,41 +4,34 @@ import {
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
-  type PaginationState,
-  type SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-import { useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 import { fetchGamesByUserId } from "../api/game/get/queries";
 import { type IGame } from "../api/game/types";
 import NavigationBar from "../components/NavigationBar";
 import { fiveMinutes } from "../constants/time";
+import { useTablePagination } from "../hooks/useTablePagination";
 import { useAuthStore } from "../store";
 
 const columnHelper = createColumnHelper<IGame>();
 
 const PlayerHistory = (): JSX.Element => {
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [{ pageIndex, pageSize }, setPagination] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: 10,
-  });
+  const {
+    sorting,
+    setSorting,
+    pagination,
+    setPagination,
+    pageIndex,
+    pageSize,
+  } = useTablePagination();
 
   const location = useLocation();
   const { playerId, playerName } = location.state;
 
   const { getAuth } = useAuthStore();
   const auth = getAuth();
-
-  const pagination = useMemo(
-    () => ({
-      pageIndex,
-      pageSize,
-    }),
-    [pageIndex, pageSize]
-  );
 
   const { data: games } = useQuery(
     ["playerHistory", playerId, pagination],
