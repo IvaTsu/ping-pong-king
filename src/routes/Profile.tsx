@@ -101,21 +101,23 @@ function Profile(): JSX.Element {
           </div>
         ) : (
           <>
-            <div className="card card-side bg-base-100 shadow-xl mt-10 w-full sm:w-96 p-3 sm:p-5 flex">
-              <figure className="rounded-none">
-                <img
-                  src={currentUser.profileImage}
-                  alt={`Picture of ${currentUser.name}`}
-                  className="rounded-md border-darkGrey border-2"
-                />
-              </figure>
-              <div className="text-start pl-5">
-                <p className="text-navy dark:text-aqua font-ubuntuRegular  text-l sm:text-xl pb-2">
-                  {currentUser.name}
-                </p>
-                <p>{currentUser.email}</p>
-                <p>Rating: {currentUser.rating}</p>
-                <p>Games played: {currentUser.gamesPlayed}</p>
+            <div className="flex flex-col items-center w-full mt-10 border-lightGrey">
+              <div className="card card-side bg-base-100 shadow-xl mt-10 w-full sm:w-96 p-3 sm:p-5 flex items-center">
+                <figure className="rounded-none">
+                  <img
+                    src={currentUser.profileImage}
+                    alt={`Picture of ${currentUser.name}`}
+                    className="rounded-md border-darkGrey border-2"
+                  />
+                </figure>
+                <div className="text-start pl-5">
+                  <p className="text-navy dark:text-aqua font-ubuntuRegular  text-l sm:text-xl pb-2">
+                    {currentUser.name}
+                  </p>
+                  <p>{currentUser.email}</p>
+                  <p>Rating: {currentUser.rating}</p>
+                  <p>Games played: {currentUser.gamesPlayed}</p>
+                </div>
               </div>
             </div>
             <GamesHistory />
