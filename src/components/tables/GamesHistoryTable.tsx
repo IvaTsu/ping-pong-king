@@ -7,16 +7,22 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import { fetchGamesByUserId } from "../api/game/get/queries";
-import { type IGame } from "../api/game/types";
-import { fiveMinutes } from "../constants/time";
-import { useTablePagination } from "../hooks/useTablePagination";
-import { useAuthStore, useUserStore } from "../store";
-import { LoadingSpinner } from "./LoadingSpinner";
+import { fetchGamesByUserId } from "../../api/game/get/queries";
+import { type IGame } from "../../api/game/types";
+import { fiveMinutes } from "../../constants/time";
+import { useTablePagination } from "../../hooks/useTablePagination";
+import { useAuthStore, useUserStore } from "../../store";
+import { LoadingSpinner } from "../LoadingSpinner";
 
 const columnHelper = createColumnHelper<IGame>();
 
-export const GamesHistory = (): JSX.Element => {
+const GamesHistoryTable = ({
+  playerId,
+  playerName,
+}: {
+  playerId: string;
+  playerName: string;
+}): JSX.Element => {
   const {
     sorting,
     setSorting,
@@ -32,23 +38,17 @@ export const GamesHistory = (): JSX.Element => {
   const { getUser } = useUserStore();
   const currentUser = getUser();
 
-  const { data: gameList, isLoading: isGameListLoading } = useQuery(
-    [
-      "gamesByUserId",
-      currentUser?.id,
-      fetchGamesByUserId,
-      auth?.accessToken,
-      pagination,
-    ],
+  const { data: games, isLoading: isGamesLoading } = useQuery(
+    ["playerHistory", playerId, pagination],
     async () =>
       await fetchGamesByUserId({
         accessToken: auth?.accessToken as string,
-        id: currentUser?.id as string,
+        id: playerId,
         page: pageIndex,
         size: pageSize,
       }),
     {
-      enabled: auth?.accessToken != null && currentUser?.id != null,
+      enabled: auth?.accessToken != null,
       staleTime: fiveMinutes,
       keepPreviousData: true,
       retry: false,
@@ -58,7 +58,7 @@ export const GamesHistory = (): JSX.Element => {
   const userColumnDefs = [
     columnHelper.accessor(
       (row) =>
-        row.playerRefB.id === currentUser?.id
+        row.playerRefB.id === playerId
           ? row.playerRefA.name
           : row.playerRefB.name,
       {
@@ -67,14 +67,11 @@ export const GamesHistory = (): JSX.Element => {
         header: () => <span>Opponent</span>,
       }
     ),
-    columnHelper.accessor(
-      (row) => row.gameResult.winnerId === currentUser?.id,
-      {
-        id: "result",
-        cell: (info) => <span>{JSON.stringify(info.getValue())}</span>,
-        header: () => <span>Result</span>,
-      }
-    ),
+    columnHelper.accessor((row) => row.gameResult.winnerId === playerId, {
+      id: "result",
+      cell: (info) => <span>{JSON.stringify(info.getValue())}</span>,
+      header: () => <span>Result</span>,
+    }),
     columnHelper.accessor(
       (row) =>
         `${row.gameResult.playerAScore} : ${row.gameResult.playerBScore}`,
@@ -86,7 +83,7 @@ export const GamesHistory = (): JSX.Element => {
     ),
     columnHelper.accessor(
       (row) =>
-        row.gameResult.winnerId === currentUser?.id
+        row.gameResult.winnerId === playerId
           ? Math.max(
               row.gameResult.playerARatingAlteration,
               row.gameResult.playerBRatingAlteration
@@ -113,8 +110,8 @@ export const GamesHistory = (): JSX.Element => {
 
   const table = useReactTable({
     columns: userColumnDefs,
-    data: gameList?.content ?? [],
-    pageCount: gameList?.pageable.totalPages,
+    data: games?.content ?? [],
+    pageCount: games?.pageable.totalPages,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     state: {
@@ -132,11 +129,10 @@ export const GamesHistory = (): JSX.Element => {
 
   return (
     <>
-      {gameList != null && gameList.content.length > 0 ? (
-        <>
-          <p className="text-2xl font-ubuntuBold  text-navy dark:text-aqua mb-3 ml-10">
-            Game history
-          </p>
+      {isGamesLoading && <LoadingSpinner />}
+      {!isGamesLoading &&
+        games != null &&
+        (games.content.length > 0 ? (
           <div className="overflow-x-auto py-10">
             <table className="table w-full">
               <thead>
@@ -268,18 +264,16 @@ export const GamesHistory = (): JSX.Element => {
               </div>
             </div>
           </div>
-        </>
-      ) : !isGameListLoading &&
-        gameList != null &&
-        gameList.content.length === 0 ? (
-        <div className="card flex justify-center bg-aqua dark:bg-cloudBirst w-full sm:w-96 h-16 mt-10">
-          You haven&apos;t played any games yet!
-        </div>
-      ) : isGameListLoading ? (
-        <LoadingSpinner />
-      ) : (
-        <></>
-      )}
+        ) : (
+          <div className="card flex justify-center bg-aqua dark:bg-cloudBirst w-full sm:w-96 h-16 mt-10">
+            {currentUser?.id === playerId
+              ? "You haven&apos;t"
+              : `${playerName} hasn&apos;t`}
+            played any games yet!
+          </div>
+        ))}
     </>
   );
 };
+
+export default GamesHistoryTable;

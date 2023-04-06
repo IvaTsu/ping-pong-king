@@ -6,8 +6,8 @@ import { useState } from "react";
 import { createPlayer } from "../api/player/post/mutations";
 import { type IPostPlayerBody } from "../api/player/post/types";
 import { fetchTournamentList } from "../api/tournament/get/queries";
-import { GamesHistory } from "../components/GamesHistory";
 import NavigationBar from "../components/NavigationBar";
+import GamesHistoryTable from "../components/tables/GamesHistoryTable";
 import ProtectedRoute from "../routes/ProtectedRoute";
 import { useAuthStore, useUserStore } from "../store";
 import { decodeJWT, type IDecodedIdToken } from "../utils/decodeJWT";
@@ -120,7 +120,10 @@ function Profile(): JSX.Element {
                 </div>
               </div>
             </div>
-            <GamesHistory />
+            <GamesHistoryTable
+              playerId={currentUser.id}
+              playerName={currentUser.name}
+            />
           </>
         )}
       </>
