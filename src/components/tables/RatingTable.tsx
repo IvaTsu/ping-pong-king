@@ -10,15 +10,15 @@ import {
 } from "@tanstack/react-table";
 import { Link } from "react-router-dom";
 
-import { fetchPlayerList } from "../api/player/get/queries";
-import { type IPlayer } from "../api/player/get/types";
-import { AQUA, NAVY } from "../constants/colors";
-import { tenMinutes } from "../constants/time";
-import { useDetectDarkTheme } from "../hooks/useDetectColorMode";
-import { useTablePagination } from "../hooks/useTablePagination";
-import { useAuthStore, useUserStore } from "../store";
-import { hyphenate } from "../utils/string";
-import { LoadingSpinner } from "./LoadingSpinner";
+import { fetchPlayerList } from "../../api/player/get/queries";
+import { type IPlayer } from "../../api/player/get/types";
+import { AQUA, NAVY } from "../../constants/colors";
+import { tenMinutes } from "../../constants/time";
+import { useDetectDarkTheme } from "../../hooks/useDetectColorMode";
+import { useTablePagination } from "../../hooks/useTablePagination";
+import { useAuthStore, useUserStore } from "../../store";
+import { hyphenate } from "../../utils/string";
+import { LoadingSpinner } from "../LoadingSpinner";
 
 interface ICustomTableMeta<TData extends RowData> {
   getRowStyles: (row: Row<TData>) => React.CSSProperties;
@@ -48,7 +48,7 @@ export const userColumnDefs = [
   }),
 ];
 
-export const Table = (): JSX.Element => {
+export const RatingTable = (): JSX.Element => {
   const {
     sorting,
     setSorting,

@@ -1,5 +1,5 @@
 import NavigationBar from "../components/NavigationBar";
-import { Table } from "../components/Table";
+import { RatingTable } from "../components/tables/RatingTable";
 import ProtectedRoute from "../routes/ProtectedRoute";
 
 function Root(): JSX.Element {
@@ -7,7 +7,7 @@ function Root(): JSX.Element {
     <ProtectedRoute>
       <>
         <NavigationBar />
-        <Table />
+        <RatingTable />
       </>
     </ProtectedRoute>
   );
