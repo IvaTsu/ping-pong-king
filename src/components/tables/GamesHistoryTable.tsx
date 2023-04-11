@@ -12,6 +12,7 @@ import { type IGame } from "../../api/game/types";
 import { fiveMinutes } from "../../constants/time";
 import { useTablePagination } from "../../hooks/useTablePagination";
 import { useAuthStore, useUserStore } from "../../store";
+import getRandomEmoji from "../../utils/getRandomEmoji";
 import { LoadingSpinner } from "../LoadingSpinner";
 
 const columnHelper = createColumnHelper<IGame>();
@@ -69,7 +70,15 @@ const GamesHistoryTable = ({
     ),
     columnHelper.accessor((row) => row.gameResult.winnerId === playerId, {
       id: "result",
-      cell: (info) => <span>{JSON.stringify(info.getValue())}</span>,
+      cell: (info) => (
+        <>
+          {info.getValue() ? (
+            <img src="/check.svg" className="w-6" alt="checked" />
+          ) : (
+            <img src="/denied.svg" className="w-6 color-rose" alt="denied" />
+          )}
+        </>
+      ),
       header: () => <span>Result</span>,
     }),
     columnHelper.accessor(
@@ -94,7 +103,19 @@ const GamesHistoryTable = ({
             ),
       {
         id: "gainOrLoss",
-        cell: (info) => <span>{info.getValue()}</span>,
+        cell: (info) => (
+          <>
+            {isNaN(info.getValue()) ? (
+              <span aria-hidden="true" role="img">
+                {getRandomEmoji()}
+              </span>
+            ) : info.getValue() > 0 ? (
+              <span className="text-middleGreen">{info.getValue()}</span>
+            ) : (
+              <span className="text-rose">{info.getValue()}</span>
+            )}
+          </>
+        ),
         header: () => <span>Gain / Loss</span>,
       }
     ),
