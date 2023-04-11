@@ -6,6 +6,7 @@ import { Navigate } from "react-router-dom";
 
 import { createToken } from "../api/auth/post/mutations";
 import { LoadingSpinner } from "../components/LoadingSpinner";
+import AnalyticsNotification from "../components/notifications/AnalyticsNotification";
 import { useQueryParams } from "../hooks/useQueryParams";
 import { useAuthStore } from "../store";
 import { decodeJWT, type IDecodedAccessToken } from "../utils/decodeJWT";
@@ -98,7 +99,7 @@ function Login(): JSX.Element {
               </a>
             </div>
           </div>
-          <p></p>
+          <AnalyticsNotification />
         </div>
       )}
     </>
