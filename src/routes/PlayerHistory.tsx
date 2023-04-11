@@ -10,7 +10,9 @@ const PlayerHistory = (): JSX.Element => {
   return (
     <>
       <NavigationBar />
-      <p>{playerName} Games History</p>
+      <h2 className="mt-10 text-2xl font-bold">
+        Games History of {playerName}
+      </h2>
       <GamesHistoryTable playerId={playerId} playerName={playerName} />
     </>
   );
