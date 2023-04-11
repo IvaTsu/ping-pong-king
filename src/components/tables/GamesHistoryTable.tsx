@@ -286,14 +286,16 @@ const GamesHistoryTable = ({
             </div>
           </div>
         ) : (
-          <div className="card flex justify-center bg-aqua dark:bg-cloudBirst w-full sm:w-96 h-16 mt-10">
-            {currentUser?.id === playerId ? (
-              <>You haven&apos;t</>
-            ) : (
-              <>{playerName} hasn&apos;t</>
-            )}
-            {` `}
-            played any games yet!
+          <div className="flex justify-center">
+            <div className="card flex justify-center bg-aqua dark:bg-cloudBirst w-full sm:w-96 h-16 mt-10">
+              {currentUser?.id === playerId ? (
+                <>You haven&apos;t</>
+              ) : (
+                <>{playerName} hasn&apos;t</>
+              )}
+              {` `}
+              played any games yet!
+            </div>
           </div>
         ))}
     </>
