@@ -1,3 +1,5 @@
+import { type IPageable } from "../../types";
+
 export interface IPlayerListParams {
   page: number;
   size: number;
@@ -24,14 +26,7 @@ export interface IPlayer {
 
 export interface IPlayerList {
   content: IPlayer[];
-  pageable: {
-    last: boolean;
-    numberOfElements: number;
-    pageNumber: number;
-    pageSize: number;
-    totalElements: number;
-    totalPages: number;
-  };
+  pageable: IPageable;
 }
 
 export interface IPlayerRating {

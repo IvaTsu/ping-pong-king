@@ -4,21 +4,21 @@ import {
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
-  type PaginationState,
   type Row,
   type RowData,
-  type SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-import { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 
-import { fetchPlayerList } from "../api/player/get/queries";
-import { type IPlayer } from "../api/player/get/types";
-import { AQUA, NAVY } from "../constants/colors";
-import { tenMinutes } from "../constants/time";
-import { useDetectDarkTheme } from "../hooks/useDetectColorMode";
-import { useAuthStore, useUserStore } from "../store";
-import { LoadingSpinner } from "./LoadingSpinner";
+import { fetchPlayerList } from "../../api/player/get/queries";
+import { type IPlayer } from "../../api/player/get/types";
+import { AQUA, NAVY } from "../../constants/colors";
+import { tenMinutes } from "../../constants/time";
+import { useDetectDarkTheme } from "../../hooks/useDetectColorMode";
+import { useTablePagination } from "../../hooks/useTablePagination";
+import { useAuthStore, useUserStore } from "../../store";
+import { hyphenate } from "../../utils/string";
+import { LoadingSpinner } from "../LoadingSpinner";
 
 interface ICustomTableMeta<TData extends RowData> {
   getRowStyles: (row: Row<TData>) => React.CSSProperties;
@@ -48,20 +48,15 @@ export const userColumnDefs = [
   }),
 ];
 
-export const Table = (): JSX.Element => {
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [{ pageIndex, pageSize }, setPagination] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: 10,
-  });
-
-  const pagination = useMemo(
-    () => ({
-      pageIndex,
-      pageSize,
-    }),
-    [pageIndex, pageSize]
-  );
+export const RatingTable = (): JSX.Element => {
+  const {
+    sorting,
+    setSorting,
+    pagination,
+    setPagination,
+    pageIndex,
+    pageSize,
+  } = useTablePagination();
 
   const { getAuth } = useAuthStore();
   const auth = getAuth();
@@ -165,7 +160,27 @@ export const Table = (): JSX.Element => {
                       </div>
                     )}
                   {`   `}
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  {index === 0 ? (
+                    <Link
+                      to={`/player-history/${hyphenate(row.original.name)}`}
+                      state={{
+                        playerId: row.original.id,
+                        playerName: row.original.name,
+                      }}
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </Link>
+                  ) : (
+                    <>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </>
+                  )}
                   {`   `}
                   {playerList?.content[0].id === row.original.id &&
                     index === 0 &&
