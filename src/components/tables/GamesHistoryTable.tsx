@@ -83,7 +83,9 @@ const GamesHistoryTable = ({
     }),
     columnHelper.accessor(
       (row) =>
-        `${row.gameResult.playerAScore} : ${row.gameResult.playerBScore}`,
+        playerId === row.playerRefA.id
+          ? `${row.gameResult.playerAScore} : ${row.gameResult.playerBScore}`
+          : `${row.gameResult.playerBScore} : ${row.gameResult.playerAScore}`,
       {
         id: "score",
         cell: (info) => <span>{info.getValue()}</span>,
