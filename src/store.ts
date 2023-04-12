@@ -109,3 +109,40 @@ export const useAuthStore = create<IAuthState & IAuthStateActions>()(
     }
   )
 );
+
+interface INotificationState {
+  isAnalyticsNotificationShown: boolean;
+}
+
+interface INotificationStateActions {
+  clear: () => void;
+  setIsAnalyticsNotificationShown: (
+    isAnalyticsNotificationShown: boolean
+  ) => void;
+  getIsAnalyticsNotificationShown: () => boolean;
+}
+
+export const useNotificationStore = create<
+  INotificationState & INotificationStateActions
+>()(
+  persist(
+    (set, get) => ({
+      isAnalyticsNotificationShown: false,
+      clear: () => {
+        set({
+          isAnalyticsNotificationShown: false,
+        });
+      },
+      setIsAnalyticsNotificationShown: (isAnalyticsNotificationShown) => {
+        set({
+          isAnalyticsNotificationShown,
+        });
+      },
+      getIsAnalyticsNotificationShown: () => get().isAnalyticsNotificationShown,
+    }),
+    {
+      name: "notification-storage", // name of the item in the storage (must be unique)
+      storage: createJSONStorage(() => localStorage),
+    }
+  )
+);
