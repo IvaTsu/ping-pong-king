@@ -9,7 +9,6 @@ export default function AnalyticsNotification(): JSX.Element {
     useNotificationStore();
 
   const isAnalyticsNotificationAlreadyShown = getIsAnalyticsNotificationShown();
-  console.log(isAnalyticsNotificationAlreadyShown);
 
   useEffect(() => {
     !isAnalyticsNotificationAlreadyShown
