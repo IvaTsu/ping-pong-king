@@ -171,6 +171,7 @@ export default function AddGame(): JSX.Element {
                           setUserScore={handleOpponentScore}
                           value={opponentScore}
                           isInvalid={showErrors}
+                          playersList={playersList}
                         />
 
                         {showErrors && (
