@@ -12,6 +12,8 @@ import { type IGame } from "../../api/game/types";
 import { fiveMinutes } from "../../constants/time";
 import { useTablePagination } from "../../hooks/useTablePagination";
 import { useAuthStore, useUserStore } from "../../store";
+import { ReactComponent as CheckSvg } from "../../svg/check.svg";
+import { ReactComponent as DeniedSvg } from "../../svg/denied.svg";
 import getRandomEmoji from "../../utils/getRandomEmoji";
 import { LoadingSpinner } from "../LoadingSpinner";
 
@@ -73,9 +75,9 @@ const GamesHistoryTable = ({
       cell: (info) => (
         <>
           {info.getValue() ? (
-            <img src="/check.svg" className="w-6" alt="checked" />
+            <CheckSvg color="#539165" width={18} height={18} />
           ) : (
-            <img src="/denied.svg" className="w-6 color-rose" alt="denied" />
+            <DeniedSvg color="#E11D48" width={18} height={18} />
           )}
         </>
       ),
