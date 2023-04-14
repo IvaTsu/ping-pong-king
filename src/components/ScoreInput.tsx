@@ -32,18 +32,6 @@ export const ScoreInput = ({
           ) : (
             "Your Score"
           )}
-          {/* <div className="absolute w-40 flex flex-col top-15 left-0 z-10 bg-cloudBirst rounded p-2 max-h-96 overflow-auto">
-            {playersList?.map((player) => {
-              return (
-                <div
-                  className="p-0 btn btn-ghost font-ubuntuRegular bg-base-100 my-1"
-                  key={player.name}
-                >
-                  {player.name}
-                </div>
-              );
-            })}
-          </div> */}
         </span>
       </label>
       <label className="input-group">
