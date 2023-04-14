@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 import { type IPlayer } from "../api/player/get/types";
+import useClickOutside from "../hooks/useClickOutside";
 import { useOpponentStore, useUserStore } from "../store";
 
 export const ChooseOpponentsDropdown = ({
@@ -24,24 +25,7 @@ export const ChooseOpponentsDropdown = ({
     setisShown(!isShown);
   };
 
-  useEffect(() => {
-    const checkIfClickedOutside = (e: Event): void => {
-      if (
-        isShown &&
-        ref.current != null &&
-        !ref.current.contains(e.target as Node)
-      ) {
-        setisShown(false);
-      }
-    };
-
-    document.addEventListener("mousedown", checkIfClickedOutside);
-
-    return () => {
-      // Cleanup the event listener
-      document.removeEventListener("mousedown", checkIfClickedOutside);
-    };
-  }, [isShown]);
+  useClickOutside(ref, setisShown);
   return (
     <>
       <div className="flex">
