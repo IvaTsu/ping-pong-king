@@ -23,7 +23,7 @@ export default function AnalyticsNotification(): JSX.Element {
 
   return (
     <div
-      className={`absolute bottom-0 left-0 m-3 p-2 shadow bg-base-100 rounded-box w-72 transition transform ${opacity}`}
+      className={`bg-base-100 rounded-box absolute bottom-0 left-0 m-3 w-72 p-2 shadow transition${opacity}`}
     >
       <div className="flex flex-row">
         <p>🚨 We track everything you do here! 😈 😈 😈 😈</p>

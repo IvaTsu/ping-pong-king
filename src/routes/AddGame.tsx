@@ -148,15 +148,15 @@ export default function AddGame(): JSX.Element {
     <ProtectedRoute>
       <>
         <NavigationBar />
-        <div className="flex justify-center items-center flex-col relative">
+        <div className="relative flex flex-col items-center justify-center">
           <SuccessNotification isOpen={isSuccess} />
           <>
             {currentUser?.registeredWhen != null ? (
               <>
                 {currentOpponent != null ? (
                   <>
-                    <div className="max-w-lg mt-10">
-                      <h3 className="text-xl font-ubuntuRegular ">
+                    <div className="mt-10 max-w-lg">
+                      <h3 className="font-ubuntuRegular text-xl ">
                         Game results
                       </h3>
                       <div className="flex flex-col content-center items-center">
@@ -175,39 +175,39 @@ export default function AddGame(): JSX.Element {
                         />
 
                         {showErrors && (
-                          <div className="pt-5 text-rose break-words max-w-[280px] label-text">
+                          <div className="text-rose label-text max-w-[280px] break-words pt-5">
                             Wrong input value! Either one of the inputs is
                             empty, or both players have the same score.
                           </div>
                         )}
                       </div>
-                      <div className="p-10 flex flex-col">
+                      <div className="flex flex-col p-10">
                         <button
-                          className="btn btn-success mt-4 transition-all duration-200 hover:bg-aqua"
+                          className="btn btn-success hover:bg-aqua mt-4 transition-all duration-200"
                           onClick={_onCreateGameClick}
                           disabled={inputsAreInvalid}
                         >
-                          <div className="flex justify-start w-full items-center">
+                          <div className="flex w-full items-center justify-start">
                             <CheckSVG width={25} height={25} />
                             <p className="pl-2">Create game</p>
                           </div>
                         </button>
 
                         <button
-                          className="btn btn-success mt-4 transition-all duration-200 hover:bg-aqua"
+                          className="btn btn-success hover:bg-aqua mt-4 transition-all duration-200"
                           onClick={_toOpponents}
                         >
-                          <div className="flex justify-start w-full items-center">
+                          <div className="flex w-full items-center justify-start">
                             <RacketSVG width={25} height={25} />
                             <p className="pl-2">To opponents</p>
                           </div>
                         </button>
 
                         <button
-                          className="btn btn-success mt-4 transition-all duration-200 hover:bg-aqua"
+                          className="btn btn-success hover:bg-aqua mt-4 transition-all duration-200"
                           onClick={_getBack}
                         >
-                          <div className="flex justify-start w-full items-center">
+                          <div className="flex w-full items-center justify-start">
                             <BackSVG width={25} height={25} />
                             <p className="pl-2">To main page</p>
                           </div>
@@ -234,7 +234,7 @@ export default function AddGame(): JSX.Element {
                 />
               </>
             ) : (
-              <div className="card w-96 bg-base-100 shadow-xl mt-10">
+              <div className="card bg-base-100 mt-10 w-96 shadow-xl">
                 <div className="card-body">
                   <h2 className="card-title">
                     Please assign yourself to the office first 🏢

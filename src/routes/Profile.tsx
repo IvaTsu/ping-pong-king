@@ -58,7 +58,7 @@ function Profile(): JSX.Element {
             <p className="my-5">Assign yourself to the Office</p>
 
             <select
-              className="mb-5 mr-5 select select-info w-full max-w-xs"
+              className="select select-info mb-5 mr-5 w-full max-w-xs"
               defaultValue={"DEFAULT"}
               onChange={_onTournamentChange}
             >
@@ -101,17 +101,17 @@ function Profile(): JSX.Element {
           </div>
         ) : (
           <>
-            <div className="flex flex-col items-center w-full mt-10 border-lightGrey">
-              <div className="card card-side bg-base-100 shadow-xl mt-10 w-full sm:w-96 p-3 sm:p-5 flex items-center">
+            <div className="border-lightGrey mt-10 flex w-full flex-col items-center">
+              <div className="card card-side bg-base-100 mt-10 flex w-full items-center p-3 shadow-xl sm:w-96 sm:p-5">
                 <figure className="rounded-none">
                   <img
                     src={currentUser.profileImage}
                     alt={`Picture of ${currentUser.name}`}
-                    className="rounded-md border-darkGrey border-2"
+                    className="border-darkGrey rounded-md border-2"
                   />
                 </figure>
-                <div className="text-start pl-5">
-                  <p className="text-navy dark:text-aqua font-ubuntuRegular  text-l sm:text-xl pb-2">
+                <div className="pl-5 text-start">
+                  <p className="text-navy dark:text-aqua font-ubuntuRegular  text-l pb-2 sm:text-xl">
                     {currentUser.name}
                   </p>
                   <p>{currentUser.email}</p>
