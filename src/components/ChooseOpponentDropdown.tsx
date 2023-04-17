@@ -26,8 +26,6 @@ export const ChooseOpponentsDropdown = ({
     setIsShown(!isShown);
   };
 
-  console.log();
-
   return (
     <div ref={ref}>
       <div className="flex">
