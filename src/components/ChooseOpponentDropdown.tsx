@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 import { type IPlayer } from "../api/player/get/types";
 import useClickOutside from "../hooks/useClickOutside";
@@ -28,32 +28,30 @@ export const ChooseOpponentsDropdown = ({
 
   return (
     <div ref={ref}>
-      <div className="flex">
-        <p>
-          <a
-            className="transition-all text-navy duration-200 hover:text-brightNavy cursor-pointer"
-            onClick={toggleDropdown}
-          >
-            {userName}
-          </a>
-          &apos;s Score
-        </p>
-      </div>
+      <p>
+        <a
+          className="text-navy hover:text-brightNavy cursor-pointer transition-all duration-200"
+          onClick={toggleDropdown}
+        >
+          {userName}
+        </a>
+        &apos;s Score
+      </p>
       {isShown && (
-        <div className="absolute card w-40 flex flex-col top-15 left-0 z-10 bg-base-100 shadow-xl rounded py-1 px-2 max-h-72 overflow-auto">
+        <div className="top-15 card bg-base-100  absolute left-0 z-10 flex max-h-72 w-40 flex-col overflow-auto rounded py-1 px-2 shadow-xl ">
           {playersList
             ?.filter((player) => player.id !== currentUser?.id)
             .map((player) => {
               return (
-                <div
-                  className="p-0 btn border-none dark:bg-base-600 bg-base-300 hover:bg-lightGrey font-ubuntuRegular my-1 text-cloudBirst dark:text-white borde-2 hover:border-navy"
+                <a
+                  className="btn bg-base-300 hover:bg-lightGrey font-ubuntuRegular hover:border-navy dark:bg-base-600 my-1 border-2 border-none p-0 dark:hover:text-black"
                   key={player.name}
                   onClick={() => {
                     _onOpponentSelect(player);
                   }}
                 >
                   {player.name}
-                </div>
+                </a>
               );
             })}
         </div>
