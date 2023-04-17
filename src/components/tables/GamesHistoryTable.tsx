@@ -208,7 +208,7 @@ const GamesHistoryTable = ({
               </tbody>
             </table>
             <div className="my-2">
-              <div className="flex flex-col items-start gap-2 sm:flex-row  sm:items-center">
+              <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center">
                 <div className="btn-group flex w-full justify-between sm:w-fit sm:justify-start">
                   <div>
                     <button
