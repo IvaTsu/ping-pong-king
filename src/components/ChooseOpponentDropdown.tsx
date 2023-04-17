@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 import { type IPlayer } from "../api/player/get/types";
 import useClickOutside from "../hooks/useClickOutside";
