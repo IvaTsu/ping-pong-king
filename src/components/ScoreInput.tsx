@@ -19,7 +19,6 @@ export const ScoreInput = ({
     else setUserScore(Number.parseInt(e.target.value, 10));
   };
   const borderColor = isInvalid ? "border-rose" : " ";
-  // const userName = user != null ? `${user?.name}'s Score` : "Your Score";
   return (
     <div>
       <label className="label">

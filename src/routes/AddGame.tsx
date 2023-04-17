@@ -189,7 +189,7 @@ export default function AddGame(): JSX.Element {
                         >
                           <div className="flex justify-start w-full items-center">
                             <CheckSVG width={25} height={25} />
-                            <p className="pl-2"> Create game </p>
+                            <p className="pl-2">Create game</p>
                           </div>
                         </button>
 
@@ -199,7 +199,7 @@ export default function AddGame(): JSX.Element {
                         >
                           <div className="flex justify-start w-full items-center">
                             <RacketSVG width={25} height={25} />
-                            <p className="pl-2"> To opponents </p>
+                            <p className="pl-2">To opponents</p>
                           </div>
                         </button>
 
@@ -209,7 +209,7 @@ export default function AddGame(): JSX.Element {
                         >
                           <div className="flex justify-start w-full items-center">
                             <BackSVG width={25} height={25} />
-                            <p className="pl-2"> To main page </p>
+                            <p className="pl-2">To main page</p>
                           </div>
                         </button>
                       </div>

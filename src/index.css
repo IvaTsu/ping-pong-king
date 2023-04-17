@@ -4,17 +4,17 @@
 
 @font-face {
   font-family: "Ubuntu";
-  src: url("/fonts/Ubuntu-Light.ttf") format("truetype")
+  src: url("/fonts/Ubuntu-Light.ttf") format("truetype");
 }
 
 @font-face {
   font-family: "UbuntuBold";
-  src: url("/fonts/Ubuntu-Bold.ttf") format("truetype")
+  src: url("/fonts/Ubuntu-Bold.ttf") format("truetype");
 }
 
 @font-face {
   font-family: "UbuntuRegular";
-  src: url("/fonts/Ubuntu-Regular.ttf") format("truetype")
+  src: url("/fonts/Ubuntu-Regular.ttf") format("truetype");
 }
 
 :root {
@@ -38,9 +38,9 @@ a {
   color: #646cff;
   text-decoration: inherit;
 }
-a:hover {
+/* a:hover {
   color: #535bf2;
-}
+} */
 
 body {
   margin: 0;
