@@ -24,14 +24,14 @@ export const PlayersSearchList = ({
             .filter((player) => player.id !== currentUser?.id)
             .map((player) => (
               <li key={player.id} className="m-2">
-                <button
-                  className="hover:bg-darkGrey w-full transition-all duration-200"
+                <a
+                  className="btn btn-outline font-ubuntuRegular hover:bg-lightGrey hover:border-navy dark:hover:bg-cloud w-full border-2 text-black hover:text-black dark:text-white  dark:hover:text-white"
                   onClick={() => {
                     _onOpponentSelect(player);
                   }}
                 >
                   {player.name}
-                </button>
+                </a>
               </li>
             ))}
         </ul>

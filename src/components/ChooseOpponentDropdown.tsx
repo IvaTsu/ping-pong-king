@@ -38,23 +38,24 @@ export const ChooseOpponentsDropdown = ({
         &apos;s Score
       </p>
       {isShown && (
-        <div className="top-15 card bg-base-100  absolute left-0 z-10 flex max-h-72 w-40 flex-col overflow-auto rounded py-1 px-2 shadow-xl ">
+        <ul className="card bg-base-100 top-15 absolute left-0 z-10 mt-2 max-h-96 overflow-auto shadow-xl">
           {playersList
             ?.filter((player) => player.id !== currentUser?.id)
             .map((player) => {
               return (
-                <a
-                  className="btn bg-base-300 hover:bg-lightGrey font-ubuntuRegular hover:border-navy dark:bg-base-600 my-1 border-2 border-none p-0 dark:hover:text-black"
-                  key={player.name}
-                  onClick={() => {
-                    _onOpponentSelect(player);
-                  }}
-                >
-                  {player.name}
-                </a>
+                <li key={player.id} className="m-2">
+                  <a
+                    className="btn btn-outline font-ubuntuRegular hover:bg-lightGrey hover:border-navy dark:hover:bg-cloud w-full border-2 text-black transition-all duration-200 dark:text-white"
+                    onClick={() => {
+                      _onOpponentSelect(player);
+                    }}
+                  >
+                    {player.name}
+                  </a>
+                </li>
               );
             })}
-        </div>
+        </ul>
       )}
     </div>
   );
