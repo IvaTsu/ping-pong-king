@@ -45,7 +45,7 @@ export const ChooseOpponentsDropdown = ({
               return (
                 <li key={player.id} className="m-2">
                   <a
-                    className="btn btn-outline font-ubuntuRegular hover:bg-lightGrey hover:border-navy dark:hover:bg-cloud w-full border-2 text-black transition-all duration-200 dark:text-white"
+                    className="btn btn-outline font-ubuntuRegular hover:bg-lightGrey hover:border-navy dark:hover:bg-cloud w-full border-2 text-black transition-all duration-200 dark:text-white border-darkGrey"
                     onClick={() => {
                       _onOpponentSelect(player);
                     }}
