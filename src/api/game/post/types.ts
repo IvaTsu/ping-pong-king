@@ -1,18 +1,13 @@
-export interface IPostGameBody {
-  playerRefA: {
-    id: string;
-  };
-  playerRefB: {
-    id: string;
-  };
-  // TODO: this should be a separate selector
-  tournamentRef: {
-    id: string;
-  };
-  gameResult: {
-    playerAScore: number;
-    playerBScore: number;
-    winnerId: string;
-  };
+interface PlayerRef {
+  id: string;
+}
+interface PlayerScore {
+  playerRef: PlayerRef;
+  score: number;
 }
 
+export interface IPostGameBody {
+  playerScoreA: PlayerScore;
+  playerScoreB: PlayerScore;
+  tournamentRef: PlayerRef;
+}
