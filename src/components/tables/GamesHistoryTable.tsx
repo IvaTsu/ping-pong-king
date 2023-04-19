@@ -61,16 +61,16 @@ const GamesHistoryTable = ({
   const userColumnDefs = [
     columnHelper.accessor(
       (row) =>
-        row.playerRefB.id === playerId
-          ? row.playerRefA.name
-          : row.playerRefB.name,
+        row.playerScoreB.playerRef.id === playerId
+          ? row.playerScoreA.playerRef.name
+          : row.playerScoreB.playerRef.name,
       {
         id: "Opponent",
         cell: (info) => <span>{info.getValue()}</span>,
         header: () => <span>Opponent</span>,
       }
     ),
-    columnHelper.accessor((row) => row.gameResult.winnerId === playerId, {
+    columnHelper.accessor((row) => row.winnerId === playerId, {
       id: "result",
       cell: (info) => (
         <>
@@ -85,9 +85,9 @@ const GamesHistoryTable = ({
     }),
     columnHelper.accessor(
       (row) =>
-        playerId === row.playerRefA.id
-          ? `${row.gameResult.playerAScore} : ${row.gameResult.playerBScore}`
-          : `${row.gameResult.playerBScore} : ${row.gameResult.playerAScore}`,
+        playerId === row.playerScoreA.playerRef.id
+          ? `${row.playerScoreA.score} : ${row.playerScoreB.score}`
+          : `${row.playerScoreB.score} : ${row.playerScoreA.score}`,
       {
         id: "score",
         cell: (info) => <span>{info.getValue()}</span>,
@@ -96,14 +96,14 @@ const GamesHistoryTable = ({
     ),
     columnHelper.accessor(
       (row) =>
-        row.gameResult.winnerId === playerId
+        row.winnerId === playerId
           ? Math.max(
-              row.gameResult.playerARatingAlteration,
-              row.gameResult.playerBRatingAlteration
+              row.playerScoreA.ratingAlteration,
+              row.playerScoreB.ratingAlteration
             )
           : Math.min(
-              row.gameResult.playerARatingAlteration,
-              row.gameResult.playerBRatingAlteration
+              row.playerScoreA.ratingAlteration,
+              row.playerScoreB.ratingAlteration
             ),
       {
         id: "gainOrLoss",

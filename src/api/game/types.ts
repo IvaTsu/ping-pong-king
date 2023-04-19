@@ -1,25 +1,26 @@
 export interface IGame {
   id: string;
-  playerRefA: {
-    id: string;
-    name: string;
-    rating: number;
-  };
-  playerRefB: {
-    id: string;
-    name: string;
-    rating: number;
-  };
-  tournamentRef: {
-    id: string;
-    name: string;
-  };
-  gameResult: {
-    playerAScore: number;
-    playerBScore: number;
-    winnerId: string;
-    playerARatingAlteration: number;
-    playerBRatingAlteration: number;
-  };
+  playerScoreA: PlayerScore;
+  playerScoreB: PlayerScore;
+  tournamentRef: TournamentRef;
+  winnerId: string;
   playedWhen: string;
+}
+
+// TODO: check if the below types can be reused and come up with the naming convention
+interface TournamentRef {
+  id: string;
+  name: string;
+}
+
+interface PlayerScore {
+  playerRef: PlayerRef;
+  score: number;
+  ratingAlteration: number;
+}
+
+interface PlayerRef {
+  id: string;
+  name: string;
+  rating: number;
 }
