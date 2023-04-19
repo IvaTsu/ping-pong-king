@@ -176,7 +176,7 @@ const GamesHistoryTable = ({
                         {header.isPlaceholder ? null : (
                           <div
                             onClick={header.column.getToggleSortingHandler()}
-                            className="cursor-pointer flex gap-4 font-ubuntuBold"
+                            className="font-ubuntuBold flex cursor-pointer gap-4"
                           >
                             {flexRender(
                               header.column.columnDef.header,
@@ -208,8 +208,8 @@ const GamesHistoryTable = ({
               </tbody>
             </table>
             <div className="my-2">
-              <div className="flex items-start sm:items-center flex-col sm:flex-row  gap-2">
-                <div className="btn-group flex justify-between sm:justify-start w-full sm:w-fit">
+              <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center">
+                <div className="btn-group flex w-full justify-between sm:w-fit sm:justify-start">
                   <div>
                     <button
                       className="btn btn-sm"
@@ -248,7 +248,7 @@ const GamesHistoryTable = ({
                       {">>"}
                     </button>
                   </div>
-                  <span className="flex items-center gap-1 ml-1">
+                  <span className="ml-1 flex items-center gap-1">
                     <div>Page</div>
                     <strong>
                       {table.getState().pagination.pageIndex + 1} of{" "}
@@ -269,7 +269,7 @@ const GamesHistoryTable = ({
                             : 0;
                         table.setPageIndex(page);
                       }}
-                      className="input input-bordered w-20 input-sm mx-2 focus:outline-none dark:focus:border-aqua focus:border-navy"
+                      className="input input-bordered input-sm dark:focus:border-aqua focus:border-navy mx-2 w-20 focus:outline-none"
                     />
                   </span>
                   <select
@@ -277,7 +277,7 @@ const GamesHistoryTable = ({
                     onChange={(e) => {
                       table.setPageSize(Number(e.target.value));
                     }}
-                    className="select select-sm select-bordered focus:outline-none dark:focus:border-aqua focus:border-navy"
+                    className="select select-sm select-bordered dark:focus:border-aqua focus:border-navy focus:outline-none"
                   >
                     {[10, 20, 30, 40, 50].map((pageSize) => (
                       <option key={pageSize} value={pageSize}>
@@ -291,7 +291,7 @@ const GamesHistoryTable = ({
           </div>
         ) : (
           <div className="flex justify-center">
-            <div className="card flex justify-center bg-aqua dark:bg-cloudBirst w-full sm:w-96 h-16 mt-10">
+            <div className="card bg-aqua dark:bg-cloudBirst mt-10 flex h-16 w-full justify-center sm:w-96">
               {currentUser?.id === playerId ? (
                 <>You haven&apos;t</>
               ) : (

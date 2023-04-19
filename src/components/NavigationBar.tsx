@@ -58,7 +58,7 @@ const NavigationBar = (): JSX.Element => {
           </label>
           <ul
             tabIndex={0}
-            className={`menu menu-compact dropdown-content mt-3 p-2 shadow bg-aqua dark:bg-cloudBirst rounded-box w-52`}
+            className={`menu menu-compact dropdown-content bg-aqua dark:bg-cloudBirst rounded-box mt-3 w-52 p-2 shadow`}
           >
             {location.pathname !== paths.root && (
               <li>
@@ -75,7 +75,7 @@ const NavigationBar = (): JSX.Element => {
       </div>
       <div className="navbar-center">
         <a
-          className="btn btn-ghost font-ubuntuBold font-normal normal-case text-xl sm:text-2xl"
+          className="btn btn-ghost font-ubuntuBold text-xl font-normal normal-case sm:text-2xl"
           href="/"
         >
           👑 PING PONG KING 👑
@@ -101,7 +101,7 @@ const NavigationBar = (): JSX.Element => {
               </div>
             ) : (
               <div className="avatar placeholder">
-                <div className="bg-neutral-focus text-neutral-content rounded-full w-10">
+                <div className="bg-neutral-focus text-neutral-content w-10 rounded-full">
                   <span className="text-xl">
                     {userFromIdToken?.given_name?.charAt(0)}
                     {userFromIdToken?.family_name?.charAt(0)}
@@ -112,7 +112,7 @@ const NavigationBar = (): JSX.Element => {
           </label>
           <ul
             tabIndex={0}
-            className={`menu menu-compact dropdown-content mt-3 p-2 shadow bg-aqua dark:bg-cloudBirst rounded-box w-52`}
+            className={`menu menu-compact dropdown-content bg-aqua dark:bg-cloudBirst rounded-box mt-3 w-52 p-2 shadow`}
           >
             {location.pathname !== paths.profile && (
               <li>

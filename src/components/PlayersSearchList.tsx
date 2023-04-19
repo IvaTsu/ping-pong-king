@@ -19,19 +19,19 @@ export const PlayersSearchList = ({
       playersList.length !== 0 &&
       playersList.filter((player) => player.id !== currentUser?.id).length !==
         0 ? (
-        <ul className="card bg-base-100 shadow-xl mt-2 max-h-96 overflow-auto">
+        <ul className="card bg-base-100 mt-2 max-h-96 overflow-auto shadow-xl">
           {playersList
             .filter((player) => player.id !== currentUser?.id)
             .map((player) => (
               <li key={player.id} className="m-2">
-                <button
-                  className="w-full transition-all duration-200 hover:bg-darkGrey"
+                <a
+                  className="btn btn-outline font-ubuntuRegular hover:bg-lightGrey hover:border-navy dark:hover:bg-cloud border-darkGrey w-full border-2 text-black hover:text-black dark:text-white dark:hover:text-white"
                   onClick={() => {
                     _onOpponentSelect(player);
                   }}
                 >
                   {player.name}
-                </button>
+                </a>
               </li>
             ))}
         </ul>
