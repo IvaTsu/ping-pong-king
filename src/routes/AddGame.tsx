@@ -156,7 +156,7 @@ export default function AddGame(): JSX.Element {
                 {currentOpponent != null ? (
                   <>
                     <div className="mt-10 max-w-lg">
-                      <h3 className="font-ubuntuRegular text-xl ">
+                      <h3 className="font-ubuntuRegular text-xl">
                         Game results
                       </h3>
                       <div className="flex flex-col content-center items-center">

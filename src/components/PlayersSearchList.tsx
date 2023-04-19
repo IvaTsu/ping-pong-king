@@ -25,7 +25,7 @@ export const PlayersSearchList = ({
             .map((player) => (
               <li key={player.id} className="m-2">
                 <a
-                  className=" btn-outline btn font-ubuntuRegular hover:bg-lightGrey hover:border-navy dark:hover:bg-cloud border-darkGrey w-full border-2  text-black hover:text-black dark:text-white dark:hover:text-white"
+                  className="btn btn-outline font-ubuntuRegular hover:bg-lightGrey hover:border-navy dark:hover:bg-cloud border-darkGrey w-full border-2 text-black hover:text-black dark:text-white dark:hover:text-white"
                   onClick={() => {
                     _onOpponentSelect(player);
                   }}

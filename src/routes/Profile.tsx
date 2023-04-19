@@ -111,7 +111,7 @@ function Profile(): JSX.Element {
                   />
                 </figure>
                 <div className="pl-5 text-start">
-                  <p className="text-navy dark:text-aqua font-ubuntuRegular  text-l pb-2 sm:text-xl">
+                  <p className="text-navy dark:text-aqua font-ubuntuRegular text-l pb-2 sm:text-xl">
                     {currentUser.name}
                   </p>
                   <p>{currentUser.email}</p>
