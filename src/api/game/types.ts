@@ -1,25 +1,23 @@
 export interface IGame {
   id: string;
-  playerScoreA: PlayerScore;
-  playerScoreB: PlayerScore;
-  tournamentRef: TournamentRef;
+  playerScoreA: IPlayerScore;
+  playerScoreB: IPlayerScore;
+  tournamentRef: ITournamentRef;
   winnerId: string;
   playedWhen: string;
 }
-
-// TODO: check if the below types can be reused and come up with the naming convention
-interface TournamentRef {
+export interface ITournamentRef {
   id: string;
   name: string;
 }
 
-interface PlayerScore {
-  playerRef: PlayerRef;
+export interface IPlayerScore {
+  playerRef: IPlayerRef;
   score: number;
   ratingAlteration: number;
 }
 
-interface PlayerRef {
+export interface IPlayerRef {
   id: string;
   name: string;
   rating: number;
