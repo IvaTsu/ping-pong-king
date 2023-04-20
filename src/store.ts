@@ -146,3 +146,36 @@ export const useNotificationStore = create<
     }
   )
 );
+
+interface IOfficeState {
+  officeId: string | undefined;
+}
+
+interface IOfficeStateActions {
+  clear: () => void;
+  setOfficeId: (officeId: string) => void;
+  getOfficeId: () => string | undefined;
+}
+
+export const useOfficeStore = create<IOfficeState & IOfficeStateActions>()(
+  persist(
+    (set, get) => ({
+      officeId: undefined,
+      clear: () => {
+        set({
+          officeId: undefined,
+        });
+      },
+      setOfficeId: (officeId) => {
+        set({
+          officeId,
+        });
+      },
+      getOfficeId: () => get().officeId,
+    }),
+    {
+      name: "office-storage", // name of the item in the storage (must be unique)
+      storage: createJSONStorage(() => localStorage),
+    }
+  )
+);
