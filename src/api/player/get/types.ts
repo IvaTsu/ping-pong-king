@@ -4,6 +4,7 @@ export interface IPlayerListParams {
   page: number;
   size: number;
   minGamesPlayed?: number;
+  tournamentId?: string;
 }
 
 export interface IPlayerFindParams {

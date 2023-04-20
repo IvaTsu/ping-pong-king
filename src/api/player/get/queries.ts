@@ -11,11 +11,12 @@ export async function fetchPlayerList({
   accessToken,
   page,
   size,
+  tournamentId,
   minGamesPlayed,
 }: IPlayerListParams & { accessToken: string }): Promise<IPlayerList> {
   return await getRequest({
     accessToken,
-    url: playerList({ page, size, minGamesPlayed }),
+    url: playerList({ page, size, tournamentId, minGamesPlayed }),
   });
 }
 
