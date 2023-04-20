@@ -1,18 +1,17 @@
-export interface IPostGameBody {
-  playerRefA: {
-    id: string;
-  };
-  playerRefB: {
-    id: string;
-  };
-  // TODO: this should be a separate selector
-  tournamentRef: {
-    id: string;
-  };
-  gameResult: {
-    playerAScore: number;
-    playerBScore: number;
-    winnerId: string;
-  };
+import { type IPlayerRef, type IPlayerScore } from "../types";
+import { type ITournamentRef } from "./../types";
+
+interface IPlayerRefId extends Omit<IPlayerRef, "name" | "rating"> {}
+
+interface IPlayerScoreWOutAlternation
+  extends Omit<IPlayerScore, "ratingAlteration" | "playerRef"> {
+  playerRef: IPlayerRefId;
 }
 
+interface ITournamentRefId extends Omit<ITournamentRef, "name"> {}
+
+export interface IPostGameBody {
+  playerScoreA: IPlayerScoreWOutAlternation;
+  playerScoreB: IPlayerScoreWOutAlternation;
+  tournamentRef: ITournamentRefId;
+}

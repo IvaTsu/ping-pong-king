@@ -113,23 +113,21 @@ export default function AddGame(): JSX.Element {
       createGameMutation({
         accessToken: auth.accessToken,
         body: {
-          playerRefA: {
-            id: currentUser?.id,
+          playerScoreA: {
+            playerRef: {
+              id: currentUser?.id,
+            },
+            score: currentUserScore,
           },
-          playerRefB: {
-            id: currentOpponent?.id,
+          playerScoreB: {
+            playerRef: {
+              id: currentOpponent?.id,
+            },
+            score: opponentScore,
           },
           // TODO: this should be a separate selector
           tournamentRef: {
             id: currentUser?.tournamentRef.id,
-          },
-          gameResult: {
-            playerAScore: currentUserScore,
-            playerBScore: opponentScore,
-            winnerId:
-              currentUserScore > opponentScore
-                ? currentUser?.id
-                : currentOpponent?.id,
           },
         },
       });
