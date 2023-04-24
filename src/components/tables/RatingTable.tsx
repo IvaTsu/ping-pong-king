@@ -19,6 +19,7 @@ import { useTablePagination } from "../../hooks/useTablePagination";
 import { useAuthStore, useOfficeStore, useUserStore } from "../../store";
 import { hyphenate } from "../../utils/string";
 import { LoadingSpinner } from "../LoadingSpinner";
+import { WinRate } from "../WinRate";
 
 interface ICustomTableMeta<TData extends RowData> {
   getRowStyles: (row: Row<TData>) => React.CSSProperties;
@@ -36,10 +37,10 @@ export const userColumnDefs = [
     cell: (info) => <span>{info.getValue()}</span>,
     header: () => <span>Rating</span>,
   }),
-  columnHelper.accessor((row) => row.tournamentRef.name, {
-    id: "office",
-    cell: (info) => <span>{info.getValue()}</span>,
-    header: () => <span>Office</span>,
+  columnHelper.accessor((row) => row.winRate, {
+    id: "winRate",
+    cell: (info) => <WinRate value={info.getValue()} />,
+    header: () => <span>Win Rate</span>,
   }),
   columnHelper.accessor((row) => row.gamesPlayed, {
     id: "gamesPlayed",
@@ -179,6 +180,10 @@ export const RatingTable = (): JSX.Element => {
                       state={{
                         playerId: row.original.id,
                         playerName: row.original.name,
+                        winRate: row.original.winRate,
+                        gamesWon: row.original.gamesWon,
+                        gamesPlayed: row.original.gamesPlayed,
+                        rating: row.original.rating,
                       }}
                     >
                       {flexRender(

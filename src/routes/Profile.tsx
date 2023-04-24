@@ -117,6 +117,8 @@ function Profile(): JSX.Element {
                   <p>{currentUser.email}</p>
                   <p>Rating: {currentUser.rating}</p>
                   <p>Games played: {currentUser.gamesPlayed}</p>
+                  <p>Games won: {currentUser.gamesWon}</p>
+                  <p>Win Rate: {Math.round(currentUser.winRate * 100)}%</p>
                 </div>
               </div>
             </div>

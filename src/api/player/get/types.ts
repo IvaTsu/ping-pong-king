@@ -23,6 +23,8 @@ export interface IPlayer {
   rating: number;
   registeredWhen: string;
   gamesPlayed: number;
+  gamesWon: number;
+  winRate: number;
 }
 
 export interface IPlayerList {
