@@ -13,6 +13,10 @@ module.exports = {
       rose: "#E11D48",
       white: "#ffffff",
       black: "#000000",
+      red: "#FF0000",
+      orange: "#FFA500",
+      yellow: "#E6DB63",
+      green: "#00FF00",
     },
     extend: {
       fontFamily: {
