@@ -8,6 +8,7 @@ import { type IPostPlayerBody } from "../api/player/post/types";
 import { fetchTournamentList } from "../api/tournament/get/queries";
 import NavigationBar from "../components/NavigationBar";
 import GamesHistoryTable from "../components/tables/GamesHistoryTable";
+import { WinRate } from "../components/WinRate";
 import ProtectedRoute from "../routes/ProtectedRoute";
 import { useAuthStore, useUserStore } from "../store";
 import { decodeJWT, type IDecodedIdToken } from "../utils/decodeJWT";
@@ -116,9 +117,11 @@ function Profile(): JSX.Element {
                   </p>
                   <p>{currentUser.email}</p>
                   <p>Rating: {currentUser.rating}</p>
-                  <p>Games played: {currentUser.gamesPlayed}</p>
-                  <p>Games won: {currentUser.gamesWon}</p>
-                  <p>Win Rate: {Math.round(currentUser.winRate * 100)}%</p>
+                  <p>
+                    Won {currentUser.gamesWon} games out of{" "}
+                    {currentUser.gamesPlayed}{" "}
+                    <WinRate value={currentUser.winRate} />
+                  </p>
                 </div>
               </div>
             </div>
