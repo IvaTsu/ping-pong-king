@@ -2,6 +2,7 @@ import { useLocation } from "react-router-dom";
 
 import NavigationBar from "../components/NavigationBar";
 import GamesHistoryTable from "../components/tables/GamesHistoryTable";
+import { WinRate } from "../components/WinRate";
 
 const PlayerHistory = (): JSX.Element => {
   const location = useLocation();
@@ -18,9 +19,9 @@ const PlayerHistory = (): JSX.Element => {
         <div className="card card-side bg-base-100 flex w-full items-center p-3 shadow-xl sm:w-96 sm:p-5">
           <div className="pl-5 text-start">
             <p>Rating: {rating}</p>
-            <p>Win Rate: {Math.round(winRate * 100)}%</p>
             <p>
-              Won {gamesWon} games out of {gamesPlayed}
+              Won {gamesWon} games out of {gamesPlayed}{" "}
+              <WinRate value={winRate} />
             </p>
           </div>
         </div>
