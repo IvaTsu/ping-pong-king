@@ -22,7 +22,7 @@ export const WinRate = ({ value }: { value: number }): JSX.Element => {
 
   return (
     <span
-      className={`bg-cloudBirst p-2 font-semibold dark:bg-none ${winRateColorGradation}`}
+      className={`bg-cloudBirst font-ubuntuBold p-2 dark:bg-none ${winRateColorGradation}`}
     >
       {Math.round(value * 100)}%
     </span>
