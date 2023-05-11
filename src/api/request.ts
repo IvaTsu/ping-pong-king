@@ -1,3 +1,14 @@
+import axios from "axios";
+
+import { baseURL } from "./urls";
+
+const axiosInstance = axios.create({
+  baseURL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
 interface IGetRequestParams {
   accessToken: string;
   url: string;
@@ -7,19 +18,14 @@ export async function getRequest<T>({
   accessToken,
   url,
 }: IGetRequestParams): Promise<T> {
-  const response = await fetch(url, {
+  const response = await axiosInstance(url, {
     method: "GET",
     headers: {
-      "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
     },
   });
 
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-
-  return await response.json();
+  return response.data;
 }
 
 interface IPostRequestParams extends IGetRequestParams {
@@ -31,13 +37,12 @@ export async function postRequest<T>({
   body,
   url,
 }: IPostRequestParams): Promise<T> {
-  const response = await fetch(url, {
+  const response = await axiosInstance(url, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
-      "Content-Type": "application/json",
     },
     method: "POST",
-    body: JSON.stringify(body),
+    data: JSON.stringify(body),
   });
-  return await response.json();
+  return response.data;
 }
