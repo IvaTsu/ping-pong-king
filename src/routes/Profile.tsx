@@ -103,7 +103,10 @@ function Profile(): JSX.Element {
         ) : (
           <>
             <div className="border-lightGrey mt-10 flex w-full flex-col items-center">
-              <div className="card card-side bg-base-100 mt-10 flex w-full items-center p-3 shadow-xl sm:w-96 sm:p-5">
+              <div className="card card-side bg-base-100 relative mt-10 flex w-full items-center p-3 shadow-xl sm:w-96 sm:p-5">
+                <div className="absolute top-4 right-2">
+                  <WinRate value={currentUser.winRate} />
+                </div>
                 <figure className="rounded-none">
                   <img
                     src={currentUser.profileImage}
@@ -120,7 +123,6 @@ function Profile(): JSX.Element {
                   <p>
                     Won {currentUser.gamesWon} games out of{" "}
                     {currentUser.gamesPlayed}{" "}
-                    <WinRate value={currentUser.winRate} />
                   </p>
                 </div>
               </div>

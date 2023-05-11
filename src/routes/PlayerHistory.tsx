@@ -17,12 +17,12 @@ const PlayerHistory = (): JSX.Element => {
       </h2>
       <div className="border-lightGrey mt-10 flex w-full flex-col items-center">
         <div className="card card-side bg-base-100 flex w-full items-center p-3 shadow-xl sm:w-96 sm:p-5">
+          <WinRate value={winRate} />
           <div className="pl-5 text-start">
             <p>Rating: {rating}</p>
-            <p>
-              Won {gamesWon} games out of {gamesPlayed}{" "}
-              <WinRate value={winRate} />
-            </p>
+            <div className="flex justify-start">
+              Won {gamesWon} games out of {gamesPlayed}
+            </div>
           </div>
         </div>
       </div>
