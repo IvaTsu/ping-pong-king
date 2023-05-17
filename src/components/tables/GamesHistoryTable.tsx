@@ -11,7 +11,7 @@ import { fetchGamesByUserId } from "../../api/game/get/queries";
 import { type IGame } from "../../api/game/types";
 import { fiveMinutes } from "../../constants/time";
 import { useTablePagination } from "../../hooks/useTablePagination";
-import { useAuthStore, useUserStore } from "../../store";
+import { useUserStore } from "../../store";
 import { ReactComponent as CheckSvg } from "../../svg/check.svg";
 import { ReactComponent as DeniedSvg } from "../../svg/denied.svg";
 import getRandomEmoji from "../../utils/getRandomEmoji";
@@ -35,9 +35,6 @@ const GamesHistoryTable = ({
     pageSize,
   } = useTablePagination();
 
-  const { getAuth } = useAuthStore();
-  const auth = getAuth();
-
   const { getUser } = useUserStore();
   const currentUser = getUser();
 
@@ -45,13 +42,11 @@ const GamesHistoryTable = ({
     ["playerHistory", playerId, pagination],
     async () =>
       await fetchGamesByUserId({
-        accessToken: auth?.accessToken as string,
         id: playerId,
         page: pageIndex,
         size: pageSize,
       }),
     {
-      enabled: auth?.accessToken != null,
       staleTime: fiveMinutes,
       keepPreviousData: true,
       retry: false,

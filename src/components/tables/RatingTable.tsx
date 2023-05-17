@@ -16,7 +16,7 @@ import { AQUA, NAVY } from "../../constants/colors";
 import { tenMinutes } from "../../constants/time";
 import { useDetectDarkTheme } from "../../hooks/useDetectColorMode";
 import { useTablePagination } from "../../hooks/useTablePagination";
-import { useAuthStore, useOfficeStore, useUserStore } from "../../store";
+import { useOfficeStore, useUserStore } from "../../store";
 import { hyphenate } from "../../utils/string";
 import { LoadingSpinner } from "../LoadingSpinner";
 import { WinRate } from "../WinRate";
@@ -59,8 +59,6 @@ export const RatingTable = (): JSX.Element => {
     pageSize,
   } = useTablePagination();
 
-  const { getAuth } = useAuthStore();
-  const auth = getAuth();
   const { getUser } = useUserStore();
   const currentUser = getUser();
   const { getOfficeId } = useOfficeStore();
@@ -70,19 +68,17 @@ export const RatingTable = (): JSX.Element => {
   const currentUserRowBgColor = isDarkTheme ? AQUA : NAVY;
 
   const { data: playerList, isLoading } = useQuery(
-    ["playerList", fetchPlayerList, pagination, auth?.accessToken, officeId],
+    ["playerList", fetchPlayerList, pagination, officeId],
     async () =>
       await fetchPlayerList(
         officeId != null
           ? {
-              accessToken: auth?.accessToken as string,
               page: pageIndex,
               size: pageSize,
               tournamentId: officeId,
               minGamesPlayed: 1,
             }
           : {
-              accessToken: auth?.accessToken as string,
               page: pageIndex,
               size: pageSize,
               minGamesPlayed: 1,
@@ -91,7 +87,6 @@ export const RatingTable = (): JSX.Element => {
     {
       keepPreviousData: true,
       retry: false,
-      enabled: auth?.accessToken != null,
       staleTime: tenMinutes,
     }
   );

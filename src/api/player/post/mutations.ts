@@ -5,8 +5,7 @@ import { type IPostPlayerBody } from "./types";
 import { playerCreate } from "./urls";
 
 export async function createPlayer({
-  accessToken,
   body,
 }: ICreateMutationParams<IPostPlayerBody>): Promise<IPlayer> {
-  return await postRequest({ accessToken, body, url: playerCreate() });
+  return await postRequest({ body, url: playerCreate() });
 }

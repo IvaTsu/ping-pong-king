@@ -5,8 +5,7 @@ import { type IPostGameBody } from "./types";
 import { gameCreate } from "./urls";
 
 export async function createGame({
-  accessToken,
   body,
 }: ICreateMutationParams<IPostGameBody>): Promise<IGame> {
-  return await postRequest({ accessToken, body, url: gameCreate() });
+  return await postRequest({ body, url: gameCreate() });
 }
