@@ -5,6 +5,7 @@ import Login from "../routes/Login";
 import NotFound from "../routes/NotFound";
 import PlayerHistory from "../routes/PlayerHistory";
 import Profile from "../routes/Profile";
+import Tournament from "../routes/Tournament";
 import Root from "../routes/Root";
 
 export const paths = Object.freeze({
@@ -13,6 +14,7 @@ export const paths = Object.freeze({
   profile: "/profile",
   addGame: "/add-game",
   playerHistory: "/player-history/:playerName",
+  tournament: "/tournament",
 });
 
 const router = createBrowserRouter([
@@ -36,6 +38,10 @@ const router = createBrowserRouter([
   {
     path: paths.playerHistory,
     element: <PlayerHistory />,
+  },
+  {
+    path: paths.tournament,
+    element: <Tournament />,
   },
 ]);
 
