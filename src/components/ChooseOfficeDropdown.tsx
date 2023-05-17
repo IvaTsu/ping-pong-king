@@ -2,22 +2,18 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 
 import { fetchTournamentList } from "../api/tournament/get/queries";
-import { useAuthStore, useOfficeStore, useUserStore } from "../store";
+import { useOfficeStore, useUserStore } from "../store";
 import { LoadingSpinner } from "./LoadingSpinner";
 
 export const ChooseOfficeDropdown = (): JSX.Element => {
-  const { getAuth } = useAuthStore();
-  const auth = getAuth();
-
   const { getUser } = useUserStore();
   const currentUser = getUser();
 
   const { setOfficeId } = useOfficeStore();
 
   const { data: tournamentList, isLoading: isTournamentListLoading } = useQuery(
-    ["tournamentList", fetchTournamentList, auth?.accessToken],
-    async () => await fetchTournamentList(auth?.accessToken as string),
-    { enabled: auth?.accessToken != null }
+    ["tournamentList", fetchTournamentList],
+    async () => await fetchTournamentList()
   );
 
   const sortedTournamentList = useMemo(() => {

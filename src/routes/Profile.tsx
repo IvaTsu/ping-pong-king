@@ -21,9 +21,8 @@ function Profile(): JSX.Element {
   const { setUser } = useUserStore();
 
   const { data: tournamentList, isLoading: isTournamentListLoading } = useQuery(
-    ["tournamentList", fetchTournamentList, auth?.accessToken],
-    async () => await fetchTournamentList(auth?.accessToken as string),
-    { enabled: auth?.accessToken != null }
+    ["tournamentList", fetchTournamentList],
+    async () => await fetchTournamentList()
   );
 
   const { mutate: createPlayerMutation } = useMutation({
@@ -42,11 +41,8 @@ function Profile(): JSX.Element {
     setTournamentId(e.target.value);
   };
 
-  const _onTournamentSubmit = (
-    accessToken: string,
-    body: IPostPlayerBody
-  ): void => {
-    createPlayerMutation({ accessToken, body });
+  const _onTournamentSubmit = (body: IPostPlayerBody): void => {
+    createPlayerMutation({ body });
   };
 
   return (
@@ -81,12 +77,8 @@ function Profile(): JSX.Element {
                   : "btn-disabled"
               }  ${isTournamentListLoading ? "loading" : ""}`}
               onClick={() => {
-                if (
-                  auth?.accessToken != null &&
-                  tournamentId != null &&
-                  userFromIdToken != null
-                ) {
-                  _onTournamentSubmit(auth?.accessToken, {
+                if (tournamentId != null && userFromIdToken != null) {
+                  _onTournamentSubmit({
                     name: userFromIdToken.name,
                     email: userFromIdToken.email,
                     profileImage: userFromIdToken.picture,

@@ -71,7 +71,7 @@ export const useOpponentStore = create<
   )
 );
 
-interface IAuth {
+export interface IAuth {
   accessToken: string;
   refreshToken: string;
   idToken: string;
