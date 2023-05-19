@@ -4,7 +4,7 @@ export interface IPlayerListParams {
   page: number;
   size: number;
   minGamesPlayed?: number;
-  tournamentId?: string;
+  locationId?: string;
 }
 
 export interface IPlayerFindParams {
@@ -16,7 +16,7 @@ export interface IPlayer {
   name: string;
   email: string;
   profileImage: string;
-  tournamentRef: {
+  locationRef: {
     id: string;
     name: string;
   };

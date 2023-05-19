@@ -120,8 +120,8 @@ export default function AddGame(): JSX.Element {
             score: opponentScore,
           },
           // TODO: this should be a separate selector
-          tournamentRef: {
-            id: currentUser?.tournamentRef.id,
+          locationRef: {
+            id: currentUser?.locationRef.id,
           },
         },
       });

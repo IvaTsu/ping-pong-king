@@ -75,7 +75,7 @@ export const RatingTable = (): JSX.Element => {
           ? {
               page: pageIndex,
               size: pageSize,
-              tournamentId: officeId,
+              locationId: officeId,
               minGamesPlayed: 1,
             }
           : {

@@ -4,17 +4,17 @@ import { type IPlayerFindParams, type IPlayerListParams } from "./types";
 export const playerList = ({
   page,
   size,
-  tournamentId,
+  locationId,
   minGamesPlayed,
 }: IPlayerListParams): string => {
-  if (minGamesPlayed != null && tournamentId != null) {
-    return `${baseURL}/player/list?page=${page}&size=${size}&tournamentId=${tournamentId}&minGamesPlayed=${minGamesPlayed}`;
+  if (minGamesPlayed != null && locationId != null) {
+    return `${baseURL}/player/list?page=${page}&size=${size}&locationId=${locationId}&minGamesPlayed=${minGamesPlayed}`;
   }
   if (minGamesPlayed != null) {
     return `${baseURL}/player/list?page=${page}&size=${size}&minGamesPlayed=${minGamesPlayed}`;
   }
-  if (tournamentId != null) {
-    return `${baseURL}/player/list?page=${page}&size=${size}&tournamentId=${tournamentId}`;
+  if (locationId != null) {
+    return `${baseURL}/player/list?page=${page}&size=${size}&locationId=${locationId}`;
   }
   return `${baseURL}/player/list?page=${page}&size=${size}`;
 };
