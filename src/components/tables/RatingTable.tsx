@@ -70,21 +70,14 @@ export const RatingTable = (): JSX.Element => {
   const { data: playerList, isLoading } = useQuery(
     ["playerList", fetchPlayerList, pagination, officeId],
     async () =>
-      await fetchPlayerList(
-        officeId != null
-          ? {
-              page: pageIndex,
-              size: pageSize,
-              locationId: officeId,
-              minGamesPlayed: 1,
-            }
-          : {
-              page: pageIndex,
-              size: pageSize,
-              minGamesPlayed: 1,
-            }
-      ),
+      await fetchPlayerList({
+        page: pageIndex,
+        size: pageSize,
+        locationId: officeId,
+        minGamesPlayed: 1,
+      }),
     {
+      enabled: officeId != null,
       keepPreviousData: true,
       retry: false,
       staleTime: tenMinutes,
