@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 
 import { fetchLocationList } from "../api/location/get/queries";
 import { useOfficeStore, useUserStore } from "../store";
@@ -16,6 +16,12 @@ export const ChooseOfficeDropdown = (): JSX.Element => {
     ["locationList", fetchLocationList],
     async () => await fetchLocationList()
   );
+
+  useEffect(() => {
+    if (currentUser?.locationRef.id != null) {
+      setOfficeId(currentUser?.locationRef.id);
+    }
+  }, [currentUser?.locationRef.id]);
 
   const sortedLocationList = useMemo(() => {
     if (locationList != null) {
@@ -46,7 +52,7 @@ export const ChooseOfficeDropdown = (): JSX.Element => {
           className="select select-info w-full max-w-xs"
           onChange={_onLocationChange}
         >
-          {previouslySelectedLocation != null ? (
+          {previouslySelectedLocation != null && (
             <>
               <option
                 key={previouslySelectedLocation.id}
@@ -63,16 +69,6 @@ export const ChooseOfficeDropdown = (): JSX.Element => {
                     </option>
                   );
                 })}
-            </>
-          ) : (
-            <>
-              {sortedLocationList?.map((location) => {
-                return (
-                  <option key={location.id} value={location.id}>
-                    {location.name}
-                  </option>
-                );
-              })}
             </>
           )}
         </select>
