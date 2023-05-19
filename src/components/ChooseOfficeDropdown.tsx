@@ -46,24 +46,35 @@ export const ChooseOfficeDropdown = (): JSX.Element => {
           className="select select-info w-full max-w-xs"
           onChange={_onLocationChange}
         >
-          {previouslySelectedLocation != null && (
-            <option
-              key={previouslySelectedLocation.id}
-              value={previouslySelectedLocation.id}
-            >
-              {previouslySelectedLocation.name}
-            </option>
+          {previouslySelectedLocation != null ? (
+            <>
+              <option
+                key={previouslySelectedLocation.id}
+                value={previouslySelectedLocation.id}
+              >
+                {previouslySelectedLocation.name}
+              </option>
+              {sortedLocationList
+                ?.filter((location) => location.id !== getOfficeId())
+                .map((location) => {
+                  return (
+                    <option key={location.id} value={location.id}>
+                      {location.name}
+                    </option>
+                  );
+                })}
+            </>
+          ) : (
+            <>
+              {sortedLocationList?.map((location) => {
+                return (
+                  <option key={location.id} value={location.id}>
+                    {location.name}
+                  </option>
+                );
+              })}
+            </>
           )}
-
-          {sortedLocationList
-            ?.filter((location) => location.id !== getOfficeId())
-            .map((location) => {
-              return (
-                <option key={location.id} value={location.id}>
-                  {location.name}
-                </option>
-              );
-            })}
         </select>
       </div>
     </>
