@@ -2,11 +2,11 @@ export interface IGame {
   id: string;
   playerScoreA: IPlayerScore;
   playerScoreB: IPlayerScore;
-  tournamentRef: ITournamentRef;
+  locationRef: ILocationRef;
   winnerId: string;
   playedWhen: string;
 }
-export interface ITournamentRef {
+export interface ILocationRef {
   id: string;
   name: string;
 }

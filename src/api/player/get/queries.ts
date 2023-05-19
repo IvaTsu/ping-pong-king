@@ -10,11 +10,11 @@ import { playerFind, playerList } from "./urls";
 export async function fetchPlayerList({
   page,
   size,
-  tournamentId,
+  locationId,
   minGamesPlayed,
 }: IPlayerListParams): Promise<IPlayerList> {
   return await getRequest({
-    url: playerList({ page, size, tournamentId, minGamesPlayed }),
+    url: playerList({ page, size, locationId, minGamesPlayed }),
   });
 }
 

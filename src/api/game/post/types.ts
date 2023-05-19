@@ -1,5 +1,5 @@
 import { type IPlayerRef, type IPlayerScore } from "../types";
-import { type ITournamentRef } from "./../types";
+import { type ILocationRef } from "./../types";
 
 interface IPlayerRefId extends Omit<IPlayerRef, "name" | "rating"> {}
 
@@ -8,10 +8,10 @@ interface IPlayerScoreWOutAlternation
   playerRef: IPlayerRefId;
 }
 
-interface ITournamentRefId extends Omit<ITournamentRef, "name"> {}
+interface ILocationRefId extends Omit<ILocationRef, "name"> {}
 
 export interface IPostGameBody {
   playerScoreA: IPlayerScoreWOutAlternation;
   playerScoreB: IPlayerScoreWOutAlternation;
-  tournamentRef: ITournamentRefId;
+  locationRef: ILocationRefId;
 }

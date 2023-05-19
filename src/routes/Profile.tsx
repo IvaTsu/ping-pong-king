@@ -3,9 +3,9 @@ import "../App.css";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
+import { fetchLocationList } from "../api/location/get/queries";
 import { createPlayer } from "../api/player/post/mutations";
 import { type IPostPlayerBody } from "../api/player/post/types";
-import { fetchTournamentList } from "../api/tournament/get/queries";
 import NavigationBar from "../components/NavigationBar";
 import GamesHistoryTable from "../components/tables/GamesHistoryTable";
 import { WinRate } from "../components/WinRate";
@@ -14,15 +14,15 @@ import { useAuthStore, useUserStore } from "../store";
 import { decodeJWT, type IDecodedIdToken } from "../utils/decodeJWT";
 
 function Profile(): JSX.Element {
-  const [tournamentId, setTournamentId] = useState<string>();
+  const [locationId, setLocationId] = useState<string>();
   const { getAuth } = useAuthStore();
   const auth = getAuth();
   const userFromIdToken = decodeJWT<IDecodedIdToken>(auth?.idToken);
   const { setUser } = useUserStore();
 
-  const { data: tournamentList, isLoading: isTournamentListLoading } = useQuery(
-    ["tournamentList", fetchTournamentList],
-    async () => await fetchTournamentList()
+  const { data: locationList, isLoading: isLocationListLoading } = useQuery(
+    ["locationList", fetchLocationList],
+    async () => await fetchLocationList()
   );
 
   const { mutate: createPlayerMutation } = useMutation({
@@ -35,13 +35,11 @@ function Profile(): JSX.Element {
   const { getUser } = useUserStore();
   const currentUser = getUser();
 
-  const _onTournamentChange = (
-    e: React.ChangeEvent<HTMLSelectElement>
-  ): void => {
-    setTournamentId(e.target.value);
+  const _onLocationChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
+    setLocationId(e.target.value);
   };
 
-  const _onTournamentSubmit = (body: IPostPlayerBody): void => {
+  const _onLocationSubmit = (body: IPostPlayerBody): void => {
     createPlayerMutation({ body });
   };
 
@@ -57,33 +55,31 @@ function Profile(): JSX.Element {
             <select
               className="select select-info mb-5 mr-5 w-full max-w-xs"
               defaultValue={"DEFAULT"}
-              onChange={_onTournamentChange}
+              onChange={_onLocationChange}
             >
               <option value={"DEFAULT"} disabled>
                 Select office
               </option>
-              {tournamentList?.map((tournament) => {
+              {locationList?.map((location) => {
                 return (
-                  <option key={tournament.id} value={tournament.id}>
-                    {tournament.name}
+                  <option key={location.id} value={location.id}>
+                    {location.name}
                   </option>
                 );
               })}
             </select>
             <button
               className={`btn btn-ghost ${
-                tournamentId != null
-                  ? "btn-outline btn-success"
-                  : "btn-disabled"
-              }  ${isTournamentListLoading ? "loading" : ""}`}
+                locationId != null ? "btn-outline btn-success" : "btn-disabled"
+              }  ${isLocationListLoading ? "loading" : ""}`}
               onClick={() => {
-                if (tournamentId != null && userFromIdToken != null) {
-                  _onTournamentSubmit({
+                if (locationId != null && userFromIdToken != null) {
+                  _onLocationSubmit({
                     name: userFromIdToken.name,
                     email: userFromIdToken.email,
                     profileImage: userFromIdToken.picture,
-                    tournamentRef: {
-                      id: tournamentId,
+                    locationRef: {
+                      id: locationId,
                     },
                   });
                 }
