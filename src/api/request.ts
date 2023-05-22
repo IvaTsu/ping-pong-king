@@ -104,7 +104,7 @@ axiosInstance.interceptors.response.use(
 
 interface IGetRequestParams<P> {
   url: string;
-  params: P | undefined;
+  params?: P;
 }
 
 export async function getRequest<T, P>({
