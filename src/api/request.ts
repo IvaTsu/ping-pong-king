@@ -102,19 +102,25 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-interface IGetRequestParams {
+interface IGetRequestParams<P> {
   url: string;
+  params?: P;
 }
 
-export async function getRequest<T>({ url }: IGetRequestParams): Promise<T> {
+export async function getRequest<T, P>({
+  url,
+  params,
+}: IGetRequestParams<P>): Promise<T> {
   const response = await axiosInstance(url, {
     method: "GET",
+    params,
   });
 
   return response.data;
 }
 
-interface IPostRequestParams extends IGetRequestParams {
+interface IPostRequestParams {
+  url: string;
   body: object;
 }
 

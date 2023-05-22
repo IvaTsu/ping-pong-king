@@ -9,6 +9,7 @@ export interface IPlayerListParams {
 
 export interface IPlayerFindParams {
   name: string;
+  locationId?: string;
 }
 
 export interface IPlayer {

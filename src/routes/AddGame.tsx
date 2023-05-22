@@ -92,6 +92,7 @@ export default function AddGame(): JSX.Element {
     async () =>
       await fetchPlayer({
         name: debouncedOpponentSearchValue,
+        locationId: currentUser?.locationRef.id,
       }),
     {
       staleTime: thirtyMinutes,
