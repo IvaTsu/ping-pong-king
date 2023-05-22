@@ -20,8 +20,9 @@ export async function fetchPlayerList({
 
 export async function fetchPlayer({
   name,
+  locationId,
 }: IPlayerFindParams): Promise<IPlayer[]> {
   return await getRequest({
-    url: playerFind({ name }),
+    url: playerFind({ name, locationId }),
   });
 }

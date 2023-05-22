@@ -19,6 +19,9 @@ export const playerList = ({
   return `${baseURL}/player/list?page=${page}&size=${size}`;
 };
 
-export const playerFind = ({ name }: IPlayerFindParams): string => {
+export const playerFind = ({ name, locationId }: IPlayerFindParams): string => {
+  if (locationId != null) {
+    return `${baseURL}/player/find?name=${name}&locationId=${locationId}`;
+  }
   return `${baseURL}/player/find?name=${name}`;
 };
