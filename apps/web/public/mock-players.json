@@ -1,0 +1,162 @@
+{
+  "content": [
+    {
+      "id": "player-001",
+      "name": "John Smith",
+      "email": "john.smith@example.com",
+      "profileImage": "https://randomuser.me/api/portraits/men/1.jpg",
+      "locationRef": {
+        "id": "office-001",
+        "name": "New York Office"
+      },
+      "rating": 1850,
+      "registeredWhen": "2023-01-15T10:30:00Z",
+      "gamesPlayed": 45,
+      "gamesWon": 32,
+      "winRate": 71.11
+    },
+    {
+      "id": "player-002",
+      "name": "Sarah Johnson",
+      "email": "sarah.johnson@example.com",
+      "profileImage": "https://randomuser.me/api/portraits/women/2.jpg",
+      "locationRef": {
+        "id": "office-001",
+        "name": "New York Office"
+      },
+      "rating": 1720,
+      "registeredWhen": "2023-02-10T14:20:00Z",
+      "gamesPlayed": 38,
+      "gamesWon": 24,
+      "winRate": 63.16
+    },
+    {
+      "id": "player-003",
+      "name": "Mike Chen",
+      "email": "mike.chen@example.com",
+      "profileImage": "https://randomuser.me/api/portraits/men/3.jpg",
+      "locationRef": {
+        "id": "office-001",
+        "name": "New York Office"
+      },
+      "rating": 1680,
+      "registeredWhen": "2023-01-28T09:45:00Z",
+      "gamesPlayed": 52,
+      "gamesWon": 28,
+      "winRate": 53.85
+    },
+    {
+      "id": "player-004",
+      "name": "Emily Davis",
+      "email": "emily.davis@example.com",
+      "profileImage": "https://randomuser.me/api/portraits/women/4.jpg",
+      "locationRef": {
+        "id": "office-001",
+        "name": "New York Office"
+      },
+      "rating": 1650,
+      "registeredWhen": "2023-03-05T16:15:00Z",
+      "gamesPlayed": 29,
+      "gamesWon": 15,
+      "winRate": 51.72
+    },
+    {
+      "id": "player-005",
+      "name": "Alex Rodriguez",
+      "email": "alex.rodriguez@example.com",
+      "profileImage": "https://randomuser.me/api/portraits/men/5.jpg",
+      "locationRef": {
+        "id": "office-001",
+        "name": "New York Office"
+      },
+      "rating": 1590,
+      "registeredWhen": "2023-02-20T11:30:00Z",
+      "gamesPlayed": 41,
+      "gamesWon": 19,
+      "winRate": 46.34
+    },
+    {
+      "id": "player-006",
+      "name": "Lisa Wilson",
+      "email": "lisa.wilson@example.com",
+      "profileImage": "https://randomuser.me/api/portraits/women/6.jpg",
+      "locationRef": {
+        "id": "office-001",
+        "name": "New York Office"
+      },
+      "rating": 1540,
+      "registeredWhen": "2023-03-12T13:45:00Z",
+      "gamesPlayed": 33,
+      "gamesWon": 14,
+      "winRate": 42.42
+    },
+    {
+      "id": "player-007",
+      "name": "David Brown",
+      "email": "david.brown@example.com",
+      "profileImage": "https://randomuser.me/api/portraits/men/7.jpg",
+      "locationRef": {
+        "id": "office-001",
+        "name": "New York Office"
+      },
+      "rating": 1520,
+      "registeredWhen": "2023-01-08T08:20:00Z",
+      "gamesPlayed": 47,
+      "gamesWon": 18,
+      "winRate": 38.30
+    },
+    {
+      "id": "player-008",
+      "name": "Jessica Martinez",
+      "email": "jessica.martinez@example.com",
+      "profileImage": "https://randomuser.me/api/portraits/women/8.jpg",
+      "locationRef": {
+        "id": "office-001",
+        "name": "New York Office"
+      },
+      "rating": 1480,
+      "registeredWhen": "2023-02-28T15:10:00Z",
+      "gamesPlayed": 25,
+      "gamesWon": 9,
+      "winRate": 36.00
+    },
+    {
+      "id": "player-009",
+      "name": "Ryan Taylor",
+      "email": "ryan.taylor@example.com",
+      "profileImage": "https://randomuser.me/api/portraits/men/9.jpg",
+      "locationRef": {
+        "id": "office-001",
+        "name": "New York Office"
+      },
+      "rating": 1450,
+      "registeredWhen": "2023-03-18T12:25:00Z",
+      "gamesPlayed": 36,
+      "gamesWon": 12,
+      "winRate": 33.33
+    },
+    {
+      "id": "player-010",
+      "name": "Amanda White",
+      "email": "amanda.white@example.com",
+      "profileImage": "https://randomuser.me/api/portraits/women/10.jpg",
+      "locationRef": {
+        "id": "office-001",
+        "name": "New York Office"
+      },
+      "rating": 1420,
+      "registeredWhen": "2023-01-22T17:40:00Z",
+      "gamesPlayed": 31,
+      "gamesWon": 10,
+      "winRate": 32.26
+    }
+  ],
+  "pageable": {
+    "pageNumber": 0,
+    "pageSize": 10,
+    "numberOfElements": 10,
+    "totalElements": 25,
+    "totalPages": 3,
+    "last": false
+  }
+}

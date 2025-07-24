@@ -1,41 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
 import { Navigate } from "react-router-dom";
-
-import { fetchPlayer } from "../api/player/get/queries";
-import { thirtyMinutes } from "../constants/time";
-import { useAuthStore, useUserStore } from "../store";
-import { decodeJWT, type IDecodedIdToken } from "../utils/decodeJWT";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function ProtectedRoute({ children }: { children: JSX.Element }): JSX.Element {
-  const { getAuth } = useAuthStore();
-  const auth = getAuth();
-  const { setUser } = useUserStore();
+  const { isAuthenticated, isLoading } = useAuth0();
 
-  const userFromIdToken = decodeJWT<IDecodedIdToken>(auth?.idToken);
-
-  const { isLoading, isError } = useQuery(
-    ["player", fetchPlayer, userFromIdToken?.name],
-    async () =>
-      await fetchPlayer({
-        name: userFromIdToken?.name as string,
-      }),
-    {
-      enabled: userFromIdToken?.name != null,
-      staleTime: thirtyMinutes,
-      onSuccess: (player) => {
-        const currentUser = player?.filter(
-          (player) => player.email === userFromIdToken?.email
-        )[0];
-        if (currentUser != null) {
-          setUser(currentUser);
-        } else {
-          setUser(undefined);
-        }
-      },
-    }
-  );
-
-  if ((!isLoading && isError) || auth?.accessToken === undefined) {
+  if (!isLoading && !isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
