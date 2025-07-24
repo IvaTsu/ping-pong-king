@@ -1,26 +1,16 @@
+import "./index.css";
+
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
-import { createRoot } from "react-dom/client";
-import "./style.css";
-import typescriptLogo from "/typescript.svg";
-import { Header, Counter } from "@repo/ui";
+import ReactDOM from "react-dom/client";
+import { RouterProvider } from "react-router-dom";
 
-const App = () => (
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" className="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img
-        src={typescriptLogo}
-        className="logo vanilla"
-        alt="TypeScript logo"
-      />
-    </a>
-    <Header title="Web" />
-    <div className="card">
-      <Counter />
-    </div>
-  </div>
+import router from "./router/router";
+
+const queryClient = new QueryClient();
+
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+  <QueryClientProvider client={queryClient}>
+    <RouterProvider router={router} />
+  </QueryClientProvider>
 );
-
-createRoot(document.getElementById("app")!).render(<App />);
