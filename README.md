@@ -1,20 +1,32 @@
-# ping-pong-king
+# `Turborepo` Vite starter
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/1f4f6ead-c9e3-4ae3-85cf-4c456b7e14ef/deploy-status)](https://app.netlify.com/sites/ping-pong-king/deploys)
+This is a community-maintained example. If you experience a problem, please submit a pull request with a fix. GitHub Issues will be closed.
 
-Ladder of the Ping-Pong Games
+## Using this example
 
-## ENV
+Run the following command:
 
-Check out [this documentation](https://vitejs.dev/guide/env-and-mode.html#env-files) to learn about how `.env` is structured. Prefer `.env.development.local` with `VITE_` prefix.
-
-## Auth0
-
-Project Name: `Ping Pong King (SPA)`
-
-Make sure to add the credentials to `.env.development.local` file.
-Use [.env.development.local.sample](.env.development.local.sample) as a reference:
-
+```sh
+npx create-turbo@latest -e with-vite-react
 ```
-cp .env.development.local.sample .env.development.local
-```
+
+## What's inside?
+
+This Turborepo includes the following packages and apps:
+
+### Apps and Packages
+
+- `web`: react [vite](https://vitejs.dev) ts app
+- `@repo/ui`: a stub component library shared by `web` application
+- `@repo/eslint-config`: shared `eslint` configurations
+- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+
+Each package and app is 100% [TypeScript](https://www.typescriptlang.org/).
+
+### Utilities
+
+This Turborepo has some additional tools already setup for you:
+
+- [TypeScript](https://www.typescriptlang.org/) for static type checking
+- [ESLint](https://eslint.org/) for code linting
+- [Prettier](https://prettier.io) for code formatting

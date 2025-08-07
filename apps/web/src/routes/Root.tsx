@@ -8,7 +8,6 @@ function Root(): JSX.Element {
     <ProtectedRoute>
       <>
         <NavigationBar />
-        <ChooseOfficeDropdown />
         <RatingTable />
       </>
     </ProtectedRoute>

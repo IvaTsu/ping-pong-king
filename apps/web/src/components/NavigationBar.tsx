@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { paths } from "../router/router";
 import { useAuthStore, useOpponentStore, useUserStore } from "../store";
 import { decodeJWT, type IDecodedIdToken } from "../utils/decodeJWT";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const NavigationBar = (): JSX.Element => {
   const location = useLocation();
@@ -12,10 +13,10 @@ const NavigationBar = (): JSX.Element => {
   const auth = getAuth();
   const userFromIdToken = decodeJWT<IDecodedIdToken>(auth?.idToken);
 
-  const { getUser, clear: clearUser } = useUserStore();
+  const { getUser } = useUserStore();
   const currentUser = getUser();
+  const { logout } = useAuth0();
 
-  const { clear: clearOpponent } = useOpponentStore();
 
   const _onRootClick = (): void => {
     navigate(paths.root);
@@ -30,10 +31,7 @@ const NavigationBar = (): JSX.Element => {
   };
 
   const _onSignOutClick = (): void => {
-    clearAuth();
-    clearUser();
-    clearOpponent();
-    navigate(paths.login);
+    logout({ logoutParams: { returnTo: window.location.origin } })
   };
 
   return (

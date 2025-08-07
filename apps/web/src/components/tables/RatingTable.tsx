@@ -10,7 +10,6 @@ import {
 } from "@tanstack/react-table";
 import { Link } from "react-router-dom";
 
-import { fetchPlayerList } from "../../api/player/get/queries";
 import { type IPlayer } from "../../api/player/get/types";
 import { AQUA, NAVY } from "../../constants/colors";
 import { tenMinutes } from "../../constants/time";
@@ -68,16 +67,12 @@ export const RatingTable = (): JSX.Element => {
   const currentUserRowBgColor = isDarkTheme ? AQUA : NAVY;
 
   const { data: playerList, isLoading } = useQuery(
-    ["playerList", fetchPlayerList, pagination, officeId],
-    async () =>
-      await fetchPlayerList({
-        page: pageIndex,
-        size: pageSize,
-        locationId: officeId,
-        minGamesPlayed: 1,
-      }),
+    ["playerList", "mockData", pagination],
+    async () => {
+      const response = await fetch('/mock-players.json');
+      return await response.json();
+    },
     {
-      enabled: officeId != null,
       keepPreviousData: true,
       retry: false,
       staleTime: tenMinutes,

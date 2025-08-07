@@ -1,49 +1,33 @@
 {
-  "name": "ping-pong-king",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "lint": "eslint --ignore-path .eslintignore --ext .js,.jsx,.ts,.tsx .",
-    "check-types": "tsc --noemit",
-    "prettier-format": "prettier --config .prettierrc 'src/**/*.tsx' --write",
+    "build": "turbo run build",
+    "clean": "rimraf {apps,packages}/**/{node_modules,dist,.next,.turbo} -g && rimraf node_modules",
+    "dev": "turbo run dev",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "lint": "turbo run lint",
     "prepare": "husky install"
   },
-  "dependencies": {
-    "@tanstack/react-query": "^4.24.10",
-    "@tanstack/react-table": "^8.7.9",
-    "axios": "^1.4.0",
-    "eslint-plugin-tailwindcss": "^3.11.0",
-    "jwt-decode": "^3.1.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.8.1",
-    "vite-plugin-svgr": "^2.4.0",
-    "zustand": "^4.3.3"
-  },
   "devDependencies": {
-    "@types/react": "^18.0.27",
-    "@types/react-dom": "^18.0.10",
-    "@typescript-eslint/eslint-plugin": "^5.0.0",
-    "@vitejs/plugin-react": "^3.1.0",
-    "autoprefixer": "^10.4.13",
-    "daisyui": "^2.51.1",
-    "eslint": "^8.34.0",
-    "eslint-config-prettier": "^8.6.0",
-    "eslint-config-standard-with-typescript": "^34.0.0",
-    "eslint-plugin-import": "^2.25.2",
-    "eslint-plugin-n": "^15.0.0",
-    "eslint-plugin-promise": "^6.0.0",
-    "eslint-plugin-react": "^7.32.2",
-    "eslint-plugin-simple-import-sort": "^10.0.0",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@commitlint/cz-commitlint": "^19.8.1",
+    "eslint": "^8.57.0",
     "husky": "^8.0.3",
-    "postcss": "^8.4.21",
-    "prettier": "^2.8.4",
-    "tailwindcss": "^3.2.7",
-    "typescript": "^4.9.5",
-    "vite": "^4.1.0"
-  }
+    "lint-staged": "^16.1.4",
+    "prettier": "^3.2.5",
+    "turbo": "^2.5.4"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "vitest related --run --bail",
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{md,json}": [
+      "prettier -w"
+    ]
+  },
+  "packageManager": "pnpm@8.15.6",
+  "name": "with-vite-react"
 }
