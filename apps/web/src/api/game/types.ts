@@ -2,13 +2,8 @@ export interface IGame {
   id: string;
   playerScoreA: IPlayerScore;
   playerScoreB: IPlayerScore;
-  locationRef: ILocationRef;
   winnerId: string;
   playedWhen: string;
-}
-export interface ILocationRef {
-  id: string;
-  name: string;
 }
 
 export interface IPlayerScore {
