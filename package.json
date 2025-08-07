@@ -2,14 +2,31 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
+    "clean": "rimraf {apps,packages}/**/{node_modules,dist,.next,.turbo} -g && rimraf node_modules",
     "dev": "turbo run dev",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "prepare": "husky install"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@commitlint/cz-commitlint": "^19.8.1",
     "eslint": "^8.57.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^16.1.4",
     "prettier": "^3.2.5",
     "turbo": "^2.5.4"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "vitest related --run --bail",
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{md,json}": [
+      "prettier -w"
+    ]
   },
   "packageManager": "pnpm@8.15.6",
   "name": "with-vite-react"
