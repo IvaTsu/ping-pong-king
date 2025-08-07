@@ -93,9 +93,9 @@ const NavigationBar = (): JSX.Element => {
                 Action required
               </span>
             )}
-            {userFromIdToken?.picture != null ? (
+            {currentUser?.profileImage != null ? (
               <div className="w-10 rounded-full">
-                <img src={userFromIdToken.picture} />
+                <img src={currentUser.profileImage} />
               </div>
             ) : (
               <div className="avatar placeholder">
