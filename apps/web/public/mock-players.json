@@ -5,10 +5,6 @@
       "name": "John Smith",
       "email": "john.smith@example.com",
       "profileImage": "https://randomuser.me/api/portraits/men/1.jpg",
-      "locationRef": {
-        "id": "office-001",
-        "name": "New York Office"
-      },
       "rating": 1850,
       "registeredWhen": "2023-01-15T10:30:00Z",
       "gamesPlayed": 45,
@@ -20,10 +16,6 @@
       "name": "Sarah Johnson",
       "email": "sarah.johnson@example.com",
       "profileImage": "https://randomuser.me/api/portraits/women/2.jpg",
-      "locationRef": {
-        "id": "office-001",
-        "name": "New York Office"
-      },
       "rating": 1720,
       "registeredWhen": "2023-02-10T14:20:00Z",
       "gamesPlayed": 38,
@@ -35,10 +27,6 @@
       "name": "Mike Chen",
       "email": "mike.chen@example.com",
       "profileImage": "https://randomuser.me/api/portraits/men/3.jpg",
-      "locationRef": {
-        "id": "office-001",
-        "name": "New York Office"
-      },
       "rating": 1680,
       "registeredWhen": "2023-01-28T09:45:00Z",
       "gamesPlayed": 52,
@@ -50,10 +38,6 @@
       "name": "Emily Davis",
       "email": "emily.davis@example.com",
       "profileImage": "https://randomuser.me/api/portraits/women/4.jpg",
-      "locationRef": {
-        "id": "office-001",
-        "name": "New York Office"
-      },
       "rating": 1650,
       "registeredWhen": "2023-03-05T16:15:00Z",
       "gamesPlayed": 29,
@@ -65,10 +49,6 @@
       "name": "Alex Rodriguez",
       "email": "alex.rodriguez@example.com",
       "profileImage": "https://randomuser.me/api/portraits/men/5.jpg",
-      "locationRef": {
-        "id": "office-001",
-        "name": "New York Office"
-      },
       "rating": 1590,
       "registeredWhen": "2023-02-20T11:30:00Z",
       "gamesPlayed": 41,
@@ -80,10 +60,6 @@
       "name": "Lisa Wilson",
       "email": "lisa.wilson@example.com",
       "profileImage": "https://randomuser.me/api/portraits/women/6.jpg",
-      "locationRef": {
-        "id": "office-001",
-        "name": "New York Office"
-      },
       "rating": 1540,
       "registeredWhen": "2023-03-12T13:45:00Z",
       "gamesPlayed": 33,
@@ -95,10 +71,6 @@
       "name": "David Brown",
       "email": "david.brown@example.com",
       "profileImage": "https://randomuser.me/api/portraits/men/7.jpg",
-      "locationRef": {
-        "id": "office-001",
-        "name": "New York Office"
-      },
       "rating": 1520,
       "registeredWhen": "2023-01-08T08:20:00Z",
       "gamesPlayed": 47,
@@ -110,10 +82,6 @@
       "name": "Jessica Martinez",
       "email": "jessica.martinez@example.com",
       "profileImage": "https://randomuser.me/api/portraits/women/8.jpg",
-      "locationRef": {
-        "id": "office-001",
-        "name": "New York Office"
-      },
       "rating": 1480,
       "registeredWhen": "2023-02-28T15:10:00Z",
       "gamesPlayed": 25,
@@ -125,10 +93,6 @@
       "name": "Ryan Taylor",
       "email": "ryan.taylor@example.com",
       "profileImage": "https://randomuser.me/api/portraits/men/9.jpg",
-      "locationRef": {
-        "id": "office-001",
-        "name": "New York Office"
-      },
       "rating": 1450,
       "registeredWhen": "2023-03-18T12:25:00Z",
       "gamesPlayed": 36,
@@ -140,10 +104,6 @@
       "name": "Amanda White",
       "email": "amanda.white@example.com",
       "profileImage": "https://randomuser.me/api/portraits/women/10.jpg",
-      "locationRef": {
-        "id": "office-001",
-        "name": "New York Office"
-      },
       "rating": 1420,
       "registeredWhen": "2023-01-22T17:40:00Z",
       "gamesPlayed": 31,

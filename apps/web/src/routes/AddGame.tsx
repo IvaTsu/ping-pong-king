@@ -92,7 +92,6 @@ export default function AddGame(): JSX.Element {
     async () =>
       await fetchPlayer({
         name: debouncedOpponentSearchValue,
-        locationId: currentUser?.locationRef.id,
       }),
     {
       staleTime: thirtyMinutes,
@@ -119,10 +118,6 @@ export default function AddGame(): JSX.Element {
               id: currentOpponent?.id,
             },
             score: opponentScore,
-          },
-          // TODO: this should be a separate selector
-          locationRef: {
-            id: currentUser?.locationRef.id,
           },
         },
       });

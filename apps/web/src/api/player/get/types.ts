@@ -17,10 +17,6 @@ export interface IPlayer {
   name: string;
   email: string;
   profileImage: string;
-  locationRef: {
-    id: string;
-    name: string;
-  };
   rating: number;
   registeredWhen: string;
   gamesPlayed: number;

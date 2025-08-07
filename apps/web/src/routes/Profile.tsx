@@ -81,9 +81,6 @@ function Profile(): JSX.Element {
                     name: userFromIdToken.name,
                     email: userFromIdToken.email,
                     profileImage: userFromIdToken.picture,
-                    locationRef: {
-                      id: locationId,
-                    },
                   });
                 }
               }}
