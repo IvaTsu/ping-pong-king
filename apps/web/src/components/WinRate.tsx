@@ -1,6 +1,10 @@
 import { useMemo } from "react";
 
-export const WinRate = ({ value }: { value: number }): JSX.Element => {
+export const WinRate = ({ value }: { value?: number }): JSX.Element => {
+  if (!value) {
+    return <span className="bg-cloudBirst font-ubuntuBold p-2 dark:bg-none rounded">N/A</span>;
+  }
+
   const winRateColorGradation = useMemo(() => {
     if (value <= 0.3) {
       return "text-red";
