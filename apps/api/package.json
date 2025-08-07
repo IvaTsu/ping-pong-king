@@ -1,0 +1,26 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --platform=node --outfile=dist/index.js --external:express --external:cors",
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "type-check": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "esbuild": "^0.25.8",
+    "tsx": "^4.20.3",
+    "typescript": "^5.9.2"
+  }
+}
