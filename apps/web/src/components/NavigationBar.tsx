@@ -1,8 +1,8 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { paths } from "../router/router";
 import { useUserStore } from "../store";
-import { useAuth0 } from "@auth0/auth0-react";
 
 const NavigationBar = (): JSX.Element => {
   const location = useLocation();
@@ -29,17 +29,19 @@ const NavigationBar = (): JSX.Element => {
   };
 
   const _onSignOutClick = (): void => {
-    logout({ logoutParams: { returnTo: window.location.origin } });
+    logout({ logoutParams: { returnTo: window.location.origin } }).catch(() => {
+      // Handle logout error if needed
+    });
   };
 
   return (
-    <div className="navbar pb-15 bg-aqua dark:bg-cloud">
+    <div className="pb-15 navbar bg-aqua dark:bg-cloud">
       <div className="navbar-start">
         <div className="dropdown">
-          <label tabIndex={0} className="btn btn-ghost btn-circle">
+          <label tabIndex={0} className="btn btn-circle btn-ghost">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
+              className="size-5"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -54,7 +56,9 @@ const NavigationBar = (): JSX.Element => {
           </label>
           <ul
             tabIndex={0}
-            className={`menu menu-compact dropdown-content bg-aqua dark:bg-cloudBirst rounded-box mt-3 w-52 p-2 shadow`}
+            className={
+              "dropdown-content menu rounded-box menu-compact mt-3 w-52 bg-aqua p-2 shadow dark:bg-cloudBirst"
+            }
           >
             {location.pathname !== paths.root && (
               <li>
@@ -87,12 +91,12 @@ const NavigationBar = (): JSX.Element => {
         <div className="dropdown dropdown-end">
           <label
             tabIndex={0}
-            className={`btn btn-ghost btn-circle avatar ${
+            className={`avatar btn btn-circle btn-ghost ${
               currentUser?.registeredWhen == null ? "indicator" : ""
             }`}
           >
             {currentUser?.registeredWhen == null && (
-              <span className="indicator-item badge badge-secondary">
+              <span className="badge indicator-item badge-secondary">
                 Action required
               </span>
             )}
@@ -102,7 +106,7 @@ const NavigationBar = (): JSX.Element => {
               </div>
             ) : (
               <div className="avatar placeholder">
-                <div className="bg-neutral-focus text-neutral-content w-10 rounded-full">
+                <div className="w-10 rounded-full bg-neutral-focus text-neutral-content">
                   <span className="text-xl">
                     {auth0User?.given_name?.charAt(0)}
                     {auth0User?.family_name?.charAt(0)}
@@ -113,7 +117,9 @@ const NavigationBar = (): JSX.Element => {
           </label>
           <ul
             tabIndex={0}
-            className={`menu menu-compact dropdown-content bg-aqua dark:bg-cloudBirst rounded-box mt-3 w-52 p-2 shadow`}
+            className={
+              "dropdown-content menu rounded-box menu-compact mt-3 w-52 bg-aqua p-2 shadow dark:bg-cloudBirst"
+            }
           >
             {location.pathname !== paths.profile && (
               <li>

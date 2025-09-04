@@ -1,12 +1,12 @@
-import React, { createContext, useContext } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
+import React, { createContext, useContext } from "react";
 
 interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
-  user: any;
+  user: unknown;
   getAccessTokenSilently: () => Promise<string>;
-  loginWithRedirect: () => void;
+  loginWithRedirect: () => Promise<void>;
   logout: () => void;
 }
 
@@ -24,11 +24,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     logout: auth0Logout,
   } = useAuth0();
 
-  const logout = () => {
+  const logout = (): void => {
     auth0Logout({
       logoutParams: {
         returnTo: window.location.origin,
       },
+    }).catch(() => {
+      // Handle logout error if needed
     });
   };
 
@@ -46,7 +48,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-export const useAppAuth = () => {
+export const useAppAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (context === undefined) {
     throw new Error("useAppAuth must be used within an AuthProvider");

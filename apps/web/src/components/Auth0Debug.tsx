@@ -1,5 +1,5 @@
-import { useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useState } from "react";
 
 const Auth0Debug: React.FC = () => {
   const { isLoading, isAuthenticated, error, user } = useAuth0();
@@ -19,7 +19,7 @@ const Auth0Debug: React.FC = () => {
     return null;
   }
 
-  const toggleExpanded = () => {
+  const toggleExpanded = (): void => {
     setIsExpanded(!isExpanded);
   };
 
@@ -143,7 +143,7 @@ const Auth0Debug: React.FC = () => {
                   {isAuthenticated.toString()}
                 </span>
               </div>
-              {error && (
+              {error != null && (
                 <div
                   style={{
                     color: "#EF4444",
@@ -157,7 +157,7 @@ const Auth0Debug: React.FC = () => {
                   <strong>Error:</strong> {error.message}
                 </div>
               )}
-              {user && (
+              {user != null && (
                 <div
                   style={{
                     marginTop: "8px",
@@ -167,7 +167,8 @@ const Auth0Debug: React.FC = () => {
                     border: "1px solid rgba(16, 185, 129, 0.3)",
                   }}
                 >
-                  <strong>User:</strong> {user.email || user.name || user.sub}
+                  <strong>User:</strong>{" "}
+                  {user.email ?? user.name ?? user.sub ?? "Unknown"}
                 </div>
               )}
             </div>

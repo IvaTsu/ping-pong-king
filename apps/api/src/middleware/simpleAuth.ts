@@ -47,7 +47,7 @@ export interface SimpleAuthRequest extends Request {
 export const simpleAuthenticateToken = (
   req: SimpleAuthRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const authHeader = req.headers["authorization"];

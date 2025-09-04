@@ -1,4 +1,5 @@
 import axios from "axios";
+
 import { baseURL } from "./urls";
 
 const axiosInstance = axios.create({
@@ -10,7 +11,9 @@ const axiosInstance = axios.create({
 
 let getAccessTokenSilently: (() => Promise<string>) | null = null;
 
-export const setAuth0TokenGetter = (tokenGetter: () => Promise<string>) => {
+export const setAuth0TokenGetter = (
+  tokenGetter: () => Promise<string>,
+): void => {
   getAccessTokenSilently = tokenGetter;
 };
 
@@ -19,17 +22,17 @@ axiosInstance.interceptors.request.use(
   async (config) => {
     console.log("Axios request interceptor:", {
       url: config.url,
-      hasTokenGetter: !!getAccessTokenSilently,
+      hasTokenGetter: !(getAccessTokenSilently == null),
     });
 
-    if (getAccessTokenSilently) {
+    if (getAccessTokenSilently != null) {
       try {
         const token = await getAccessTokenSilently();
         console.log(
           "Token retrieved for request:",
-          token ? token.substring(0, 50) + "..." : "null"
+          typeof token === "string" ? token.substring(0, 50) + "..." : "null",
         );
-        if (token) {
+        if (token != null) {
           config.headers.Authorization = `Bearer ${token}`;
           console.log("Authorization header set");
         }
@@ -40,15 +43,15 @@ axiosInstance.interceptors.request.use(
       }
     } else {
       console.log(
-        "No token getter available - request will continue without auth header"
+        "No token getter available - request will continue without auth header",
       );
     }
     return config;
   },
-  (error) => {
+  async (error) => {
     console.error("Request interceptor error:", error);
-    return Promise.reject(error);
-  }
+    return await Promise.reject(error);
+  },
 );
 
 // Response interceptor to handle auth errors
@@ -63,8 +66,8 @@ axiosInstance.interceptors.response.use(
       // You might want to trigger a re-login here if needed
       console.error("Authentication failed:", error.response.data);
     }
-    return Promise.reject(error);
-  }
+    return await Promise.reject(error);
+  },
 );
 
 interface IGetRequestParams<P> {

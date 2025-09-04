@@ -24,7 +24,7 @@ export const useTablePagination = (): IUseTablePagination => {
       pageIndex,
       pageSize,
     }),
-    [pageIndex, pageSize]
+    [pageIndex, pageSize],
   );
 
   return {

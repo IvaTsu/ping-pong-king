@@ -15,7 +15,7 @@ export const SearchOpponentByName = ({
           <input
             type="text"
             placeholder="Search…"
-            className="input input-bordered dark:focus:border-aqua focus:border-navy focus:outline-none"
+            className="input input-bordered focus:border-navy focus:outline-none dark:focus:border-aqua"
             value={value}
             onChange={(e) => {
               onChange(e.target.value);

@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 
-import AddGame from "../routes/AddGame";
 import ApiTest from "../components/ApiTest";
+import AddGame from "../routes/AddGame";
 import Login from "../routes/Login";
 import NotFound from "../routes/NotFound";
 import PlayerHistory from "../routes/PlayerHistory";

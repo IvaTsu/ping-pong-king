@@ -47,7 +47,7 @@ export interface AuthenticatedRequest extends Request {
 export const authenticateToken = (
   req: AuthenticatedRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const authHeader = req.headers["authorization"];
@@ -114,7 +114,7 @@ export const authenticateToken = (
 
         req.user = decoded;
         next();
-      }
+      },
     );
   } catch (error: any) {
     console.error("Authentication middleware error:", error);

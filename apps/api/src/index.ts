@@ -65,7 +65,7 @@ app.get(
         scope: req.user?.scope,
       },
     });
-  }
+  },
 );
 
 // Debug endpoint to check token without verification
@@ -109,7 +109,7 @@ app.post(
   "/api/games",
   authenticateToken,
   requireScope("create:games"),
-  createGame
+  createGame,
 );
 
 // Player routes

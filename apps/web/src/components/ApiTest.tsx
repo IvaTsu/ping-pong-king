@@ -1,123 +1,159 @@
 import React, { useState } from "react";
+
 import { getRequest, postRequest } from "../api/request";
 
-interface ApiTestProps {}
+interface TestResult {
+  test: string;
+  success: boolean;
+  data: unknown;
+  timestamp: string;
+}
 
-const ApiTest: React.FC<ApiTestProps> = () => {
-  const [testResults, setTestResults] = useState<any[]>([]);
+const ApiTest: React.FC = () => {
+  const [testResults, setTestResults] = useState<TestResult[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const addResult = (test: string, success: boolean, data: any) => {
+  const addResult = (test: string, success: boolean, data: unknown): void => {
     setTestResults((prev) => [
       ...prev,
       { test, success, data, timestamp: new Date().toISOString() },
     ]);
   };
 
-  const testEndpoint = async (name: string, testFn: () => Promise<any>) => {
+  const testEndpoint = async (
+    name: string,
+    testFn: () => Promise<unknown>
+  ): Promise<void> => {
     setLoading(true);
     try {
       const result = await testFn();
       addResult(name, true, result);
-    } catch (error: any) {
+    } catch (error) {
       addResult(name, false, {
-        error: error.message,
-        status: error.response?.status,
+        error: (error as Error).message,
+        status: (error as { response?: { status?: number } }).response?.status,
       });
     }
     setLoading(false);
   };
 
-  const testProfileEndpoint = () => {
-    testEndpoint("GET /api/profile", () => getRequest({ url: "/api/profile" }));
+  const testProfileEndpoint = (): void => {
+    testEndpoint(
+      "GET /api/profile",
+      async () => await getRequest({ url: "/api/profile" })
+    ).catch(() => {
+      // Ignore errors here, they are expected if not authenticated
+    });
   };
 
-  const testGamesEndpoint = () => {
-    testEndpoint("GET /api/games", () => getRequest({ url: "/api/games" }));
+  const testGamesEndpoint = (): void => {
+    testEndpoint(
+      "GET /api/games",
+      async () => await getRequest({ url: "/api/games" })
+    ).catch(() => {
+      // Ignore errors here, they are expected if not authenticated
+    });
   };
 
-  const testCreateGame = () => {
-    testEndpoint("POST /api/games", () =>
-      postRequest({
-        url: "/api/games",
-        body: {
-          player1: "Test Player 1",
-          player2: "Test Player 2",
-          score1: 21,
-          score2: 18,
-        },
-      })
-    );
+  const testCreateGame = (): void => {
+    testEndpoint(
+      "POST /api/games",
+      async () =>
+        await postRequest({
+          url: "/api/games",
+          body: {
+            player1: "Test Player 1",
+            player2: "Test Player 2",
+            score1: 21,
+            score2: 18,
+          },
+        })
+    ).catch(() => {
+      // Ignore errors here, they are expected if not authenticated
+    });
   };
 
-  const testPlayersEndpoint = () => {
-    testEndpoint("GET /api/players", () => getRequest({ url: "/api/players" }));
+  const testPlayersEndpoint = (): void => {
+    testEndpoint(
+      "GET /api/players",
+      async () => await getRequest({ url: "/api/players" })
+    ).catch(() => {
+      // Ignore errors here, they are expected if not authenticated
+    });
   };
 
-  const testDebugToken = () => {
-    testEndpoint("GET /debug/token", () => getRequest({ url: "/debug/token" }));
+  const testDebugToken = (): void => {
+    testEndpoint(
+      "GET /debug/token",
+      async () => await getRequest({ url: "/debug/token" })
+    ).catch(() => {
+      // Ignore errors here, they are expected if not authenticated
+    });
   };
 
-  const testSimpleAuth = () => {
-    testEndpoint("GET /test/simple-auth", () =>
-      getRequest({ url: "/test/simple-auth" })
-    );
+  const testSimpleAuth = (): void => {
+    testEndpoint(
+      "GET /test/simple-auth",
+      async () => await getRequest({ url: "/test/simple-auth" })
+    ).catch(() => {
+      // Ignore errors here, they are expected if not authenticated
+    });
   };
 
-  const clearResults = () => {
+  const clearResults = (): void => {
     setTestResults([]);
   };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <h2 className="text-2xl font-bold mb-4">API Authentication Test</h2>
+    <div className="mx-auto max-w-4xl p-6">
+      <h2 className="mb-4 text-2xl font-bold">API Authentication Test</h2>
 
       <div className="mb-6 space-x-2">
         <button
           onClick={testDebugToken}
           disabled={loading}
-          className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 disabled:opacity-50"
+          className="bg-gray-500 hover:bg-gray-600 rounded px-4 py-2 text-white disabled:opacity-50"
         >
           Debug Token
         </button>
         <button
           onClick={testSimpleAuth}
           disabled={loading}
-          className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 disabled:opacity-50"
+          className="bg-yellow-500 hover:bg-yellow-600 rounded px-4 py-2 text-white disabled:opacity-50"
         >
           Simple Auth Test
         </button>
         <button
           onClick={testProfileEndpoint}
           disabled={loading}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:opacity-50"
+          className="bg-blue-500 hover:bg-blue-600 rounded px-4 py-2 text-white disabled:opacity-50"
         >
           Test Profile
         </button>
         <button
           onClick={testGamesEndpoint}
           disabled={loading}
-          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 disabled:opacity-50"
+          className="bg-green-500 hover:bg-green-600 rounded px-4 py-2 text-white disabled:opacity-50"
         >
           Test Get Games
         </button>
         <button
           onClick={testCreateGame}
           disabled={loading}
-          className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 disabled:opacity-50"
+          className="bg-purple-500 hover:bg-purple-600 rounded px-4 py-2 text-white disabled:opacity-50"
         >
           Test Create Game
         </button>
         <button
           onClick={testPlayersEndpoint}
           disabled={loading}
-          className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 disabled:opacity-50"
+          className="bg-orange-500 hover:bg-orange-600 rounded px-4 py-2 text-white disabled:opacity-50"
         >
           Test Players
         </button>
         <button
           onClick={clearResults}
-          className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+          className="bg-gray-500 hover:bg-gray-600 rounded px-4 py-2 text-white"
         >
           Clear Results
         </button>
@@ -129,13 +165,13 @@ const ApiTest: React.FC<ApiTestProps> = () => {
         {testResults.map((result, index) => (
           <div
             key={index}
-            className={`p-4 rounded border ${
+            className={`rounded border p-4 ${
               result.success
                 ? "bg-green-50 border-green-200"
                 : "bg-red-50 border-red-200"
             }`}
           >
-            <div className="flex items-center justify-between mb-2">
+            <div className="mb-2 flex items-center justify-between">
               <span className="font-semibold">{result.test}</span>
               <span
                 className={`text-sm ${
@@ -145,10 +181,10 @@ const ApiTest: React.FC<ApiTestProps> = () => {
                 {result.success ? "✅ Success" : "❌ Failed"}
               </span>
             </div>
-            <pre className="text-xs bg-gray-100 p-2 rounded overflow-auto max-h-40">
+            <pre className="bg-gray-100 max-h-40 overflow-auto rounded p-2 text-xs">
               {JSON.stringify(result.data, null, 2)}
             </pre>
-            <div className="text-xs text-gray-500 mt-1">
+            <div className="text-gray-500 mt-1 text-xs">
               {new Date(result.timestamp).toLocaleTimeString()}
             </div>
           </div>
@@ -156,7 +192,7 @@ const ApiTest: React.FC<ApiTestProps> = () => {
       </div>
 
       {testResults.length === 0 && (
-        <div className="text-gray-500 text-center py-8">
+        <div className="text-gray-500 py-8 text-center">
           Click the buttons above to test API endpoints with authentication
         </div>
       )}

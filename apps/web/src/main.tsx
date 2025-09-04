@@ -1,14 +1,14 @@
 import "./index.css";
 
+import { Auth0Provider } from "@auth0/auth0-react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
-import { Auth0Provider } from "@auth0/auth0-react";
 
-import router from "./router/router";
-import { AuthProvider } from "./contexts/AuthContext";
 import Auth0Debug from "./components/Auth0Debug";
 import { AxiosAuthSetup } from "./components/AxiosAuthSetup";
+import { AuthProvider } from "./contexts/AuthContext";
+import router from "./router/router";
 
 const queryClient = new QueryClient();
 
@@ -32,5 +32,5 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         </QueryClientProvider>
       </AxiosAuthSetup>
     </AuthProvider>
-  </Auth0Provider>
+  </Auth0Provider>,
 );

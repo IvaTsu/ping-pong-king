@@ -30,7 +30,7 @@ export default function AddGame(): JSX.Element {
   const [opponentScore, setOpponentScore] = useState<number | "">("");
   const debouncedOpponentSearchValue = useDebounce<string>(
     opponentSearchedValue,
-    500
+    500,
   );
 
   const { getUser } = useUserStore();
@@ -95,7 +95,7 @@ export default function AddGame(): JSX.Element {
       }),
     {
       staleTime: thirtyMinutes,
-    }
+    },
   );
 
   const _onCreateGameClick = (): void => {
@@ -160,7 +160,7 @@ export default function AddGame(): JSX.Element {
                       />
 
                       {showErrors && (
-                        <div className="text-rose label-text max-w-[280px] break-words pt-5">
+                        <div className="label-text max-w-[280px] break-words pt-5 text-rose">
                           Wrong input value! Either one of the inputs is empty,
                           or both players have the same score.
                         </div>
@@ -168,7 +168,7 @@ export default function AddGame(): JSX.Element {
                     </div>
                     <div className="flex flex-col p-10">
                       <button
-                        className="btn btn-success hover:bg-aqua mt-4 transition-all duration-200"
+                        className="btn btn-success mt-4 transition-all duration-200 hover:bg-aqua"
                         onClick={_onCreateGameClick}
                         disabled={inputsAreInvalid}
                       >
@@ -179,7 +179,7 @@ export default function AddGame(): JSX.Element {
                       </button>
 
                       <button
-                        className="btn btn-success hover:bg-aqua mt-4 transition-all duration-200"
+                        className="btn btn-success mt-4 transition-all duration-200 hover:bg-aqua"
                         onClick={_toOpponents}
                       >
                         <div className="flex w-full items-center justify-start">
@@ -189,7 +189,7 @@ export default function AddGame(): JSX.Element {
                       </button>
 
                       <button
-                        className="btn btn-success hover:bg-aqua mt-4 transition-all duration-200"
+                        className="btn btn-success mt-4 transition-all duration-200 hover:bg-aqua"
                         onClick={_getBack}
                       >
                         <div className="flex w-full items-center justify-start">

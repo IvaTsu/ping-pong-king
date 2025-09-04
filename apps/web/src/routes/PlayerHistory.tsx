@@ -15,8 +15,8 @@ const PlayerHistory = (): JSX.Element => {
       <h2 className="mt-10 text-2xl font-bold">
         Games History of {playerName}
       </h2>
-      <div className="border-lightGrey mt-10 flex w-full flex-col items-center">
-        <div className="card card-side bg-base-100 flex w-full items-center p-3 shadow-xl sm:w-96 sm:p-5">
+      <div className="mt-10 flex w-full flex-col items-center border-lightGrey">
+        <div className="card card-side flex w-full items-center bg-base-100 p-3 shadow-xl sm:w-96 sm:p-5">
           <WinRate value={winRate} />
           <div className="pl-5 text-start">
             <p>Rating: {rating}</p>

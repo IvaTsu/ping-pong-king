@@ -11,15 +11,15 @@ import {
 } from "@tanstack/react-table";
 import { Link } from "react-router-dom";
 
-import { AQUA, NAVY } from "../../constants/colors";
+import { type IPlayer } from "../../api/player/get/types";
 import { getRequest } from "../../api/request";
+import { AQUA, NAVY } from "../../constants/colors";
+import { tenMinutes } from "../../constants/time";
+import { useDetectDarkTheme } from "../../hooks/useDetectColorMode";
+import { useTablePagination } from "../../hooks/useTablePagination";
+import { useUserStore } from "../../store";
 import { hyphenate } from "../../utils/string";
 import { LoadingSpinner } from "../LoadingSpinner";
-import { tenMinutes } from "../../constants/time";
-import { type IPlayer } from "../../api/player/get/types";
-import { useDetectDarkTheme } from "../../hooks/useDetectColorMode";
-import { useUserStore } from "../../store";
-import { useTablePagination } from "../../hooks/useTablePagination";
 import { WinRate } from "../WinRate";
 
 interface ICustomTableMeta<TData extends RowData> {
@@ -51,14 +51,8 @@ export const userColumnDefs = [
 ];
 
 export const RatingTable = (): JSX.Element => {
-  const {
-    sorting,
-    setSorting,
-    pagination,
-    setPagination,
-    pageIndex,
-    pageSize,
-  } = useTablePagination();
+  const { sorting, setSorting, pagination, setPagination } =
+    useTablePagination();
 
   const { getUser } = useUserStore();
   const currentUser = getUser();
@@ -129,7 +123,7 @@ export const RatingTable = (): JSX.Element => {
                   {header.isPlaceholder ? null : (
                     <div
                       onClick={header.column.getToggleSortingHandler()}
-                      className="font-ubuntuBold flex cursor-pointer gap-4"
+                      className="flex cursor-pointer gap-4 font-ubuntuBold"
                     >
                       {flexRender(
                         header.column.columnDef.header,
@@ -163,7 +157,7 @@ export const RatingTable = (): JSX.Element => {
                         👑
                       </div>
                     )}
-                  {`   `}
+                  {"   "}
                   {index === 0 ? (
                     <Link
                       to={`/player-history/${hyphenate(row.original.name)}`}
@@ -189,7 +183,7 @@ export const RatingTable = (): JSX.Element => {
                       )}
                     </>
                   )}
-                  {`   `}
+                  {"   "}
                   {/* @ts-expect-error TODO fix this properly once DB is not mocked */}
                   {playerList?.content[0].id === row.original.id &&
                     index === 0 &&
@@ -264,7 +258,7 @@ export const RatingTable = (): JSX.Element => {
                     e.target.value != null ? Number(e.target.value) - 1 : 0;
                   table.setPageIndex(page);
                 }}
-                className="input input-bordered input-sm dark:focus:border-aqua focus:border-navy mx-2 w-20 focus:outline-none"
+                className="input input-bordered input-sm mx-2 w-20 focus:border-navy focus:outline-none dark:focus:border-aqua"
               />
             </span>
             <select
@@ -272,7 +266,7 @@ export const RatingTable = (): JSX.Element => {
               onChange={(e) => {
                 table.setPageSize(Number(e.target.value));
               }}
-              className="select select-sm select-bordered dark:focus:border-aqua focus:border-navy focus:outline-none"
+              className="select select-bordered select-sm focus:border-navy focus:outline-none dark:focus:border-aqua"
             >
               {[10, 20, 30, 40, 50].map((pageSize) => (
                 <option key={pageSize} value={pageSize}>
