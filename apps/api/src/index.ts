@@ -4,7 +4,6 @@ import dotenv from "dotenv";
 import {
   authenticateToken,
   requireScope,
-  type AuthenticatedRequest,
 } from "./middleware/auth";
 import {
   simpleAuthenticateToken,
@@ -17,6 +16,7 @@ import {
   createGame,
   getPlayers,
 } from "./controllers/apiController";
+import jwt from "jsonwebtoken";
 
 // Load environment variables
 dotenv.config();
@@ -82,22 +82,14 @@ app.post("/debug/token", (req, res) => {
   }
 
   // Decode token without verification to see its contents
-  try {
-    const decoded = require("jsonwebtoken").decode(token, { complete: true });
-    res.json({
-      message: "Token debug info",
-      tokenPreview: token.substring(0, 50) + "...",
-      decoded: decoded,
-      expectedAudience: process.env.AUTH0_AUDIENCE,
-      expectedIssuer: `https://${process.env.AUTH0_DOMAIN}/`,
-    });
-  } catch (error: any) {
-    res.json({
-      error: "Failed to decode token",
-      message: error.message,
-      tokenPreview: token.substring(0, 50) + "...",
-    });
-  }
+  const decoded = jwt.decode(token, { complete: true });
+  res.json({
+    message: "Token debug info",
+    tokenPreview: token.substring(0, 50) + "...",
+    decoded: decoded,
+    expectedAudience: process.env.AUTH0_AUDIENCE,
+    expectedIssuer: `https://${process.env.AUTH0_DOMAIN}/`,
+  });
 });
 
 // Protected routes
