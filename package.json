@@ -5,8 +5,7 @@
     "clean": "rimraf {apps,packages}/**/{node_modules,dist,.next,.turbo} -g && rimraf node_modules",
     "dev": "turbo run dev",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "lint": "turbo run lint",
-    "prepare": "husky install"
+    "lint": "turbo run lint"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
