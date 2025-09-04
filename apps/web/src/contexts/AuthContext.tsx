@@ -1,10 +1,10 @@
-import { useAuth0 } from "@auth0/auth0-react";
+import { useAuth0, type User } from "@auth0/auth0-react";
 import React, { createContext, useContext } from "react";
 
 interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
-  user: unknown;
+  user: User | undefined;
   getAccessTokenSilently: () => Promise<string>;
   loginWithRedirect: () => Promise<void>;
   logout: () => void;
