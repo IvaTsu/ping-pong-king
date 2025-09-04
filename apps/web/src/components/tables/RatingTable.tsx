@@ -72,7 +72,7 @@ export const RatingTable = (): JSX.Element => {
       keepPreviousData: true,
       retry: false,
       staleTime: tenMinutes,
-    }
+    },
   );
 
   console.log({ playerList });
@@ -127,7 +127,7 @@ export const RatingTable = (): JSX.Element => {
                     >
                       {flexRender(
                         header.column.columnDef.header,
-                        header.getContext()
+                        header.getContext(),
                       )}
                       {direction !== false && <span>{sortIndicator}</span>}
                     </div>
@@ -172,14 +172,14 @@ export const RatingTable = (): JSX.Element => {
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </Link>
                   ) : (
                     <>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </>
                   )}

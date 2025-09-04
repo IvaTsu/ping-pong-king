@@ -22,7 +22,7 @@ const ApiTest: React.FC = () => {
 
   const testEndpoint = async (
     name: string,
-    testFn: () => Promise<unknown>
+    testFn: () => Promise<unknown>,
   ): Promise<void> => {
     setLoading(true);
     try {
@@ -40,7 +40,7 @@ const ApiTest: React.FC = () => {
   const testProfileEndpoint = (): void => {
     testEndpoint(
       "GET /api/profile",
-      async () => await getRequest({ url: "/api/profile" })
+      async () => await getRequest({ url: "/api/profile" }),
     ).catch(() => {
       // Ignore errors here, they are expected if not authenticated
     });
@@ -49,7 +49,7 @@ const ApiTest: React.FC = () => {
   const testGamesEndpoint = (): void => {
     testEndpoint(
       "GET /api/games",
-      async () => await getRequest({ url: "/api/games" })
+      async () => await getRequest({ url: "/api/games" }),
     ).catch(() => {
       // Ignore errors here, they are expected if not authenticated
     });
@@ -67,7 +67,7 @@ const ApiTest: React.FC = () => {
             score1: 21,
             score2: 18,
           },
-        })
+        }),
     ).catch(() => {
       // Ignore errors here, they are expected if not authenticated
     });
@@ -76,7 +76,7 @@ const ApiTest: React.FC = () => {
   const testPlayersEndpoint = (): void => {
     testEndpoint(
       "GET /api/players",
-      async () => await getRequest({ url: "/api/players" })
+      async () => await getRequest({ url: "/api/players" }),
     ).catch(() => {
       // Ignore errors here, they are expected if not authenticated
     });
@@ -85,7 +85,7 @@ const ApiTest: React.FC = () => {
   const testDebugToken = (): void => {
     testEndpoint(
       "GET /debug/token",
-      async () => await getRequest({ url: "/debug/token" })
+      async () => await getRequest({ url: "/debug/token" }),
     ).catch(() => {
       // Ignore errors here, they are expected if not authenticated
     });
@@ -94,7 +94,7 @@ const ApiTest: React.FC = () => {
   const testSimpleAuth = (): void => {
     testEndpoint(
       "GET /test/simple-auth",
-      async () => await getRequest({ url: "/test/simple-auth" })
+      async () => await getRequest({ url: "/test/simple-auth" }),
     ).catch(() => {
       // Ignore errors here, they are expected if not authenticated
     });
