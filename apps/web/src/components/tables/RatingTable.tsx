@@ -1,3 +1,4 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import { useQuery } from "@tanstack/react-query";
 import {
   createColumnHelper,
@@ -10,14 +11,15 @@ import {
 } from "@tanstack/react-table";
 import { Link } from "react-router-dom";
 
-import { type IPlayer } from "../../api/player/get/types";
 import { AQUA, NAVY } from "../../constants/colors";
-import { tenMinutes } from "../../constants/time";
-import { useDetectDarkTheme } from "../../hooks/useDetectColorMode";
-import { useTablePagination } from "../../hooks/useTablePagination";
-import { useOfficeStore, useUserStore } from "../../store";
+import { getRequest } from "../../api/request";
 import { hyphenate } from "../../utils/string";
 import { LoadingSpinner } from "../LoadingSpinner";
+import { tenMinutes } from "../../constants/time";
+import { type IPlayer } from "../../api/player/get/types";
+import { useDetectDarkTheme } from "../../hooks/useDetectColorMode";
+import { useUserStore } from "../../store";
+import { useTablePagination } from "../../hooks/useTablePagination";
 import { WinRate } from "../WinRate";
 
 interface ICustomTableMeta<TData extends RowData> {
@@ -60,8 +62,7 @@ export const RatingTable = (): JSX.Element => {
 
   const { getUser } = useUserStore();
   const currentUser = getUser();
-  const { getOfficeId } = useOfficeStore();
-  const officeId = getOfficeId();
+  const { isAuthenticated, isLoading: authLoading } = useAuth0();
 
   const isDarkTheme = useDetectDarkTheme();
   const currentUserRowBgColor = isDarkTheme ? AQUA : NAVY;
@@ -69,19 +70,24 @@ export const RatingTable = (): JSX.Element => {
   const { data: playerList, isLoading } = useQuery(
     ["playerList", "mockData", pagination],
     async () => {
-      const response = await fetch('/mock-players.json');
-      return await response.json();
+      const response = await getRequest({ url: "/api/players" });
+      return response;
     },
     {
+      enabled: isAuthenticated && !authLoading, // Only run when authenticated
       keepPreviousData: true,
       retry: false,
       staleTime: tenMinutes,
     }
   );
 
+  console.log({ playerList });
+
   const table = useReactTable({
     columns: userColumnDefs,
+    // @ts-expect-error TODO fix this properly once DB is not mocked
     data: playerList?.content ?? [],
+    // @ts-expect-error TODO fix this properly once DB is not mocked
     pageCount: playerList?.pageable.totalPages,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -149,6 +155,7 @@ export const RatingTable = (): JSX.Element => {
             >
               {row.getVisibleCells().map((cell, index) => (
                 <td key={cell.id}>
+                  {/* @ts-expect-error TODO fix this properly once DB is not mocked */}
                   {playerList?.content[0].id === row.original.id &&
                     index === 0 &&
                     currentPage === 0 && (
@@ -183,6 +190,7 @@ export const RatingTable = (): JSX.Element => {
                     </>
                   )}
                   {`   `}
+                  {/* @ts-expect-error TODO fix this properly once DB is not mocked */}
                   {playerList?.content[0].id === row.original.id &&
                     index === 0 &&
                     currentPage === 0 && (

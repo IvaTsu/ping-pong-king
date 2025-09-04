@@ -1,22 +1,16 @@
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { paths } from "../router/router";
-import { useAuthStore, useOpponentStore, useUserStore } from "../store";
-import { decodeJWT, type IDecodedIdToken } from "../utils/decodeJWT";
+import { useUserStore } from "../store";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const NavigationBar = (): JSX.Element => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { getAuth, clear: clearAuth } = useAuthStore();
-  const auth = getAuth();
-  const userFromIdToken = decodeJWT<IDecodedIdToken>(auth?.idToken);
-
   const { getUser } = useUserStore();
   const currentUser = getUser();
-  const { logout } = useAuth0();
-
+  const { logout, user: auth0User } = useAuth0();
 
   const _onRootClick = (): void => {
     navigate(paths.root);
@@ -30,8 +24,12 @@ const NavigationBar = (): JSX.Element => {
     navigate(paths.addGame);
   };
 
+  const _onApiTestClick = (): void => {
+    navigate(paths.apiTest);
+  };
+
   const _onSignOutClick = (): void => {
-    logout({ logoutParams: { returnTo: window.location.origin } })
+    logout({ logoutParams: { returnTo: window.location.origin } });
   };
 
   return (
@@ -68,6 +66,11 @@ const NavigationBar = (): JSX.Element => {
                 <a onClick={_onAddGameClick}>Add game</a>
               </li>
             )}
+            {location.pathname !== paths.apiTest && (
+              <li>
+                <a onClick={_onApiTestClick}>Test API</a>
+              </li>
+            )}
           </ul>
         </div>
       </div>
@@ -101,8 +104,8 @@ const NavigationBar = (): JSX.Element => {
               <div className="avatar placeholder">
                 <div className="bg-neutral-focus text-neutral-content w-10 rounded-full">
                   <span className="text-xl">
-                    {userFromIdToken?.given_name?.charAt(0)}
-                    {userFromIdToken?.family_name?.charAt(0)}
+                    {auth0User?.given_name?.charAt(0)}
+                    {auth0User?.family_name?.charAt(0)}
                   </span>
                 </div>
               </div>

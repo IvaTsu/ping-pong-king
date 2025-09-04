@@ -1,10 +1,22 @@
 import "../App.css";
 
-import AnalyticsNotification from "../components/notifications/AnalyticsNotification";
 import { useAuth0 } from "@auth0/auth0-react";
+import AnalyticsNotification from "../components/notifications/AnalyticsNotification";
 
 function Login(): JSX.Element {
-  const { loginWithRedirect } = useAuth0();
+  const { loginWithRedirect, isLoading, error } = useAuth0();
+
+  const handleLogin = () => {
+    try {
+      loginWithRedirect();
+    } catch (err) {
+      console.error("Login error:", err);
+    }
+  };
+
+  if (error) {
+    console.error("Auth0 error in Login component:", error);
+  }
 
   return (
     <>
@@ -24,8 +36,19 @@ function Login(): JSX.Element {
             <span className="indicator-item badge badge-secondary">
               with Google
             </span>
-            <button onClick={() => loginWithRedirect()}>Log In</button>
+            <button
+              onClick={handleLogin}
+              disabled={isLoading}
+              className={isLoading ? "opacity-50 cursor-not-allowed" : ""}
+            >
+              {isLoading ? "Loading..." : "Log In"}
+            </button>
           </div>
+          {error && (
+            <div className="text-red-500 mt-4">
+              Auth0 Error: {error.message}
+            </div>
+          )}
         </div>
         <AnalyticsNotification />
       </div>
