@@ -7,7 +7,11 @@ export default function SuccessNotification({
 }: SuccessNotificationProps): JSX.Element {
   const [opacity, setOpacity] = useState<string>("opacity-0");
   useEffect(() => {
-    isOpen ? setOpacity("opacity-100") : setOpacity("opacity-0");
+    if (isOpen) {
+      setOpacity("opacity-100");
+    } else {
+      setOpacity("opacity-0");
+    }
   }, [isOpen]);
   return (
     <div

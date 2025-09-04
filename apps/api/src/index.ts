@@ -1,10 +1,7 @@
 import cors from "cors";
 import express from "express";
 import dotenv from "dotenv";
-import {
-  authenticateToken,
-  requireScope,
-} from "./middleware/auth";
+import { authenticateToken, requireScope } from "./middleware/auth";
 import {
   simpleAuthenticateToken,
   type SimpleAuthRequest,
