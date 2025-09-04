@@ -1,6 +1,8 @@
-import { type IPlayerRef, type IPlayerScore } from "../types";
+import { type IPlayerScore } from "../types";
 
-interface IPlayerRefId extends Omit<IPlayerRef, "name" | "rating"> {}
+interface IPlayerRefId {
+  id: string;
+}
 
 interface IPlayerScoreWOutAlternation
   extends Omit<IPlayerScore, "ratingAlteration" | "playerRef"> {
