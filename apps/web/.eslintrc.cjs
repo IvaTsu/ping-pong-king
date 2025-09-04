@@ -9,10 +9,7 @@ module.exports = {
     es2021: true,
   },
   extends: [
-    "plugin:react/recommended",
-    "plugin:tailwindcss/recommended",
-    "standard-with-typescript",
-    "prettier",
+    "../../.eslintrc.js",
   ],
   overrides: [],
   parserOptions: {
@@ -20,12 +17,10 @@ module.exports = {
     sourceType: "module",
     project: "./tsconfig.json",
   },
-  plugins: ["react", "tailwindcss", "simple-import-sort"],
+  plugins: ["tailwindcss"],
   rules: {
-    "react/react-in-jsx-scope": "off",
-    "simple-import-sort/imports": "warn",
-    "simple-import-sort/exports": "warn",
     "tailwindcss/classnames-order": "error",
     "tailwindcss/no-custom-classname": "off",
   },
+  ignorePatterns: ["vite.config.ts"],
 };
