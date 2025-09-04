@@ -32,8 +32,8 @@ export const useUserStore = create<IUserState & IUserStateActions>()(
     {
       name: "user-storage", // name of the item in the storage (must be unique)
       storage: createJSONStorage(() => localStorage),
-    }
-  )
+    },
+  ),
 );
 
 interface IOpponentState {
@@ -67,8 +67,8 @@ export const useOpponentStore = create<
     {
       name: "opponent-storage", // name of the item in the storage (must be unique)
       storage: createJSONStorage(() => localStorage),
-    }
-  )
+    },
+  ),
 );
 
 export interface IAuth {
@@ -106,8 +106,8 @@ export const useAuthStore = create<IAuthState & IAuthStateActions>()(
     {
       name: "auth-storage", // name of the item in the storage (must be unique)
       storage: createJSONStorage(() => localStorage),
-    }
-  )
+    },
+  ),
 );
 
 interface INotificationState {
@@ -117,7 +117,7 @@ interface INotificationState {
 interface INotificationStateActions {
   clear: () => void;
   setIsAnalyticsNotificationShown: (
-    isAnalyticsNotificationShown: boolean
+    isAnalyticsNotificationShown: boolean,
   ) => void;
   getIsAnalyticsNotificationShown: () => boolean;
 }
@@ -143,8 +143,8 @@ export const useNotificationStore = create<
     {
       name: "notification-storage", // name of the item in the storage (must be unique)
       storage: createJSONStorage(() => localStorage),
-    }
-  )
+    },
+  ),
 );
 
 interface IOfficeState {
@@ -176,6 +176,6 @@ export const useOfficeStore = create<IOfficeState & IOfficeStateActions>()(
     {
       name: "office-storage", // name of the item in the storage (must be unique)
       storage: createJSONStorage(() => localStorage),
-    }
-  )
+    },
+  ),
 );

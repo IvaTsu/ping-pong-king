@@ -1,8 +1,12 @@
 import { useMemo } from "react";
 
 export const WinRate = ({ value }: { value?: number }): JSX.Element => {
-  if (!value) {
-    return <span className="bg-cloudBirst font-ubuntuBold p-2 dark:bg-none rounded">N/A</span>;
+  if (value === null || value === undefined || !Number.isFinite(value)) {
+    return (
+      <span className="rounded bg-cloudBirst p-2 font-ubuntuBold dark:bg-none">
+        N/A
+      </span>
+    );
   }
 
   const winRateColorGradation = useMemo(() => {
@@ -26,7 +30,7 @@ export const WinRate = ({ value }: { value?: number }): JSX.Element => {
 
   return (
     <span
-      className={`bg-cloudBirst font-ubuntuBold p-2 dark:bg-none ${winRateColorGradation} rounded`}
+      className={`bg-cloudBirst p-2 font-ubuntuBold dark:bg-none ${winRateColorGradation} rounded`}
     >
       {Math.round(value * 100)}%
     </span>

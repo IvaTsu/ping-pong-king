@@ -50,7 +50,7 @@ const GamesHistoryTable = ({
       staleTime: fiveMinutes,
       keepPreviousData: true,
       retry: false,
-    }
+    },
   );
 
   const userColumnDefs = [
@@ -63,7 +63,7 @@ const GamesHistoryTable = ({
         id: "Opponent",
         cell: (info) => <span>{info.getValue()}</span>,
         header: () => <span>Opponent</span>,
-      }
+      },
     ),
     columnHelper.accessor((row) => row.winnerId === playerId, {
       id: "result",
@@ -87,18 +87,18 @@ const GamesHistoryTable = ({
         id: "score",
         cell: (info) => <span>{info.getValue()}</span>,
         header: () => <span>Score</span>,
-      }
+      },
     ),
     columnHelper.accessor(
       (row) =>
         row.winnerId === playerId
           ? Math.max(
               row.playerScoreA.ratingAlteration,
-              row.playerScoreB.ratingAlteration
+              row.playerScoreB.ratingAlteration,
             )
           : Math.min(
               row.playerScoreA.ratingAlteration,
-              row.playerScoreB.ratingAlteration
+              row.playerScoreB.ratingAlteration,
             ),
       {
         id: "gainOrLoss",
@@ -116,7 +116,7 @@ const GamesHistoryTable = ({
           </>
         ),
         header: () => <span>Gain / Loss</span>,
-      }
+      },
     ),
     columnHelper.accessor(
       (row) => new Date(row.playedWhen).toISOString().split("T")[0],
@@ -124,7 +124,7 @@ const GamesHistoryTable = ({
         id: "date",
         cell: (info) => <span>{info.getValue()}</span>,
         header: () => <span>Date</span>,
-      }
+      },
     ),
   ];
 
@@ -171,11 +171,11 @@ const GamesHistoryTable = ({
                         {header.isPlaceholder ? null : (
                           <div
                             onClick={header.column.getToggleSortingHandler()}
-                            className="font-ubuntuBold flex cursor-pointer gap-4"
+                            className="flex cursor-pointer gap-4 font-ubuntuBold"
                           >
                             {flexRender(
                               header.column.columnDef.header,
-                              header.getContext()
+                              header.getContext(),
                             )}
                             {direction !== false && (
                               <span>{sortIndicator}</span>
@@ -194,7 +194,7 @@ const GamesHistoryTable = ({
                       <td key={cell.id}>
                         {flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext()
+                          cell.getContext(),
                         )}
                       </td>
                     ))}
@@ -264,7 +264,7 @@ const GamesHistoryTable = ({
                             : 0;
                         table.setPageIndex(page);
                       }}
-                      className="input input-bordered input-sm dark:focus:border-aqua focus:border-navy mx-2 w-20 focus:outline-none"
+                      className="input input-bordered input-sm mx-2 w-20 focus:border-navy focus:outline-none dark:focus:border-aqua"
                     />
                   </span>
                   <select
@@ -272,7 +272,7 @@ const GamesHistoryTable = ({
                     onChange={(e) => {
                       table.setPageSize(Number(e.target.value));
                     }}
-                    className="select select-sm select-bordered dark:focus:border-aqua focus:border-navy focus:outline-none"
+                    className="select select-bordered select-sm focus:border-navy focus:outline-none dark:focus:border-aqua"
                   >
                     {[10, 20, 30, 40, 50].map((pageSize) => (
                       <option key={pageSize} value={pageSize}>
@@ -286,13 +286,12 @@ const GamesHistoryTable = ({
           </div>
         ) : (
           <div className="flex justify-center">
-            <div className="card bg-aqua dark:bg-cloudBirst mt-10 flex h-16 w-full justify-center sm:w-96">
+            <div className="card mt-10 flex h-16 w-full justify-center bg-aqua sm:w-96 dark:bg-cloudBirst">
               {currentUser?.id === playerId ? (
                 <>You haven&apos;t</>
               ) : (
                 <>{playerName} hasn&apos;t</>
-              )}
-              {` `}
+              )}{" "}
               played any games yet!
             </div>
           </div>

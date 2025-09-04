@@ -1,10 +1,25 @@
 import "../App.css";
 
-import AnalyticsNotification from "../components/notifications/AnalyticsNotification";
 import { useAuth0 } from "@auth0/auth0-react";
 
+import AnalyticsNotification from "../components/notifications/AnalyticsNotification";
+
 function Login(): JSX.Element {
-  const { loginWithRedirect } = useAuth0();
+  const { loginWithRedirect, isLoading, error } = useAuth0();
+
+  const handleLogin = (): void => {
+    try {
+      loginWithRedirect().catch(() => {
+        // Handle login error if needed
+      });
+    } catch (err) {
+      console.error("Login error:", err);
+    }
+  };
+
+  if (error != null) {
+    console.error("Auth0 error in Login component:", error);
+  }
 
   return (
     <>
@@ -12,20 +27,29 @@ function Login(): JSX.Element {
         <div className="max-w-md">
           <h1 className="text-5xl font-bold">Welcome to Ping Pong King 👑</h1>
           <p className="py-6">
-            It will help you to track your ping pong games and count you in the
-            {` `}
+            It will help you to track your ping pong games and count you in the{" "}
             <a href="https://www.hiarcs.com/hce-manual/pc/Eloratings.html">
               ELO-based
-            </a>
-            {` `}
+            </a>{" "}
             rating system.
           </p>
           <div className="indicator">
-            <span className="indicator-item badge badge-secondary">
+            <span className="badge indicator-item badge-secondary">
               with Google
             </span>
-            <button onClick={() => loginWithRedirect()}>Log In</button>
+            <button
+              onClick={handleLogin}
+              disabled={isLoading}
+              className={isLoading ? "cursor-not-allowed opacity-50" : ""}
+            >
+              {isLoading ? "Loading..." : "Log In"}
+            </button>
           </div>
+          {error != null && (
+            <div className="text-red-500 mt-4">
+              Auth0 Error: {error.message}
+            </div>
+          )}
         </div>
         <AnalyticsNotification />
       </div>

@@ -1,3 +1,4 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import { useQuery } from "@tanstack/react-query";
 import {
   createColumnHelper,
@@ -11,11 +12,12 @@ import {
 import { Link } from "react-router-dom";
 
 import { type IPlayer } from "../../api/player/get/types";
+import { getRequest } from "../../api/request";
 import { AQUA, NAVY } from "../../constants/colors";
 import { tenMinutes } from "../../constants/time";
 import { useDetectDarkTheme } from "../../hooks/useDetectColorMode";
 import { useTablePagination } from "../../hooks/useTablePagination";
-import { useOfficeStore, useUserStore } from "../../store";
+import { useUserStore } from "../../store";
 import { hyphenate } from "../../utils/string";
 import { LoadingSpinner } from "../LoadingSpinner";
 import { WinRate } from "../WinRate";
@@ -49,19 +51,12 @@ export const userColumnDefs = [
 ];
 
 export const RatingTable = (): JSX.Element => {
-  const {
-    sorting,
-    setSorting,
-    pagination,
-    setPagination,
-    pageIndex,
-    pageSize,
-  } = useTablePagination();
+  const { sorting, setSorting, pagination, setPagination } =
+    useTablePagination();
 
   const { getUser } = useUserStore();
   const currentUser = getUser();
-  const { getOfficeId } = useOfficeStore();
-  const officeId = getOfficeId();
+  const { isAuthenticated, isLoading: authLoading } = useAuth0();
 
   const isDarkTheme = useDetectDarkTheme();
   const currentUserRowBgColor = isDarkTheme ? AQUA : NAVY;
@@ -69,19 +64,24 @@ export const RatingTable = (): JSX.Element => {
   const { data: playerList, isLoading } = useQuery(
     ["playerList", "mockData", pagination],
     async () => {
-      const response = await fetch('/mock-players.json');
-      return await response.json();
+      const response = await getRequest({ url: "/api/players" });
+      return response;
     },
     {
+      enabled: isAuthenticated && !authLoading, // Only run when authenticated
       keepPreviousData: true,
       retry: false,
       staleTime: tenMinutes,
-    }
+    },
   );
+
+  console.log({ playerList });
 
   const table = useReactTable({
     columns: userColumnDefs,
+    // @ts-expect-error TODO fix this properly once DB is not mocked
     data: playerList?.content ?? [],
+    // @ts-expect-error TODO fix this properly once DB is not mocked
     pageCount: playerList?.pageable.totalPages,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -123,11 +123,11 @@ export const RatingTable = (): JSX.Element => {
                   {header.isPlaceholder ? null : (
                     <div
                       onClick={header.column.getToggleSortingHandler()}
-                      className="font-ubuntuBold flex cursor-pointer gap-4"
+                      className="flex cursor-pointer gap-4 font-ubuntuBold"
                     >
                       {flexRender(
                         header.column.columnDef.header,
-                        header.getContext()
+                        header.getContext(),
                       )}
                       {direction !== false && <span>{sortIndicator}</span>}
                     </div>
@@ -149,6 +149,7 @@ export const RatingTable = (): JSX.Element => {
             >
               {row.getVisibleCells().map((cell, index) => (
                 <td key={cell.id}>
+                  {/* @ts-expect-error TODO fix this properly once DB is not mocked */}
                   {playerList?.content[0].id === row.original.id &&
                     index === 0 &&
                     currentPage === 0 && (
@@ -156,7 +157,7 @@ export const RatingTable = (): JSX.Element => {
                         👑
                       </div>
                     )}
-                  {`   `}
+                  {"   "}
                   {index === 0 ? (
                     <Link
                       to={`/player-history/${hyphenate(row.original.name)}`}
@@ -171,18 +172,19 @@ export const RatingTable = (): JSX.Element => {
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </Link>
                   ) : (
                     <>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </>
                   )}
-                  {`   `}
+                  {"   "}
+                  {/* @ts-expect-error TODO fix this properly once DB is not mocked */}
                   {playerList?.content[0].id === row.original.id &&
                     index === 0 &&
                     currentPage === 0 && (
@@ -256,7 +258,7 @@ export const RatingTable = (): JSX.Element => {
                     e.target.value != null ? Number(e.target.value) - 1 : 0;
                   table.setPageIndex(page);
                 }}
-                className="input input-bordered input-sm dark:focus:border-aqua focus:border-navy mx-2 w-20 focus:outline-none"
+                className="input input-bordered input-sm mx-2 w-20 focus:border-navy focus:outline-none dark:focus:border-aqua"
               />
             </span>
             <select
@@ -264,7 +266,7 @@ export const RatingTable = (): JSX.Element => {
               onChange={(e) => {
                 table.setPageSize(Number(e.target.value));
               }}
-              className="select select-sm select-bordered dark:focus:border-aqua focus:border-navy focus:outline-none"
+              className="select select-bordered select-sm focus:border-navy focus:outline-none dark:focus:border-aqua"
             >
               {[10, 20, 30, 40, 50].map((pageSize) => (
                 <option key={pageSize} value={pageSize}>

@@ -30,7 +30,7 @@ export const ChooseOpponentsDropdown = ({
     <div ref={ref}>
       <p>
         <a
-          className="text-navy hover:text-brightNavy cursor-pointer transition-all duration-200"
+          className="hover:text-brightNavy cursor-pointer text-navy transition-all duration-200"
           onClick={toggleDropdown}
         >
           {userName}
@@ -38,14 +38,14 @@ export const ChooseOpponentsDropdown = ({
         &apos;s Score
       </p>
       {isShown && (
-        <ul className="card bg-base-100 top-15 absolute left-0 z-10 mt-2 max-h-96 overflow-auto shadow-xl">
+        <ul className="top-15 card absolute left-0 z-10 mt-2 max-h-96 overflow-auto bg-base-100 shadow-xl">
           {playersList
             ?.filter((player) => player.id !== currentUser?.id)
             .map((player) => {
               return (
                 <li key={player.id} className="m-2">
                   <a
-                    className="btn btn-outline font-ubuntuRegular hover:bg-lightGrey hover:border-navy dark:hover:bg-cloud border-darkGrey w-full border-2 text-black transition-all duration-200 dark:text-white"
+                    className="btn btn-outline w-full border-2 border-darkGrey font-ubuntuRegular text-black transition-all duration-200 hover:border-navy hover:bg-lightGrey dark:text-white dark:hover:bg-cloud"
                     onClick={() => {
                       _onOpponentSelect(player);
                     }}

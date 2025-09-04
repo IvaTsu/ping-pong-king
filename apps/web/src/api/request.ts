@@ -1,7 +1,5 @@
 import axios from "axios";
 
-import { type IAuth } from "../store";
-import { oauthToken } from "./auth/post/urls";
 import { baseURL } from "./urls";
 
 const axiosInstance = axios.create({
@@ -11,95 +9,65 @@ const axiosInstance = axios.create({
   },
 });
 
-interface IAuthStorage {
-  state: { auth: IAuth };
-}
+let getAccessTokenSilently: (() => Promise<string>) | null = null;
 
-interface IRefreshTokenResponse {
-  access_token: string;
-  refresh_token: string;
-  id_token: string;
-  scope: string;
-  expires_in: number;
-  token_type: string;
-}
+export const setAuth0TokenGetter = (
+  tokenGetter: () => Promise<string>,
+): void => {
+  getAccessTokenSilently = tokenGetter;
+};
 
+// Request interceptor to add auth token
 axiosInstance.interceptors.request.use(
-  (config) => {
-    const value = localStorage.getItem("auth-storage");
-    if (value != null) {
-      const keys: IAuthStorage = JSON.parse(value);
-      if (keys?.state?.auth?.accessToken != null) {
-        config.headers.Authorization = `Bearer ${keys.state.auth.accessToken}`;
+  async (config) => {
+    console.log("Axios request interceptor:", {
+      url: config.url,
+      hasTokenGetter: !(getAccessTokenSilently == null),
+    });
+
+    if (getAccessTokenSilently != null) {
+      try {
+        const token = await getAccessTokenSilently();
+        console.log(
+          "Token retrieved for request:",
+          typeof token === "string" ? token.substring(0, 50) + "..." : "null",
+        );
+        if (token != null) {
+          config.headers.Authorization = `Bearer ${token}`;
+          console.log("Authorization header set");
+        }
+      } catch (error) {
+        console.error("Error getting access token:", error);
+        // If we can't get a token, let the request continue without auth
+        // The backend will return 401 if auth is required
       }
+    } else {
+      console.log(
+        "No token getter available - request will continue without auth header",
+      );
     }
     return config;
   },
-  (error) => {
-    Promise.reject(error).finally(() => {});
-  }
+  async (error) => {
+    console.error("Request interceptor error:", error);
+    return await Promise.reject(error);
+  },
 );
 
+// Response interceptor to handle auth errors
 axiosInstance.interceptors.response.use(
   (response) => {
     return response;
   },
   async function (error) {
-    const originalRequest = error.config;
-    if (
-      (error.response?.status === 401 || error.response?.status === 403) &&
-      !(originalRequest?._retry as boolean)
-    ) {
-      originalRequest._retry = true;
-      const value = localStorage.getItem("auth-storage");
-      if (value != null) {
-        const keys: IAuthStorage = JSON.parse(value);
-        if (
-          keys?.state?.auth?.accessToken != null &&
-          keys?.state?.auth?.refreshToken != null
-        ) {
-          const refreshTokenOptions = {
-            method: "POST",
-            url: oauthToken,
-            headers: { "content-type": "application/x-www-form-urlencoded" },
-            data: new URLSearchParams({
-              grant_type: "refresh_token",
-              client_id: import.meta.env.VITE_AUTH0_CLIENT_ID,
-              refresh_token: keys?.state?.auth?.refreshToken,
-            }),
-          };
-          try {
-            const response = await axiosInstance.request(refreshTokenOptions);
-            const authData: IRefreshTokenResponse = response.data;
-
-            if (
-              authData?.access_token != null &&
-              authData?.refresh_token != null &&
-              authData?.id_token != null
-            ) {
-              const authState = {
-                state: {
-                  auth: {
-                    accessToken: authData?.access_token,
-                    refreshToken: authData?.refresh_token,
-                    idToken: authData?.id_token,
-                  },
-                },
-                version: 0,
-              };
-              localStorage.setItem("auth-storage", JSON.stringify(authState));
-              axios.defaults.headers.common.Authorization = `Bearer ${authData?.access_token}`;
-            }
-          } catch (error) {
-            localStorage.removeItem("auth-storage");
-          }
-        }
-      }
-
-      return await axiosInstance(originalRequest);
+    if (error.response?.status === 401) {
+      // Token might be expired or invalid
+      // Auth0 React SDK handles token refresh automatically
+      // You might want to trigger a re-login here if needed
+      console.error("Authentication failed:", error.response.data);
     }
     return await Promise.reject(error);
-  }
+  },
 );
 
 interface IGetRequestParams<P> {
