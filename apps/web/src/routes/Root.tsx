@@ -12,7 +12,6 @@ const USER_BOILERPLATE = {
   email: "",
   profileImage: "",
   rating: 0,
-  registeredWhen: "",
   gamesPlayed: 0,
   gamesWon: 0,
   winRate: 0,
@@ -24,29 +23,26 @@ function Root(): JSX.Element {
 
   useEffect(() => {
     if (user == null) return;
-
+    
     const {
       given_name: givenName,
       family_name: familyName,
       email,
       picture,
-      created_at: createdAt,
     } = user;
-
+    
     if (
       givenName == null ||
       familyName == null ||
-      createdAt == null ||
       picture == null ||
       email == null
     )
-      return;
+    return;
 
     const updatedUser = {
       name: `${givenName} ${familyName}`,
       email,
       profileImage: picture,
-      registeredWhen: createdAt,
     };
 
     setUser({ ...USER_BOILERPLATE, ...updatedUser });
