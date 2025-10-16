@@ -1,22 +1,22 @@
 import cors from "cors";
 import express from "express";
 import dotenv from "dotenv";
-import {
-  authenticateToken,
-  requireScope,
-  type AuthenticatedRequest,
-} from "./middleware/auth";
+import { authenticateToken, requireScope } from "./middleware/auth";
 import {
   simpleAuthenticateToken,
   type SimpleAuthRequest,
 } from "./middleware/simpleAuth";
+import { getUser } from "./middleware/getUser";
 import {
   healthCheck,
   getProfile,
   getGames,
   createGame,
   getPlayers,
+  createUser,
+  getUserController,
 } from "./controllers/apiController";
+import jwt from "jsonwebtoken";
 
 // Load environment variables
 dotenv.config();
@@ -65,7 +65,7 @@ app.get(
         scope: req.user?.scope,
       },
     });
-  },
+  }
 );
 
 // Debug endpoint to check token without verification
@@ -82,22 +82,14 @@ app.post("/debug/token", (req, res) => {
   }
 
   // Decode token without verification to see its contents
-  try {
-    const decoded = require("jsonwebtoken").decode(token, { complete: true });
-    res.json({
-      message: "Token debug info",
-      tokenPreview: token.substring(0, 50) + "...",
-      decoded: decoded,
-      expectedAudience: process.env.AUTH0_AUDIENCE,
-      expectedIssuer: `https://${process.env.AUTH0_DOMAIN}/`,
-    });
-  } catch (error: any) {
-    res.json({
-      error: "Failed to decode token",
-      message: error.message,
-      tokenPreview: token.substring(0, 50) + "...",
-    });
-  }
+  const decoded = jwt.decode(token, { complete: true });
+  res.json({
+    message: "Token debug info",
+    tokenPreview: token.substring(0, 50) + "...",
+    decoded: decoded,
+    expectedAudience: process.env.AUTH0_AUDIENCE,
+    expectedIssuer: `https://${process.env.AUTH0_DOMAIN}/`,
+  });
 });
 
 // Protected routes
@@ -109,11 +101,15 @@ app.post(
   "/api/games",
   authenticateToken,
   requireScope("create:games"),
-  createGame,
+  createGame
 );
 
 // Player routes
 app.get("/api/players", authenticateToken, getPlayers);
+
+// User routes
+app.get("/api/user", authenticateToken, getUser, getUserController);
+app.post("/api/user", authenticateToken, getUser, createUser);
 
 app.listen(port, () => {
   console.log(`Ping Pong King API listening on http://localhost:${port}`);

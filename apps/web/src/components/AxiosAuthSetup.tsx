@@ -1,10 +1,10 @@
-import React, { type PropsWithChildren } from "react";
+import React from "react";
 
 import { useAxiosAuth } from "../hooks/useAxiosAuth";
 
-interface AxiosAuthSetupProps extends PropsWithChildren {}
-
-export const AxiosAuthSetup: React.FC<AxiosAuthSetupProps> = ({ children }) => {
+export const AxiosAuthSetup: React.FC<React.PropsWithChildren> = ({
+  children,
+}) => {
   useAxiosAuth();
 
   return <>{children}</>;

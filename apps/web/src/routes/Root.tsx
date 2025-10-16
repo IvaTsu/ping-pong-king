@@ -5,6 +5,8 @@ import NavigationBar from "../components/NavigationBar";
 import { RatingTable } from "../components/tables/RatingTable";
 import ProtectedRoute from "../routes/ProtectedRoute";
 import { useUserStore } from "../store";
+import { useMutation } from "@tanstack/react-query";
+import { createUser } from "../api/game/post/mutations";
 
 const USER_BOILERPLATE = {
   id: "",
@@ -12,7 +14,6 @@ const USER_BOILERPLATE = {
   email: "",
   profileImage: "",
   rating: 0,
-  registeredWhen: "",
   gamesPlayed: 0,
   gamesWon: 0,
   winRate: 0,
@@ -22,6 +23,19 @@ function Root(): JSX.Element {
   const { user } = useAuth0();
   const { setUser } = useUserStore();
 
+  const { mutate: createUserMutation } = useMutation({
+    mutationFn: createUser,
+    onSuccess: (data) => {
+      const updatedUser = {
+        name: `${user!.givenName} ${user!.familyName}`,
+        email: data.email,
+        profileImage: user!.picture,
+      };
+
+      setUser({ ...USER_BOILERPLATE, ...updatedUser });
+    },
+  });
+
   useEffect(() => {
     if (user == null) return;
 
@@ -30,27 +44,28 @@ function Root(): JSX.Element {
       family_name: familyName,
       email,
       picture,
-      created_at: createdAt,
     } = user;
 
     if (
       givenName == null ||
       familyName == null ||
-      createdAt == null ||
       picture == null ||
       email == null
     )
       return;
 
-    const updatedUser = {
-      name: `${givenName} ${familyName}`,
+    const userDTO = {
       email,
-      profileImage: picture,
-      registeredWhen: createdAt,
+      sub: user.sub!,
     };
 
-    setUser({ ...USER_BOILERPLATE, ...updatedUser });
-  }, [user]);
+    createUserMutation({
+      body: {
+        email: userDTO.email,
+        sub: userDTO.sub,
+      },
+    });
+  }, [user, createUserMutation]);
 
   return (
     <ProtectedRoute>

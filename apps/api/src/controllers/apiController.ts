@@ -1,5 +1,8 @@
 import { Request, Response } from "express";
+import { db } from "../db";
+import { usersTable } from "../db/schema";
 import { AuthenticatedRequest } from "../middleware/auth";
+import { UserRequest } from "../middleware/getUser";
 
 export const healthCheck = (req: Request, res: Response) => {
   res.json({
@@ -195,4 +198,59 @@ export const getPlayers = (req: AuthenticatedRequest, res: Response) => {
       number: 0,
     },
   });
+};
+
+/**
+ * Controller to get current user from database
+ * Expects getUser middleware to have already run and populated req.dbUser
+ */
+export const getUserController = (req: UserRequest, res: Response) => {
+  if (!req.dbUser) {
+    return res.status(404).json({
+      message: "User not found in database",
+      sub: req.user?.sub,
+    });
+  }
+
+  res.json({
+    message: "User retrieved successfully",
+    user: req.dbUser,
+  });
+};
+
+export const createUser = async (req: UserRequest, res: Response) => {
+  try {
+    if (req.dbUser) {
+      return res.status(200).json({
+        message: "User already exists in database",
+        user: req.dbUser,
+      });
+    }
+
+    // User doesn't exist, create new user
+    if (!req.body?.email) {
+      return res.status(401).json({
+        message: "User not authenticated",
+      });
+    }
+
+    const userData = req.body;
+    const user: typeof usersTable.$inferInsert = {
+      email: userData.email || req.user.email,
+      sub: req.user.sub,
+    };
+
+    const newUser = await db.insert(usersTable).values(user).returning();
+
+    res.status(201).json({
+      message: "User created successfully",
+      user: newUser[0],
+    });
+  } catch (error) {
+    console.error("Error creating user:", error);
+    res.status(500).json({
+      message: "Error creating user",
+      error: error instanceof Error ? error.message : "Unknown error",
+    });
+  }
 };

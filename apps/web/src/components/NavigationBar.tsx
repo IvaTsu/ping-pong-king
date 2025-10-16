@@ -91,15 +91,8 @@ const NavigationBar = (): JSX.Element => {
         <div className="dropdown dropdown-end">
           <label
             tabIndex={0}
-            className={`avatar btn btn-circle btn-ghost ${
-              currentUser?.registeredWhen == null ? "indicator" : ""
-            }`}
+            className={`avatar btn btn-circle btn-ghost`}
           >
-            {currentUser?.registeredWhen == null && (
-              <span className="badge indicator-item badge-secondary">
-                Action required
-              </span>
-            )}
             {currentUser?.profileImage != null ? (
               <div className="w-10 rounded-full">
                 <img src={currentUser.profileImage} />
@@ -125,9 +118,6 @@ const NavigationBar = (): JSX.Element => {
               <li>
                 <a className="justify-between" onClick={_onProfileClick}>
                   Profile
-                  {currentUser?.registeredWhen == null && (
-                    <span className="badge">update</span>
-                  )}
                 </a>
               </li>
             )}

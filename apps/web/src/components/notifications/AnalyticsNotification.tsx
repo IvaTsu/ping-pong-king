@@ -12,9 +12,11 @@ export default function AnalyticsNotification(): JSX.Element {
   const isAnalyticsNotificationAlreadyShown = getIsAnalyticsNotificationShown();
 
   useEffect(() => {
-    !isAnalyticsNotificationAlreadyShown
-      ? setOpacity("opacity-100")
-      : setOpacity("opacity-0");
+    if (!isAnalyticsNotificationAlreadyShown) {
+      setOpacity("opacity-100");
+    } else {
+      setOpacity("opacity-0");
+    }
   }, [isAnalyticsNotificationAlreadyShown]);
 
   const _onClose = (): void => {

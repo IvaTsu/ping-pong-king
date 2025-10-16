@@ -13,8 +13,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@neondatabase/serverless": "^1.0.2",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
+    "drizzle-orm": "^0.44.6",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "jwks-rsa": "^3.2.0"
@@ -23,6 +25,7 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/jsonwebtoken": "^9.0.10",
+    "drizzle-kit": "^0.31.5",
     "esbuild": "^0.25.8",
     "tsx": "^4.20.3",
     "typescript": "^5.9.2"

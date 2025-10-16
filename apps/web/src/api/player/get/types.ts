@@ -16,9 +16,8 @@ export interface IPlayer {
   id: string;
   name: string;
   email: string;
-  profileImage: string;
+  profileImage?: string;
   rating: number;
-  registeredWhen: string;
   gamesPlayed: number;
   gamesWon: number;
   winRate: number;
