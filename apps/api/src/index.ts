@@ -6,12 +6,15 @@ import {
   simpleAuthenticateToken,
   type SimpleAuthRequest,
 } from "./middleware/simpleAuth";
+import { getUser } from "./middleware/getUser";
 import {
   healthCheck,
   getProfile,
   getGames,
   createGame,
   getPlayers,
+  createUser,
+  getUserController,
 } from "./controllers/apiController";
 import jwt from "jsonwebtoken";
 
@@ -62,7 +65,7 @@ app.get(
         scope: req.user?.scope,
       },
     });
-  },
+  }
 );
 
 // Debug endpoint to check token without verification
@@ -98,11 +101,15 @@ app.post(
   "/api/games",
   authenticateToken,
   requireScope("create:games"),
-  createGame,
+  createGame
 );
 
 // Player routes
 app.get("/api/players", authenticateToken, getPlayers);
+
+// User routes
+app.get("/api/user", authenticateToken, getUser, getUserController);
+app.post("/api/user", authenticateToken, getUser, createUser);
 
 app.listen(port, () => {
   console.log(`Ping Pong King API listening on http://localhost:${port}`);

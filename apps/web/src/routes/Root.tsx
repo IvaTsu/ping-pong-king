@@ -5,6 +5,8 @@ import NavigationBar from "../components/NavigationBar";
 import { RatingTable } from "../components/tables/RatingTable";
 import ProtectedRoute from "../routes/ProtectedRoute";
 import { useUserStore } from "../store";
+import { useMutation } from "@tanstack/react-query";
+import { createUser } from "../api/game/post/mutations";
 
 const USER_BOILERPLATE = {
   id: "",
@@ -21,32 +23,49 @@ function Root(): JSX.Element {
   const { user } = useAuth0();
   const { setUser } = useUserStore();
 
+  const { mutate: createUserMutation } = useMutation({
+    mutationFn: createUser,
+    onSuccess: (data) => {
+      const updatedUser = {
+        name: `${user!.givenName} ${user!.familyName}`,
+        email: data.email,
+        profileImage: user!.picture,
+      };
+
+      setUser({ ...USER_BOILERPLATE, ...updatedUser });
+    },
+  });
+
   useEffect(() => {
     if (user == null) return;
-    
+
     const {
       given_name: givenName,
       family_name: familyName,
       email,
       picture,
     } = user;
-    
+
     if (
       givenName == null ||
       familyName == null ||
       picture == null ||
       email == null
     )
-    return;
+      return;
 
-    const updatedUser = {
-      name: `${givenName} ${familyName}`,
+    const userDTO = {
       email,
-      profileImage: picture,
+      sub: user.sub!,
     };
 
-    setUser({ ...USER_BOILERPLATE, ...updatedUser });
-  }, [user]);
+    createUserMutation({
+      body: {
+        email: userDTO.email,
+        sub: userDTO.sub,
+      },
+    });
+  }, [user, createUserMutation]);
 
   return (
     <ProtectedRoute>
